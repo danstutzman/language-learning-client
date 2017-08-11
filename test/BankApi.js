@@ -1,9 +1,8 @@
 // @flow
 import type { Action } from './Action'
 import type { BankApiResult } from './BankApiResult'
+import type { BankApiRequest } from './BankApiRequest'
 
 export type BankApi = {
-  sync(clientId: number | null,
-      clientIdToMaxSyncedActionId: Map<number, number>,
-      actionsFromClient: Array<Action>): BankApiResult
+  sync(request: BankApiRequest): BankApiResult
 }

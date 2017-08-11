@@ -1,6 +1,7 @@
 // @flow
 import type { Action } from './Action'
 import type { BankApi } from './BankApi'
+import type { BankApiRequest } from './BankApiRequest'
 import type { BankApiResult } from './BankApiResult'
 
 const { nonNullNumber } = require('./assertType')
@@ -22,17 +23,14 @@ class LocalBank {
     this.clientIdToMaxSyncedActionId = new Map()
   }
   sync() {
-    const request = {
+    const request: BankApiRequest = {
       clientId:                    this.clientId,
       clientIdToMaxSyncedActionId: this.clientIdToMaxSyncedActionId,
       actionsFromClient:           this.unsyncedActions
     }
     console.log(`Sync request: ${JSON.stringify(request)}`)
 
-    const response: BankApiResult = this.bankApi.sync(
-        request.clientId,
-        request.clientIdToMaxSyncedActionId,
-        request.actionsFromClient)
+    const response: BankApiResult = this.bankApi.sync(request)
     console.log(`Sync response: ${JSON.stringify(response)}`)
 
     if (response.clientId === null) {

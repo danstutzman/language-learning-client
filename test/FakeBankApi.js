@@ -1,5 +1,7 @@
 // @flow
 import type { Action } from './Action'
+import type { BankApiRequest } from './BankApiRequest'
+import type { BankApiResult } from './BankApiResult'
 
 const { nonNullNumber } = require('./assertType')
 
@@ -11,15 +13,16 @@ class FakeBankApi {
     this.nextClientId = 1
     this.actions = []
   }
-  sync(clientId: number | null,
-      clientIdToMaxSyncedActionId: Map<number, number>,
-      actionsFromClient: Array<Action>) {
-    if (clientId === null) {
+  sync(request: BankApiRequest): BankApiResult {
+    let clientId: number
+    if (request.clientId === null) {
       clientId = this.nextClientId
       this.nextClientId += 1
+    } else {
+      clientId = request.clientId
     }
 
-    for (const action of actionsFromClient) {
+    for (const action of request.actionsFromClient) {
       if (action.clientId === null) {
         action.clientId = clientId
       }
@@ -28,8 +31,8 @@ class FakeBankApi {
 
     let actionsToClient = []
     for (const action of this.actions) {
-      if (action.actionId >
-          (clientIdToMaxSyncedActionId.get(nonNullNumber(action.clientId)) || 0)) {
+      if (action.actionId > (request.clientIdToMaxSyncedActionId.get(
+              nonNullNumber(action.clientId)) || 0)) {
         actionsToClient.push(action)
       }
     }

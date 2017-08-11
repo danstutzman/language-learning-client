@@ -1,7 +1,7 @@
 // @flow
 import type { Action } from './Action'
 import type { BankApiRequest } from './BankApiRequest'
-import type { BankApiResult } from './BankApiResult'
+import type { BankApiResponse } from './BankApiResponse'
 
 const { nonNullNumber } = require('./assertType')
 
@@ -13,7 +13,7 @@ class FakeBankApi {
     this.nextClientId = 1
     this.actions = []
   }
-  sync(request: BankApiRequest): BankApiResult {
+  sync(request: BankApiRequest): BankApiResponse {
     let clientId: number
     if (request.clientId === null) {
       clientId = this.nextClientId

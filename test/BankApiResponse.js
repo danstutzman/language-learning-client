@@ -1,7 +1,7 @@
 // @flow
 import type { Action } from './Action'
 
-export interface BankApiResult {
+export interface BankApiResponse {
   clientId: number,
   actionsToClient: Array<Action>
 }

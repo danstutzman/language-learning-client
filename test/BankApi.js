@@ -1,8 +1,8 @@
 // @flow
 import type { Action } from './Action'
-import type { BankApiResult } from './BankApiResult'
 import type { BankApiRequest } from './BankApiRequest'
+import type { BankApiResponse } from './BankApiResponse'
 
 export type BankApi = {
-  sync(request: BankApiRequest): BankApiResult
+  sync(request: BankApiRequest): BankApiResponse
 }

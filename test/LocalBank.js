@@ -2,7 +2,7 @@
 import type { Action } from './Action'
 import type { BankApi } from './BankApi'
 import type { BankApiRequest } from './BankApiRequest'
-import type { BankApiResult } from './BankApiResult'
+import type { BankApiResponse } from './BankApiResponse'
 
 const { nonNullNumber } = require('./assertType')
 
@@ -30,7 +30,7 @@ class LocalBank {
     }
     console.log(`Sync request: ${JSON.stringify(request)}`)
 
-    const response: BankApiResult = this.bankApi.sync(request)
+    const response: BankApiResponse = this.bankApi.sync(request)
     console.log(`Sync response: ${JSON.stringify(response)}`)
 
     if (response.clientId === null) {

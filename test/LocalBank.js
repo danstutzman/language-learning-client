@@ -3,12 +3,15 @@ import type { Action } from './Action'
 import type { BankApi } from './BankApi'
 import type { BankApiResult } from './BankApiResult'
 
+const { nonNullNumber } = require('./assertType')
+
 class LocalBank {
   bankApi: BankApi
   clientId: number | null // null means unassigned
   syncedActions: Array<Action>
   unsyncedActions: Array<Action>
   nextActionId: number // for this clientId
+  clientIdToMaxSyncedActionId: Map<number, number>
 
   constructor(bankApi: BankApi) {
     this.bankApi = bankApi
@@ -16,17 +19,21 @@ class LocalBank {
     this.syncedActions = []
     this.unsyncedActions = []
     this.nextActionId = 1
+    this.clientIdToMaxSyncedActionId = new Map()
   }
   sync() {
     const request = {
-      clientId:          this.clientId,
-      actionsFromClient: this.unsyncedActions
+      clientId:                    this.clientId,
+      clientIdToMaxSyncedActionId: this.clientIdToMaxSyncedActionId,
+      actionsFromClient:           this.unsyncedActions
     }
     console.log(`Sync request: ${JSON.stringify(request)}`)
 
     const response: BankApiResult = this.bankApi.sync(
-        request.clientId, request.actionsFromClient)
-    console.log(`From sync ${JSON.stringify(response)}`)
+        request.clientId,
+        request.clientIdToMaxSyncedActionId,
+        request.actionsFromClient)
+    console.log(`Sync response: ${JSON.stringify(response)}`)
 
     if (response.clientId === null) {
       throw new Error("Expected to be assigned a clientId")
@@ -40,6 +47,12 @@ class LocalBank {
 
     for (const action of response.actionsToClient) {
       this.syncedActions.push(action)
+      const existing: number = this.clientIdToMaxSyncedActionId.get(
+          nonNullNumber(action.clientId)) || 0
+      if (action.actionId > existing) {
+        this.clientIdToMaxSyncedActionId.set(nonNullNumber(action.clientId),
+            action.actionId)
+      }
     }
 
     let actionIdsToDelete = {}
@@ -56,6 +69,7 @@ class LocalBank {
     }
     this.unsyncedActions = newUnsyncedActions
   }
+
   addAction() {
     this.unsyncedActions.push({
       clientId: this.clientId,

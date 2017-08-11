@@ -1,8 +1,38 @@
 // @flow
-const assert      = require('assert')
-const LocalBank   = require('./LocalBank')
-const FakeBankApi = require('./FakeBankApi')
+const assert           = require('assert')
+const LocalBank        = require('./LocalBank')
+const FakeBankApi      = require('./FakeBankApi')
+const FakeLocalStorage = require('./FakeLocalStorage')
 const { setup, suite, test } = require('mocha')
+const { SYNCED_KEY, UNSYNCED_KEY } = require('./LocalStorage')
+
+suite('LocalBank persistence to LocalStorage', ()=>{
+  test('can persist', ()=>{
+    const api = new FakeBankApi()
+    const storage = new FakeLocalStorage(1)
+    const client = new LocalBank(api, storage)
+
+    client.addAction()
+    assert.deepEqual(JSON.parse(storage.getItem(SYNCED_KEY) || '{}'), {
+      clientId: 1,
+      clientIdToMaxSyncedActionId: {},
+      syncedActions: []
+    })
+    assert.deepEqual(JSON.parse(storage.getItem(UNSYNCED_KEY) || '{}'), {
+      nextActionId: 21,
+      unsyncedActions: [
+        { actionId: 11 }
+      ]
+    })
+
+    const clientLater = new LocalBank(api, storage)
+    assert.equal(clientLater.clientId, 1)
+    assert.equal(clientLater.clientIdToMaxSyncedActionId.size, 0)
+    assert.equal(clientLater.syncedActions.length, 0)
+    assert.equal(clientLater.nextActionId, 21)
+    assert.deepEqual(clientLater.unsyncedActions, [{ actionId: 11 }])
+  })
+})
 
 suite('LocalBank sync to FakeBankApi', ()=>{
   let api: FakeBankApi
@@ -11,9 +41,10 @@ suite('LocalBank sync to FakeBankApi', ()=>{
 
   setup(() => {
     api = new FakeBankApi()
-    client0 = new LocalBank(api, 0)
-    client1 = new LocalBank(api, 1)
+    client0 = new LocalBank(api, new FakeLocalStorage(0))
+    client1 = new LocalBank(api, new FakeLocalStorage(1))
   })
+
   test('can add action before sync', ()=>{
     client0.addAction()
     assert.equal(client0.syncedActions.length, 0)

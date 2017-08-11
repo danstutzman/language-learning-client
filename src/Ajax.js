@@ -10,7 +10,7 @@ if (typeof(window) != 'undefined') {
 const TIMEOUT_MILLIS = 2000
 
 class Ajax {
-  _send(method: string, url: string, json: string | null) {
+  _send(method: string, url: string, json: string | null): Promise<any> {
     const x = new XMLHttpRequest()
 
     let canceled = false
@@ -21,6 +21,7 @@ class Ajax {
         reject(new Error(`Timeout after ${TIMEOUT_MILLIS} ms`))
       }, TIMEOUT_MILLIS)
 
+      console.log(`${method} to ${url}...`)
       x.open(method, url, true) // 3rd parameter: async=true
       x.onreadystatechange = function() {
         if (x.readyState === 4) {
@@ -55,13 +56,13 @@ class Ajax {
     })
   }
 
-  get(url: string, data: any) {
+  get(url: string, data: any): Promise<any> {
     return this._send('GET', url + '?' + JSON.stringify(data), null)
   }
 
-  post(url: string, data: any) {
+  post(url: string, data: any): Promise<any> {
     return this._send('POST', url, JSON.stringify(data))
   }
 }
 
-module.exports = Ajax
+module.exports = { Ajax }

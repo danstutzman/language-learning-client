@@ -7,17 +7,12 @@ if (process.browser) {
   const LocalStorage = require('node-localstorage').LocalStorage
   localStorage = new LocalStorage('./localStorage')
 }
-const Ajax = require('./Ajax')
-const Bank = require('./Bank')
+const LocalBank = require('./LocalBank')
+const BankApi = require('./BankApi').BankApi
 
-const url = 'http://localhost:3000/api/sync'
-console.log(`POST to ${url}...`)
-new Ajax().post(url, {})
-  .then((data: any) => {
-    console.log('POST succeeded')
-    const bank = new Bank(data)
-    console.log('bank.nextId', bank.nextId())
-    localStorage.setItem('bank', JSON.stringify(data))
-  }).catch(err => {
-    console.error(`Error from POST ${url}: ${err}`)
-  })
+const bank = new LocalBank(localStorage,
+  new BankApi('http://localhost:3000/api/sync'))
+
+bank.sync()
+  .then(() => { console.log('Done syncing') })
+  .catch(e => { console.error(`Error syncing: ${e}`) })

@@ -57,6 +57,9 @@ spawned.on('close', (code) => {
 
 function buildError(message) {
   console.log(message)
+
+  exec(`osascript -e 'display notification "${message}" with title "Build failed"'`)
+
   exec("afplay /System/Library/Sounds/Funk.aiff")
 
   try {

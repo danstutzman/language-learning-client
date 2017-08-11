@@ -2,10 +2,23 @@
 const assert      = require('assert')
 const LocalBank   = require('./LocalBank')
 const FakeBankApi = require('./FakeBankApi')
+const { setup, suite, test } = require('mocha')
 
-const api = new FakeBankApi()
-const client = new LocalBank(api)
-assert.equal(client.clientId, null)
+suite('LocalBank sync to FakeBankApi', ()=>{
+  let api
+  let client
 
-client.sync()
-assert.equal(client.clientId, 1)
+  setup(() => {
+    api = new FakeBankApi()
+    client = new LocalBank(api)
+  })
+  suite('clientId', ()=>{
+    test('starts out null', ()=>{
+      assert.equal(client.clientId, null)
+    })
+    test('gets assigned from FakeBankApi', ()=>{
+      client.sync()
+      assert.equal(client.clientId, 1)
+    })
+  })
+})

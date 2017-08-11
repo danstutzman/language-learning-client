@@ -13,6 +13,7 @@ const JSHINT_OPTIONS = { 'asi': true, 'esversion': 6 }
 
 const CHOKIDAR_OPTIONS = {'ignored':/[\/\\]\./, 'ignoreInitial':true}
 const REQUIRED_NODE_VERSION = 'v6.11.1'
+const BROWSERIFY_ARGS = `-o build/browserified.js --ignore node-localstorage --ignore xmlhttprequest --debug build/src/app.js`
 
 if (process.version !== REQUIRED_NODE_VERSION) {
   throw new Error(`Currently running ${process.version}.  Please first run: nvm use ${REQUIRED_NODE_VERSION} (may need to rerun npm install)`)
@@ -42,7 +43,8 @@ const spawned = spawn('/bin/bash', ['-c', `echo Running flow &&
   node_modules/.bin/flow-remove-types --out-dir build $JS_FILES &&
   echo Running jshint &&
   node_modules/.bin/jshint $(find build -name '*.js') &&
-  node_modules/.bin/browserify build/src/app.js -o build/browserified.js &&
+  echo Running browserify &&
+  node_modules/.bin/browserify build/src/app.js ${BROWSERIFY_ARGS} &&
   cp src/index.html build/index.html
 `])
 spawned.stdout.on('data', (data) => { console.log(data.toString().trim()) })
@@ -87,7 +89,7 @@ chokidar.watch(['src', 'test'], CHOKIDAR_OPTIONS).on('all', (event, path) => {
       fs.writeFileSync(`build/${path}`, flowRemovedSource)
 
       const spawned2 = spawn('node_modules/.bin/watchify',
-         ['build/src/app.js', '-o', 'build/browserified.js'])
+         BROWSERIFY_ARGS.split(' '))
       spawned2.stdout.on('data', (data) => { console.log(data.toString().trim()) })
       spawned2.stderr.on('data', (data) => { console.log(data.toString().trim()) })
 

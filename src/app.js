@@ -2,9 +2,9 @@
 
 const Ajax = require('./Ajax.js')
 new Ajax().post('http://localhost:3000/api/sync', {})
-  .then(() => {
-    console.log('Successfully did POST')
-  }).catch((err) => {
+  .then((data: any) => {
+    console.log('Successfully did POST', data)
+  }).catch(err => {
     console.error(`Error from POST: ${err}`)
   })
 
@@ -15,5 +15,6 @@ if (process.browser) {
   const LocalStorage = require('node-localstorage').LocalStorage
   localStorage = new LocalStorage('./localStorage')
 }
+
 localStorage.setItem('myFirstKey', 'myFirstValue')
 console.log(localStorage.getItem('myFirstKey'))

@@ -31,13 +31,25 @@ class Ajax {
           if (x.status !== 200) {
             reject(new Error(`Status ${x.status} from ${method} ${url}`))
           } else {
-            resolve(x.responseText)
+            if (x.getResponseHeader('Content-Type') === "application/json") {
+              try {
+                resolve(JSON.parse(x.responseText))
+              } catch (e) {
+                if (e instanceof SyntaxError) {
+                  reject(e)
+                } else {
+                  throw e
+                }
+              }
+            } else {
+              resolve(x.responseText)
+            }
           }
         }
       }
 
       if (method === 'POST' || method === 'PUT') {
-        x.setRequestHeader('Content-type', 'application/x-www-form-urlencoded')
+        x.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded')
       }
       x.send(json)
     })

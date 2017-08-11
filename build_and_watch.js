@@ -55,6 +55,12 @@ spawned.on('close', (code) => {
   exec('afplay /System/Library/Sounds/Pop.aiff') // success sound
 })
 
+function buildError(message) {
+  console.log(message)
+  fs.unlinkSync('build/browserified.js')
+  exec("afplay /System/Library/Sounds/Funk.aiff")
+}
+
 // Every time a file is edited, build that file
 chokidar.watch(['src', 'test'], CHOKIDAR_OPTIONS).on('all', (event, path) => {
   console.log(chalk.gray(`Detected ${event} of ${path}`))
@@ -64,17 +70,13 @@ chokidar.watch(['src', 'test'], CHOKIDAR_OPTIONS).on('all', (event, path) => {
     spawned.stderr.on('data', (data) => { console.log(data.toString().trim()) })
     spawned.on('close', (code) => {
       if (code !== 0) {
-        console.error(`Got non-zero code ${code} from spawn node_modules/.bin/flow`)
-        exec("afplay /System/Library/Sounds/Funk.aiff")
-        return
+        return buildError(`Got non-zero code ${code} from spawn node_modules/.bin/flow`)
       }
 
       const flowSource = fs.readFileSync(path, 'utf8')
       for (const line of flowSource.split('\n')) {
         if (line.endsWith(';')) {
-          console.error(`Line ends with semicolon: ${line}`)
-          exec("afplay /System/Library/Sounds/Funk.aiff")
-          return
+          return buildError(`Line ends with semicolon: ${line}`)
         }
       }
 
@@ -82,9 +84,7 @@ chokidar.watch(['src', 'test'], CHOKIDAR_OPTIONS).on('all', (event, path) => {
       try {
         flowRemovedSource = flowRemoveTypes(flowSource)
       } catch (e) {
-        console.error(e)
-        exec("afplay /System/Library/Sounds/Funk.aiff")
-        return
+        return buildError(e)
       }
       fs.writeFileSync(`build/${path}`, flowRemovedSource)
 
@@ -95,9 +95,7 @@ chokidar.watch(['src', 'test'], CHOKIDAR_OPTIONS).on('all', (event, path) => {
 
       JSHINT(flowRemovedSource.toString(), JSHINT_OPTIONS, {})
       if (JSHINT.errors.length > 0) {
-        console.error(JSHINT.errors)
-        exec("afplay /System/Library/Sounds/Funk.aiff")
-        return
+        return buildError(JSHINT.errors)
       }
 
       exec('afplay /System/Library/Sounds/Pop.aiff') // success sound

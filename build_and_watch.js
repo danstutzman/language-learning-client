@@ -57,8 +57,15 @@ spawned.on('close', (code) => {
 
 function buildError(message) {
   console.log(message)
-  fs.unlinkSync('build/browserified.js')
   exec("afplay /System/Library/Sounds/Funk.aiff")
+
+  try {
+    fs.unlinkSync('build/browserified.js')
+  } catch (e) {
+    if (e.code !== 'ENOENT') {
+      throw e
+    }
+  }
 }
 
 // Every time a file is edited, build that file

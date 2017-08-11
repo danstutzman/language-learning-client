@@ -109,7 +109,6 @@ chokidar.watch(['src', 'test'], CHOKIDAR_OPTIONS).on('all', (event, path) => {
       }
 
       exec('afplay /System/Library/Sounds/Pop.aiff') // success sound
-      exec(`osascript -e 'display notification "Success" with title "Build succeeded"'`)
     })
   }
 })

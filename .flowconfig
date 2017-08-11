@@ -1,0 +1,13 @@
+[ignore]
+.*/interfaces/.*
+.*/OLD/.*
+.*/*.json
+.*/node_modules/readline-sync/.*
+.*/node_modules/chalk/.*
+.*/node_modules/flow-bin/.*
+.*/node_modules/unflowify/.*
+.*/node_modules/flow-remove-types/.*
+.*/vendor/.*
+
+[libs]
+./interfaces

@@ -9,6 +9,17 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "http-server": "^0.10.0"
+    "browserify": "^14.4.0",
+    "chalk": "^2.1.0",
+    "chokidar": "^1.7.0",
+    "flow-bin": "^0.52.0",
+    "flow-remove-types": "^1.2.1",
+    "http-server": "^0.10.0",
+    "jshint": "^2.9.5",
+    "kexec": "^3.0.0",
+    "watchify": "^3.9.0"
+  },
+  "dependencies": {
+    "xmlhttprequest": "^1.8.0"
   }
 }

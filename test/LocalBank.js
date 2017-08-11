@@ -4,22 +4,26 @@ import type { BankApi } from './BankApi'
 import type { BankApiRequest } from './BankApiRequest'
 import type { BankApiResponse } from './BankApiResponse'
 
-const { nonNullNumber } = require('./assertType')
-
 class LocalBank {
   bankApi: BankApi
-  clientId: number | null // null means unassigned
+  clientId: number
   syncedActions: Array<Action>
   unsyncedActions: Array<Action>
   nextActionId: number // for this clientId
   clientIdToMaxSyncedActionId: Map<number, number>
 
-  constructor(bankApi: BankApi) {
+  constructor(bankApi: BankApi, clientId: number) {
+    // clientId must fit in last digit of actionIds
+    if (clientId < 0 || clientId >= 10) {
+      throw new Error(`Invalid clientId ${clientId}`)
+    }
+
     this.bankApi = bankApi
-    this.clientId = null
+    this.clientId = clientId
     this.syncedActions = []
     this.unsyncedActions = []
-    this.nextActionId = 1
+    // Start numbering at 1, but multiply by ten to put clientId in last digit
+    this.nextActionId = 10 + clientId
     this.clientIdToMaxSyncedActionId = new Map()
   }
   sync() {
@@ -33,29 +37,19 @@ class LocalBank {
     const response: BankApiResponse = this.bankApi.sync(request)
     console.log(`Sync response: ${JSON.stringify(response)}`)
 
-    if (response.clientId === null) {
-      throw new Error("Expected to be assigned a clientId")
-    }
-    if (this.clientId === null) {
-      this.clientId = response.clientId
-    } else if (response.clientId !== this.clientId) {
-      throw new Error(`Had clientId ${this.clientId}
-          but reassigned ${response.clientId}`)
-    }
-
     for (const action of response.actionsToClient) {
       this.syncedActions.push(action)
-      const existing: number = this.clientIdToMaxSyncedActionId.get(
-          nonNullNumber(action.clientId)) || 0
+      
+      const clientId = action.actionId % 10
+      const existing: number = this.clientIdToMaxSyncedActionId.get(clientId) || 0
       if (action.actionId > existing) {
-        this.clientIdToMaxSyncedActionId.set(nonNullNumber(action.clientId),
-            action.actionId)
+        this.clientIdToMaxSyncedActionId.set(clientId, action.actionId)
       }
     }
 
     let actionIdsToDelete = {}
     for (const action of response.actionsToClient) {
-      if (action.clientId === this.clientId) {
+      if (action.actionId % 10 === this.clientId) {
         actionIdsToDelete[action.actionId] = true
       }
     }
@@ -70,10 +64,9 @@ class LocalBank {
 
   addAction() {
     this.unsyncedActions.push({
-      clientId: this.clientId,
       actionId: this.nextActionId
     })
-    this.nextActionId += 1
+    this.nextActionId += 10
   }
 }
 

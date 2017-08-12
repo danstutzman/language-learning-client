@@ -13,4 +13,4 @@ bank.addAction()
 
 bank.sync()
   .then(() => { console.log('Done syncing') })
-  .catch(e => { console.error(`Error syncing: ${e}`) })
+  .catch(e => { console.error(`Error syncing:`, e) })

@@ -1,6 +1,6 @@
 // @flow
 
-const { SYNCED_KEY, UNSYNCED_KEY } = require('./LocalStorage')
+const { SYNCED_KEY, UNSYNCED_KEY } = require('../src/LocalStorage')
 
 class FakeLocalStorage {
   map: Map<string, string>

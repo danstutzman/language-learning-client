@@ -1,17 +1,15 @@
 // @flow
 
-let localStorage
-if (process.browser) {
-  localStorage = window.localStorage
-} else {
-  const LocalStorage = require('node-localstorage').LocalStorage
-  localStorage = new LocalStorage('./localStorage')
-}
-const LocalBank = require('./LocalBank')
-const BankApi = require('./BankApi').BankApi
+const Ajax             = require('./Ajax')
+const AjaxBankApi      = require('./AjaxBankApi')
+const FakeLocalStorage = require('../test/FakeLocalStorage')
+const LocalBank        = require('./LocalBank')
 
-const bank = new LocalBank(localStorage,
-  new BankApi('http://localhost:3000/api/sync'))
+const storage = new FakeLocalStorage(0)
+const bank = new LocalBank(
+  new AjaxBankApi(new Ajax(), 'http://localhost:3000/api/sync'),
+  storage)
+bank.addAction()
 
 bank.sync()
   .then(() => { console.log('Done syncing') })

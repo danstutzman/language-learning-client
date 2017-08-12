@@ -1,10 +1,10 @@
 // @flow
 const assert           = require('assert')
-const LocalBank        = require('./LocalBank')
+const LocalBank        = require('../src/LocalBank')
 const FakeBankApi      = require('./FakeBankApi')
 const FakeLocalStorage = require('./FakeLocalStorage')
 const { setup, suite, test } = require('mocha')
-const { SYNCED_KEY, UNSYNCED_KEY } = require('./LocalStorage')
+const { SYNCED_KEY, UNSYNCED_KEY } = require('../src/LocalStorage')
 
 suite('LocalBank persistence to LocalStorage', ()=>{
   test('can persist', ()=>{
@@ -45,42 +45,51 @@ suite('LocalBank sync to FakeBankApi', ()=>{
     client1 = new LocalBank(api, new FakeLocalStorage(1))
   })
 
-  test('can add action before sync', ()=>{
+  test('can add action before sync', done=>{
     client0.addAction()
     assert.equal(client0.syncedActions.length, 0)
     assert.equal(client0.unsyncedActions.length, 1)
     assert.equal(client0.unsyncedActions[0].actionId, 10)
 
-    client0.sync()
-    assert.equal(client0.syncedActions.length, 1)
-    assert.equal(client0.unsyncedActions.length, 0)
-    assert.equal(client0.syncedActions[0].actionId, 10)
+    client0.sync().then(() => {
+      assert.equal(client0.syncedActions.length, 1)
+      assert.equal(client0.unsyncedActions.length, 0)
+      assert.equal(client0.syncedActions[0].actionId, 10)
+      done()
+    })
   })
-  test("client1 sees client0's action", ()=>{
+  test("client1 sees client0's action", done=>{
     client0.addAction()
-    client0.sync()
-    client1.sync()
-    assert.equal(client1.syncedActions.length, 1)
-    assert.equal(client1.syncedActions[0].actionId, 10)
+    client0.sync().then(() => {
+      client1.sync().then(() => {
+        assert.equal(client1.syncedActions.length, 1)
+        assert.equal(client1.syncedActions[0].actionId, 10)
+        done()
+      })
+    })
   })
-  test("client0 and client1 see each others' actions", ()=>{
+  test("client0 and client1 see each others' actions", done=>{
     client0.addAction()
     client1.addAction()
 
-    client0.sync()
-    assert.equal(client0.unsyncedActions.length, 0)
-    assert.equal(client0.syncedActions.length, 1)
-    assert.deepEqual(client0.syncedActions[0], { actionId: 10 })
+    client0.sync().then(() => {
+      assert.equal(client0.unsyncedActions.length, 0)
+      assert.equal(client0.syncedActions.length, 1)
+      assert.deepEqual(client0.syncedActions[0], { actionId: 10 })
 
-    client1.sync()
-    assert.equal(client1.unsyncedActions.length, 0)
-    assert.deepEqual(client1.syncedActions[0], { actionId: 10 })
-    assert.deepEqual(client1.syncedActions[1], { actionId: 11 })
+      client1.sync().then(() => {
+        assert.equal(client1.unsyncedActions.length, 0)
+        assert.deepEqual(client1.syncedActions[0], { actionId: 10 })
+        assert.deepEqual(client1.syncedActions[1], { actionId: 11 })
 
-    client0.sync()
-    assert.equal(client0.unsyncedActions.length, 0)
-    assert.equal(client0.syncedActions.length, 2)
-    assert.deepEqual(client0.syncedActions[0], { actionId: 10 })
-    assert.deepEqual(client0.syncedActions[1], { actionId: 11 })
+        client0.sync().then(() => {
+          assert.equal(client0.unsyncedActions.length, 0)
+          assert.equal(client0.syncedActions.length, 2)
+          assert.deepEqual(client0.syncedActions[0], { actionId: 10 })
+          assert.deepEqual(client0.syncedActions[1], { actionId: 11 })
+          done()
+        })
+      })
+    })
   })
 })

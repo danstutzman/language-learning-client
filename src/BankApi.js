@@ -1,19 +1,8 @@
 // @flow
-import type { BankData } from './BankData'
+import type { Action } from './Action'
+import type { BankApiRequest } from './BankApiRequest'
+import type { BankApiResponse } from './BankApiResponse'
 
-const Ajax = require('./Ajax').Ajax
-
-class BankApi {
-  url: string
-  ajax: Ajax
-
-  constructor(url: string) {
-    this.url = url
-    this.ajax = new Ajax()
-  }
-  post(data: any): Promise<BankData> {
-    return this.ajax.post(this.url, data)
-  }
+export type BankApi = {
+  sync(request: BankApiRequest): Promise<BankApiResponse>
 }
-
-module.exports = { BankApi }

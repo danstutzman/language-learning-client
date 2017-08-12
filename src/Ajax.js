@@ -65,4 +65,4 @@ class Ajax {
   }
 }
 
-module.exports = { Ajax }
+module.exports = Ajax

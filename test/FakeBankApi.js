@@ -1,7 +1,7 @@
 // @flow
-import type { Action } from './Action'
-import type { BankApiRequest } from './BankApiRequest'
-import type { BankApiResponse } from './BankApiResponse'
+import type { Action } from '../src/Action'
+import type { BankApiRequest } from '../src/BankApiRequest'
+import type { BankApiResponse } from '../src/BankApiResponse'
 
 class FakeBankApi {
   actions: Array<Action>
@@ -9,7 +9,8 @@ class FakeBankApi {
   constructor() {
     this.actions = []
   }
-  sync(request: BankApiRequest): BankApiResponse {
+
+  sync(request: BankApiRequest): Promise<BankApiResponse> {
     for (const action of request.actionsFromClient) {
       this.actions.push(action)
     }
@@ -23,7 +24,9 @@ class FakeBankApi {
       }
     }
 
-    return { actionsToClient }
+    return new Promise((resolve, reject) => {
+      resolve({ actionsToClient })
+    })
   }
 }
 

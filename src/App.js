@@ -5,7 +5,7 @@ type Props = {
   addCard:            () => void,
   sync:               () => void
 }
- 
+
 class App extends React.Component<void, Props, void> {
   render() {
     const { cards, addCard, sync } = this.props

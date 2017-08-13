@@ -94,7 +94,7 @@ class LocalBank {
       nonNull(action.type)
       this.syncedActions.push(action)
       newActions.push(action)
-      
+
       const clientId = action.actionId % 10
       const existing: number =
         this.clientIdToMaxSyncedActionId[clientId.toString()] || 0

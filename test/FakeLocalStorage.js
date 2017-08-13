@@ -1,4 +1,4 @@
-const { SYNCED_KEY, UNSYNCED_KEY } = require('../src/LocalStorage')
+import { SYNCED_KEY, UNSYNCED_KEY } from '../src/LocalStorage'
 
 class FakeLocalStorage {
   map: Map<string, string>

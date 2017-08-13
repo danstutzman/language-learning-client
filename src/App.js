@@ -1,5 +1,5 @@
-const React = require('react')
-const LocalBank = require('./LocalBank')
+import React from 'react'
+import LocalBank from './LocalBank'
 
 type Props = {
   bank: LocalBank

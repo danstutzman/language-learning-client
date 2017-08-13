@@ -1,10 +1,10 @@
-const Ajax             = require('./Ajax')
-const AjaxBankApi      = require('./AjaxBankApi')
-const App              = require('./App')
-const LocalBank        = require('./LocalBank')
-const LocalStorage     = require('./LocalStorage')
-const React            = require('react')
-const ReactDOM         = require('react-dom')
+import Ajax         from './Ajax'
+import AjaxBankApi  from './AjaxBankApi'
+import App          from './App'
+import LocalBank    from './LocalBank'
+import LocalStorage from './LocalStorage'
+import React        from 'react'
+import ReactDOM     from 'react-dom'
 
 if (localStorage.getItem(LocalStorage.SYNCED_KEY) === null) {
   const clientId = 0

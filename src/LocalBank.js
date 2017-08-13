@@ -3,8 +3,7 @@ import type { BankApi } from './BankApi'
 import type { BankApiRequest } from './BankApiRequest'
 import type { BankApiResponse } from './BankApiResponse'
 import type { LocalStorage } from './LocalStorage'
-
-const { SYNCED_KEY, UNSYNCED_KEY } = require('./LocalStorage')
+import { SYNCED_KEY, UNSYNCED_KEY } from './LocalStorage'
 
 function nonNull(a: any): any {
   if (a === null) {

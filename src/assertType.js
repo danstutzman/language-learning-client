@@ -1,5 +1,3 @@
-import type { Action } from './Action'
-
 export function assertNum(x: any): number {
   if (typeof x !== 'number') {
     throw new Error(`Unexpected type ${typeof x}`)

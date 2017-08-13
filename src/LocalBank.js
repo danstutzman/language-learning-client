@@ -101,9 +101,6 @@ class LocalBank {
       if (action.actionId > existing) {
         this.clientIdToMaxSyncedActionId[clientId.toString()] = action.actionId
       }
-      if (clientId === this.clientId && action.actionId >= this.nextActionId) {
-        this.nextActionId = action.actionId + 10
-      }
     }
     this._saveSynced()
 

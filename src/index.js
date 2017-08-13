@@ -9,7 +9,7 @@ import reducer         from './reducer'
 import { createStore } from 'redux'
 import { SYNCED_KEY, UNSYNCED_KEY } from '../src/LocalStorage'
 
-const clientId = 0
+const clientId = 1
 if (localStorage.getItem(SYNCED_KEY) === null) {
 	localStorage.setItem(SYNCED_KEY, JSON.stringify({
 		clientId:        clientId,

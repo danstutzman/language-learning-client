@@ -94,6 +94,7 @@ class LocalBank {
 
   addAction() {
     this.unsyncedActions.push({
+      type: 'ADD_CARD',
       actionId: this.nextActionId
     })
     this.nextActionId += 10

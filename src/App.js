@@ -1,15 +1,19 @@
+import type { Action } from './action'
 import React from 'react'
-import LocalBank from './LocalBank'
 
 type Props = {
-  bank: LocalBank
+  actions: Array<Action>,
+  addCard: () => void
 }
  
 class App extends React.Component<void, Props, void> {
   render() {
-    const { bank } = this.props
+    const { actions, addCard } = this.props
     return (<ul>
-      <li>unsyncedActions = {JSON.stringify(bank.unsyncedActions)}</li>
+      <li>unsyncedActions = {JSON.stringify(actions)}</li>
+      <li>
+        <button onClick={addCard}>Add Card</button>
+      </li>
     </ul>)
   }
 }

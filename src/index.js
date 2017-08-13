@@ -1,10 +1,12 @@
-import Ajax         from './Ajax'
-import AjaxBankApi  from './AjaxBankApi'
-import App          from './App'
-import LocalBank    from './LocalBank'
-import LocalStorage from './LocalStorage'
-import React        from 'react'
-import ReactDOM     from 'react-dom'
+import Ajax            from './Ajax'
+import AjaxBankApi     from './AjaxBankApi'
+import App             from './App'
+import LocalBank       from './LocalBank'
+import LocalStorage    from './LocalStorage'
+import React           from 'react'
+import ReactDOM        from 'react-dom'
+import reducer         from './reducer'
+import { createStore } from 'redux'
 
 if (localStorage.getItem(LocalStorage.SYNCED_KEY) === null) {
   const clientId = 0
@@ -22,11 +24,22 @@ if (localStorage.getItem(LocalStorage.SYNCED_KEY) === null) {
 const bank = new LocalBank(
   new AjaxBankApi(new Ajax(), 'http://localhost:3000/api/sync'),
   window.localStorage)
+const store = createStore(reducer, [])
+
+function render() {
+  ReactDOM.render(
+    React.createElement(App, {
+      actions: store.getState(),
+      addCard: ()=>{
+        store.dispatch({ type: 'ADD_CARD', actionId: 0 })
+        render()
+      }
+    }),
+    document.getElementById('mount'))
+}
 
 document.addEventListener('DOMContentLoaded', ()=>{
-  ReactDOM.render(
-    React.createElement(App, { bank }),
-    document.getElementById('mount'))
+  render()
 })
 
 bank.sync()

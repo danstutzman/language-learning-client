@@ -3,20 +3,19 @@ const chokidar        = require('chokidar')
 const flowRemoveTypes = require('flow-remove-types')
 const fs              = require('fs')
 const { spawn, exec } = require('child_process')
-const { JSHINT }      = require('jshint')
+const { SourceCode, CLIEngine } = require('eslint')
 const chalk           = require('chalk')
 const process         = require('process')
 const kexec           = require('kexec')
 
-// Keep synced with .jshintrc
-const JSHINT_OPTIONS = { 'asi': true, 'esversion': 6 }
-
 const CHOKIDAR_OPTIONS = {'ignored':/[\/\\]\./, 'ignoreInitial':true}
 const REQUIRED_NODE_VERSION = 'v6.11.1'
-const BROWSERIFY_ARGS = `-o build/browserified.js --ignore node-localstorage --ignore xmlhttprequest --debug build/src/app.js`
+const BROWSERIFY_ARGS = `-o build/browserified.js --ignore node-localstorage \
+  --ignore xmlhttprequest --debug build/src/app.js -t babelify`
 
 if (process.version !== REQUIRED_NODE_VERSION) {
-  throw new Error(`Currently running ${process.version}.  Please first run: nvm use ${REQUIRED_NODE_VERSION} (may need to rerun npm install)`)
+  throw new Error(`Currently running ${process.version}.  Please first run:
+      nvm use ${REQUIRED_NODE_VERSION} (may need to rerun npm install)`)
 }
 
 // argv[0] is node
@@ -41,8 +40,8 @@ const spawned = spawn('/bin/bash', ['-c', `echo Running flow &&
   if [ "$?" == "0" ]; then exit 1; fi &&
   rm -rf build &&
   node_modules/.bin/flow-remove-types --out-dir build $JS_FILES &&
-  echo Running jshint &&
-  node_modules/.bin/jshint $(find build -name '*.js') &&
+  echo Running eslint &&
+  node_modules/.bin/eslint $(find build -name '*.js') &&
   echo Running browserify &&
   node_modules/.bin/browserify build/src/app.js ${BROWSERIFY_ARGS} &&
   cp src/index.html build/index.html
@@ -58,7 +57,8 @@ spawned.on('close', (code) => {
 function buildError(message) {
   console.log(message)
 
-  exec(`osascript -e 'display notification "${message}" with title "Build failed"'`)
+  exec(`osascript -e
+      'display notification "${message}" with title "Build failed"'`)
 
   exec("afplay /System/Library/Sounds/Funk.aiff")
 
@@ -80,7 +80,8 @@ chokidar.watch(['src', 'test'], CHOKIDAR_OPTIONS).on('all', (event, path) => {
     spawned.stderr.on('data', (data) => { console.log(data.toString().trim()) })
     spawned.on('close', (code) => {
       if (code !== 0) {
-        return buildError(`Got non-zero code ${code} from spawn node_modules/.bin/flow`)
+        return buildError(
+          `Got non-zero code ${code} from spawn node_modules/.bin/flow`)
       }
 
       const flowSource = fs.readFileSync(path, 'utf8')
@@ -100,12 +101,17 @@ chokidar.watch(['src', 'test'], CHOKIDAR_OPTIONS).on('all', (event, path) => {
 
       const spawned2 = spawn('node_modules/.bin/watchify',
          BROWSERIFY_ARGS.split(' '))
-      spawned2.stdout.on('data', (data) => { console.log(data.toString().trim()) })
-      spawned2.stderr.on('data', (data) => { console.log(data.toString().trim()) })
+      spawned2.stdout.on('data', (data) => {
+        console.log(data.toString().trim())
+      })
+      spawned2.stderr.on('data', (data) => {
+        console.log(data.toString().trim())
+      })
 
-      JSHINT(flowRemovedSource.toString(), JSHINT_OPTIONS, {})
-      if (JSHINT.errors.length > 0) {
-        return buildError(JSHINT.errors)
+      var messages = new CLIEngine({ envs: ['browser', 'mocha'] })
+        .executeOnText(flowRemovedSource.toString(), `build/${path}`)
+      if (messages.length > 0) {
+        return buildError(messages)
       }
 
       exec('afplay /System/Library/Sounds/Pop.aiff') // success sound

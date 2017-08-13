@@ -1,7 +1,15 @@
+## How to test from browser
+
+`nvm use v6.11.1`
+
 `./build_and_watch.js`
 
 `node_modules/.bin/http-server`
 
-To test from browser, go to http://localhost:8080/build/index.html
+Go to http://localhost:8080/build/index.html
 
-To test from command-line, run `nvm use v6.11.1` then `node_modules/.bin/mocha build/test` or `node build/src/app.js'
+## How to run automated tests
+
+`nvm use v6.11.1`
+
+`node_modules/.bin/mocha test --compilers js:babel-core/register`

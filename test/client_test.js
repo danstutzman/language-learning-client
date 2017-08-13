@@ -19,17 +19,16 @@ suite('LocalBank persistence to LocalStorage', ()=>{
     })
     assert.deepEqual(JSON.parse(storage.getItem(UNSYNCED_KEY) || '{}'), {
       nextActionId: 21,
-      unsyncedActions: [
-        { actionId: 11 }
-      ]
+      unsyncedActions: [{ actionId: 11, type: 'ADD_CARD' }]
     })
 
     const clientLater = new LocalBank(api, storage)
     assert.equal(clientLater.clientId, 1)
-    assert.equal(clientLater.clientIdToMaxSyncedActionId.size, 0)
+    assert.equal(Object.keys(clientLater.clientIdToMaxSyncedActionId).length, 0)
     assert.equal(clientLater.syncedActions.length, 0)
     assert.equal(clientLater.nextActionId, 21)
-    assert.deepEqual(clientLater.unsyncedActions, [{ actionId: 11 }])
+    assert.deepEqual(clientLater.unsyncedActions,
+      [{ actionId: 11, type: 'ADD_CARD' }])
   })
 })
 
@@ -55,7 +54,7 @@ suite('LocalBank sync to FakeBankApi', ()=>{
       assert.equal(client0.unsyncedActions.length, 0)
       assert.equal(client0.syncedActions[0].actionId, 10)
       done()
-    })
+    }).catch(e => { done(e) })
   })
   test("client1 sees client0's action", done=>{
     client0.addAction()
@@ -64,8 +63,8 @@ suite('LocalBank sync to FakeBankApi', ()=>{
         assert.equal(client1.syncedActions.length, 1)
         assert.equal(client1.syncedActions[0].actionId, 10)
         done()
-      })
-    })
+      }).catch(e => { done(e) })
+    }).catch(e => { done(e) })
   })
   test("client0 and client1 see each others' actions", done=>{
     client0.addAction()
@@ -74,21 +73,21 @@ suite('LocalBank sync to FakeBankApi', ()=>{
     client0.sync().then(() => {
       assert.equal(client0.unsyncedActions.length, 0)
       assert.equal(client0.syncedActions.length, 1)
-      assert.deepEqual(client0.syncedActions[0], { actionId: 10 })
+      assert.equal(client0.syncedActions[0].actionId, 10)
 
       client1.sync().then(() => {
         assert.equal(client1.unsyncedActions.length, 0)
-        assert.deepEqual(client1.syncedActions[0], { actionId: 10 })
-        assert.deepEqual(client1.syncedActions[1], { actionId: 11 })
+        assert.equal(client1.syncedActions[0].actionId, 10)
+        assert.equal(client1.syncedActions[1].actionId, 11)
 
         client0.sync().then(() => {
           assert.equal(client0.unsyncedActions.length, 0)
           assert.equal(client0.syncedActions.length, 2)
-          assert.deepEqual(client0.syncedActions[0], { actionId: 10 })
-          assert.deepEqual(client0.syncedActions[1], { actionId: 11 })
+          assert.equal(client0.syncedActions[0].actionId, 10)
+          assert.equal(client0.syncedActions[1].actionId, 11)
           done()
-        })
-      })
-    })
+        }).catch(e => { done(e) })
+      }).catch(e => { done(e) })
+    }).catch(e => { done(e) })
   })
 })

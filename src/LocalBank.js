@@ -4,6 +4,8 @@ import type { BankApiRequest } from './BankApiRequest'
 import type { BankApiResponse } from './BankApiResponse'
 import type { LocalStorage } from './LocalStorage'
 import { SYNCED_KEY, UNSYNCED_KEY } from './LocalStorage'
+import { assertArrayAction } from './Action'
+import { assertNum, assertObj } from './assertType'
 
 function nonNull(a: any): any {
   if (a === null) {
@@ -32,9 +34,21 @@ class LocalBank {
     if (storedDataSynced === null){
       throw new Error(`Expected initialized LocalStorage ${SYNCED_KEY}`)
     } else {
-      const unjsoned = JSON.parse(storedDataSynced)
-      this.clientId        = nonNull(unjsoned.clientId)
-      this.syncedActions   = nonNull(unjsoned.syncedActions)
+      const unjsoned: {} = assertObj(JSON.parse(storedDataSynced))
+
+      if (unjsoned.clientId === undefined) {
+        throw new Error("No clientId")
+      }
+      this.clientId = assertNum(unjsoned.clientId)
+
+      if (unjsoned.syncedActions === undefined) {
+        throw new Error("No syncedActions")
+      }
+      this.syncedActions = assertArrayAction(unjsoned.syncedActions)
+
+      if (unjsoned.clientIdToMaxSyncedActionId === undefined) {
+        throw new Error("No clientIdToMaxSyncedActionId")
+      }
       this.clientIdToMaxSyncedActionId =
         nonNull(unjsoned.clientIdToMaxSyncedActionId)
     }
@@ -44,9 +58,17 @@ class LocalBank {
       throw new Error(
         `Expected initialized LocalStorage ${UNSYNCED_KEY}`)
     } else {
-      const unjsoned = JSON.parse(storedDataUnsynced)
-      this.unsyncedActions = nonNull(unjsoned.unsyncedActions)
-      this.nextActionId    = nonNull(unjsoned.nextActionId)
+      const unjsoned: {} = assertObj(JSON.parse(storedDataUnsynced))
+
+      if (unjsoned.unsyncedActions === undefined) {
+        throw new Error("No unsyncedActions")
+      }
+      this.unsyncedActions = assertArrayAction(unjsoned.unsyncedActions)
+
+      if (unjsoned.nextActionId === undefined) {
+        throw new Error("No nextActionId")
+      }
+      this.nextActionId = assertNum(unjsoned.nextActionId)
     }
   }
 

@@ -1,9 +1,21 @@
-function nonNullNumber(n: number | null) {
-  if (n === null) {
-    throw new Error("Unexpected null")
+import type { Action } from './Action'
+
+export function assertNum(x: any): number {
+  if (typeof x !== 'number') {
+    throw new Error(`Unexpected type ${typeof x}`)
   } else {
-    return n
+    return x
   }
 }
 
-export default { nonNullNumber }
+export function assertObj(x: any): {} {
+  if (x === null) {
+    throw new Error("Unexpected null")
+  } else if (Array.isArray(x)) {
+    throw new Error("Unexpected array")
+  } else if (typeof x !== 'object') {
+    throw new Error(`Unexpected type ${typeof x}`)
+  } else {
+    return x
+  }
+}

@@ -90,6 +90,7 @@ class LocalBank {
       }
     }
     this.unsyncedActions = newUnsyncedActions
+    this._saveUnsynced()
   }
 
   addAction() {

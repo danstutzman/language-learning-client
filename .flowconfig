@@ -2,12 +2,13 @@
 .*/interfaces/.*
 .*/OLD/.*
 .*/*.json
-.*/node_modules/readline-sync/.*
-.*/node_modules/chalk/.*
-.*/node_modules/flow-bin/.*
-.*/node_modules/unflowify/.*
-.*/node_modules/flow-remove-types/.*
+.*/node_modules/.*
 .*/vendor/.*
+.*/build_and_watch.js
+.*/build/.*
 
 [libs]
 ./interfaces
+
+[options]
+all=true

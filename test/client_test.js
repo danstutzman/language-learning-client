@@ -3,8 +3,10 @@ const assert           = require('assert')
 const LocalBank        = require('../src/LocalBank')
 const FakeBankApi      = require('./FakeBankApi')
 const FakeLocalStorage = require('./FakeLocalStorage')
-const { setup, suite, test } = require('mocha')
+//const { setup, suite, test } = require('mocha')
 const { SYNCED_KEY, UNSYNCED_KEY } = require('../src/LocalStorage')
+
+import { setup, suite, test} from 'mocha'
 
 suite('LocalBank persistence to LocalStorage', ()=>{
   test('can persist', ()=>{

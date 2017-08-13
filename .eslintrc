@@ -1,4 +1,8 @@
 {
+  "parser": "babel-eslint",
+  "plugins": [
+    "flowtype"
+  ],
   "parserOptions": {
     "ecmaVersion": 6,
     "ecmaFeatures": {

@@ -1,6 +1,5 @@
 #!/usr/bin/env node
 const chokidar        = require('chokidar')
-const flowRemoveTypes = require('flow-remove-types')
 const fs              = require('fs')
 const { spawn, exec } = require('child_process')
 const { SourceCode, CLIEngine } = require('eslint')
@@ -11,7 +10,7 @@ const kexec           = require('kexec')
 const CHOKIDAR_OPTIONS = {'ignored':/[\/\\]\./, 'ignoreInitial':true}
 const REQUIRED_NODE_VERSION = 'v6.11.1'
 const BROWSERIFY_ARGS = `-o build/browserified.js --ignore node-localstorage \
-  --ignore xmlhttprequest --debug build/src/index.js -t babelify`
+  --ignore xmlhttprequest --debug src/index.js -t babelify`
 
 if (process.version !== REQUIRED_NODE_VERSION) {
   throw new Error(`Currently running ${process.version}.  Please first run:
@@ -36,14 +35,11 @@ if (process.argv.length > 3) {
 const spawned = spawn('/bin/bash', ['-c', `echo Running flow &&
   node_modules/.bin/flow &&
   JS_FILES="$(find src -name '*.js') $(find test -name '*.js')" &&
-  grep ';$' $JS_FILES
-  if [ "$?" == "0" ]; then exit 1; fi &&
-  rm -rf build &&
-  node_modules/.bin/flow-remove-types --out-dir build $JS_FILES &&
+  mkdir -p build &&
   echo Running eslint &&
-  node_modules/.bin/eslint $(find build -name '*.js') &&
+  node_modules/.bin/eslint $(find src -name '*.js') &&
   echo Running browserify &&
-  node_modules/.bin/browserify build/src/index.js ${BROWSERIFY_ARGS} &&
+  node_modules/.bin/browserify ${BROWSERIFY_ARGS} &&
   cp src/index.html build/index.html
 `])
 spawned.stdout.on('data', (data) => { console.log(data.toString().trim()) })
@@ -52,13 +48,23 @@ spawned.on('close', (code) => {
   if (code !== 0) { process.exit(1) }
   console.log('Build done')
   exec('afplay /System/Library/Sounds/Pop.aiff') // success sound
+
+  const spawned2 = spawn('node_modules/.bin/watchify',
+    BROWSERIFY_ARGS.split(' '))
+  spawned2.stdout.on('data', (data) => {
+    console.log(data.toString().trim())
+  })
+  spawned2.stderr.on('data', (data) => {
+    console.log(data.toString().trim())
+  })
 })
 
 function buildError(message) {
+  console.log('buildError')
   console.log(message)
 
-  exec(`osascript -e
-      'display notification "${message}" with title "Build failed"'`)
+  console.log(`osascript -e 'display notification "${message}" with title "Build failed"'`)
+  exec(`osascript -e 'display notification "${message}" with title "Build failed"'`)
 
   exec("afplay /System/Library/Sounds/Funk.aiff")
 
@@ -84,37 +90,20 @@ chokidar.watch(['src', 'test'], CHOKIDAR_OPTIONS).on('all', (event, path) => {
           `Got non-zero code ${code} from spawn node_modules/.bin/flow`)
       }
 
-      const flowSource = fs.readFileSync(path, 'utf8')
-      for (const line of flowSource.split('\n')) {
-        if (line.endsWith(';')) {
-          return buildError(`Line ends with semicolon: ${line}`)
+      const spawned3 = spawn('node_modules/.bin/eslint', [path])
+      spawned3.stdout.on('data', (data) => {
+        console.log(data.toString().trim())
+      })
+      spawned3.stderr.on('data', (data) => {
+        console.log(data.toString().trim())
+      })
+      spawned3.on('close', (code) => {
+        if (code === 0) {
+          exec('afplay /System/Library/Sounds/Pop.aiff') // success sound
+        } else {
+          return buildError(`Error from eslint`)
         }
-      }
-
-      let flowRemovedSource
-      try {
-        flowRemovedSource = flowRemoveTypes(flowSource)
-      } catch (e) {
-        return buildError(e)
-      }
-      fs.writeFileSync(`build/${path}`, flowRemovedSource)
-
-      const spawned2 = spawn('node_modules/.bin/watchify',
-         BROWSERIFY_ARGS.split(' '))
-      spawned2.stdout.on('data', (data) => {
-        console.log(data.toString().trim())
       })
-      spawned2.stderr.on('data', (data) => {
-        console.log(data.toString().trim())
-      })
-
-      var messages = new CLIEngine({ envs: ['browser', 'mocha'] })
-        .executeOnText(flowRemovedSource.toString(), `build/${path}`)
-      if (messages.length > 0) {
-        return buildError(messages)
-      }
-
-      exec('afplay /System/Library/Sounds/Pop.aiff') // success sound
     })
   }
 })

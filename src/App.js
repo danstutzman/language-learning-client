@@ -1,22 +1,17 @@
+// @flow
 const React = require('react')
+const LocalBank = require('./LocalBank')
+
+type Props = {
+  bank: LocalBank
+}
  
-class App extends React.Component {
-  constructor() {
-    super()
-    this.state = {
-      count: 0,
-    }
-  }
- 
+class App extends React.Component<void, Props, void> {
   render() {
-    return (
-      <button
-        onClick={() => {
-          this.setState({ count: this.state.count + 1 })
-        }}>
-        Count: {this.state.count}
-      </button>
-    )
+    const { bank } = this.props
+    return (<ul>
+      <li>unsyncedActions = {JSON.stringify(bank.unsyncedActions)}</li>
+    </ul>)
   }
 }
 

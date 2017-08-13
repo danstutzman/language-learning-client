@@ -1,4 +1,3 @@
-// @flow
 const React = require('react')
 const LocalBank = require('./LocalBank')
 

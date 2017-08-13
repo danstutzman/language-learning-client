@@ -1,4 +1,3 @@
-// @flow
 import type { Action } from './Action'
 import type { BankApi } from './BankApi'
 import type { BankApiRequest } from './BankApiRequest'

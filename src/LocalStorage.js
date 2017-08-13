@@ -1,5 +1,3 @@
-// @flow
-
 const SYNCED_KEY   = 'LocalBankSynced'
 const UNSYNCED_KEY = 'LocalBankUnsynced'
 

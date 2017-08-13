@@ -1,5 +1,3 @@
-// @flow
-
 let XMLHttpRequest
 if (typeof(window) != 'undefined') {
   XMLHttpRequest = window.XMLHttpRequest

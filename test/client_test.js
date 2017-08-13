@@ -1,4 +1,3 @@
-// @flow
 const assert           = require('assert')
 const LocalBank        = require('../src/LocalBank')
 const FakeBankApi      = require('./FakeBankApi')

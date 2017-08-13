@@ -1,5 +1,3 @@
-// @flow
-
 class Bank {
   data: { nextId: Number }
 

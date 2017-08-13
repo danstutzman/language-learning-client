@@ -1,5 +1,3 @@
-// @flow
-
 const { SYNCED_KEY, UNSYNCED_KEY } = require('../src/LocalStorage')
 
 class FakeLocalStorage {

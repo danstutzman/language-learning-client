@@ -1,5 +1,3 @@
-// @flow
-
 const Ajax             = require('./Ajax')
 const AjaxBankApi      = require('./AjaxBankApi')
 const App              = require('./App')

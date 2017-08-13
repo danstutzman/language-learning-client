@@ -1,6 +1,6 @@
 const React = require('react')
  
-class Counter extends React.Component {
+class App extends React.Component {
   constructor() {
     super()
     this.state = {
@@ -20,4 +20,4 @@ class Counter extends React.Component {
   }
 }
 
-module.exports = Counter
+module.exports = App

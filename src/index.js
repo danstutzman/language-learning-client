@@ -2,15 +2,15 @@
 
 const Ajax             = require('./Ajax')
 const AjaxBankApi      = require('./AjaxBankApi')
+const App              = require('./App')
 const FakeLocalStorage = require('../test/FakeLocalStorage')
 const LocalBank        = require('./LocalBank')
-const React            = require('react')//.React
-const ReactDOM         = require('react-dom')//.ReactDOM
-const Counter          = require('./Counter')//.Counter
+const React            = require('react')
+const ReactDOM         = require('react-dom')
 
 document.addEventListener('DOMContentLoaded', function() {
   ReactDOM.render(
-    React.createElement(Counter),
+    React.createElement(App),
     document.getElementById('mount')
   )
 })

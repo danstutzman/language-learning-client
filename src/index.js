@@ -24,14 +24,13 @@ if (localStorage.getItem(LocalStorage.SYNCED_KEY) === null) {
 const bank = new LocalBank(
   new AjaxBankApi(new Ajax(), 'http://localhost:3000/api/sync'),
   window.localStorage)
-const store = createStore(reducer, [])
 
 function render() {
   ReactDOM.render(
     React.createElement(App, {
-      actions: store.getState(),
+      bank: bank,
       addCard: ()=>{
-        store.dispatch({ type: 'ADD_CARD', actionId: 0 })
+        bank.addAction()
         render()
       }
     }),

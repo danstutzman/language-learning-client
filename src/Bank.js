@@ -10,4 +10,4 @@ class Bank {
   }
 }
 
-module.exports = Bank
+export default Bank

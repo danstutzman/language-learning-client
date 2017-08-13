@@ -1,4 +1,3 @@
-import type { Action } from './action'
 import React from 'react'
 
 type Props = {
@@ -22,4 +21,4 @@ class App extends React.Component<void, Props, void> {
   }
 }
 
-module.exports = App
+export default App

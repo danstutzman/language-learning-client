@@ -1,15 +1,8 @@
-let XMLHttpRequest
-if (typeof(window) != 'undefined') {
-  XMLHttpRequest = window.XMLHttpRequest
-} else {
-  XMLHttpRequest = require('xmlhttprequest').XMLHttpRequest
-}
-
 const TIMEOUT_MILLIS = 2000
 
 class Ajax {
   _send(method: string, url: string, json: string | null): Promise<any> {
-    const x = new XMLHttpRequest()
+    const x = new window.XMLHttpRequest()
 
     let canceled = false
     return new Promise(function(resolve, reject) {
@@ -63,4 +56,4 @@ class Ajax {
   }
 }
 
-module.exports = Ajax
+export default Ajax

@@ -130,4 +130,4 @@ class LocalBank {
   }
 }
 
-module.exports = LocalBank
+export default LocalBank

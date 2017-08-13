@@ -3,20 +3,20 @@ import Ajax            from './Ajax'
 import AjaxBankApi     from './AjaxBankApi'
 import App             from './App'
 import LocalBank       from './LocalBank'
-import LocalStorage    from './LocalStorage'
 import React           from 'react'
 import ReactDOM        from 'react-dom'
 import reducer         from './reducer'
 import { createStore } from 'redux'
+import { SYNCED_KEY, UNSYNCED_KEY } from '../src/LocalStorage'
 
 const clientId = 0
-if (localStorage.getItem(LocalStorage.SYNCED_KEY) === null) {
-	localStorage.setItem(LocalStorage.SYNCED_KEY, JSON.stringify({
+if (localStorage.getItem(SYNCED_KEY) === null) {
+	localStorage.setItem(SYNCED_KEY, JSON.stringify({
 		clientId:        clientId,
 		syncedActions:   [],
 		clientIdToMaxSyncedActionId: new Map()
 	}))
-	localStorage.setItem(LocalStorage.UNSYNCED_KEY, JSON.stringify({
+	localStorage.setItem(UNSYNCED_KEY, JSON.stringify({
 		unsyncedActions: [],
 		nextActionId:    10 + clientId,
 	}))

@@ -3,13 +3,20 @@
   "plugins": [
     "flowtype"
   ],
+  "extends": "eslint:recommended",
   "parserOptions": {
     "ecmaVersion": 6,
     "ecmaFeatures": {
       "jsx": true
     }
   },
+  "env": {
+    "browser": true,
+    "es6": true,
+    "mocha": true
+  },
   "rules": {
-    "semi": ["error", "never"]
+    "semi": ["error", "never"],
+    "no-console": "off"
   }
 }

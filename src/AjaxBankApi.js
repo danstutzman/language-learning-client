@@ -1,4 +1,3 @@
-import type { Action } from './Action'
 import type { BankApiRequest } from './BankApiRequest'
 import type { BankApiResponse } from './BankApiResponse'
 import type Ajax from './Ajax'
@@ -17,4 +16,4 @@ class AjaxBankApi {
   }
 }
 
-module.exports = AjaxBankApi
+export default AjaxBankApi

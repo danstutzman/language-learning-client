@@ -6,4 +6,4 @@ function nonNullNumber(n: number | null) {
   }
 }
 
-module.exports = { nonNullNumber }
+export default { nonNullNumber }

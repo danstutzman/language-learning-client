@@ -11,7 +11,7 @@ const kexec           = require('kexec')
 const CHOKIDAR_OPTIONS = {'ignored':/[\/\\]\./, 'ignoreInitial':true}
 const REQUIRED_NODE_VERSION = 'v6.11.1'
 const BROWSERIFY_ARGS = `-o build/browserified.js --ignore node-localstorage \
-  --ignore xmlhttprequest --debug build/src/app.js -t babelify`
+  --ignore xmlhttprequest --debug build/src/index.js -t babelify`
 
 if (process.version !== REQUIRED_NODE_VERSION) {
   throw new Error(`Currently running ${process.version}.  Please first run:
@@ -43,7 +43,7 @@ const spawned = spawn('/bin/bash', ['-c', `echo Running flow &&
   echo Running eslint &&
   node_modules/.bin/eslint $(find build -name '*.js') &&
   echo Running browserify &&
-  node_modules/.bin/browserify build/src/app.js ${BROWSERIFY_ARGS} &&
+  node_modules/.bin/browserify build/src/index.js ${BROWSERIFY_ARGS} &&
   cp src/index.html build/index.html
 `])
 spawned.stdout.on('data', (data) => { console.log(data.toString().trim()) })

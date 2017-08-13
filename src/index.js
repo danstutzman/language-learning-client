@@ -1,3 +1,4 @@
+import type { Action } from './Action'
 import Ajax            from './Ajax'
 import AjaxBankApi     from './AjaxBankApi'
 import App             from './App'
@@ -10,10 +11,6 @@ import { createStore } from 'redux'
 
 const clientId = 0
 if (localStorage.getItem(LocalStorage.SYNCED_KEY) === null) {
-  reinitBank(clientId)
-}
-
-function reinitBank(clientId: number) {
 	localStorage.setItem(LocalStorage.SYNCED_KEY, JSON.stringify({
 		clientId:        clientId,
 		syncedActions:   [],
@@ -23,33 +20,33 @@ function reinitBank(clientId: number) {
 		unsyncedActions: [],
 		nextActionId:    10 + clientId,
 	}))
-  bank = new LocalBank(
-    new AjaxBankApi(new Ajax(), 'http://localhost:3000/api/sync'),
-    window.localStorage)
 }
 
-let bank = new LocalBank(
+const bank = new LocalBank(
   new AjaxBankApi(new Ajax(), 'http://localhost:3000/api/sync'),
   window.localStorage)
+const store = createStore(reducer, {})
+for (const action of bank.syncedActions.concat(bank.unsyncedActions)) {
+  store.dispatch(action)
+}
 
 function render() {
   ReactDOM.render(
     React.createElement(App, {
-      bank: bank,
-      reinitBank: ()=>{
-        reinitBank(clientId)
-        render()
-      },
+      cards: store.getState(),
       addCard: ()=>{
-        bank.addAction()
+        const action: Action = bank.addAction()
+        store.dispatch(action)
         render()
       },
       sync: ()=>{
-        console.log('Start syncing')
         bank.sync()
-          .then(() => {
-            console.log('Done syncing')
+          .then(newActions => {
+            for (const action of newActions) {
+              store.dispatch(action)
+            }
             render()
+            console.log('Done syncing')
           })
         render()
       }

@@ -1,16 +1,16 @@
 import type { Action } from './Action'
 
-export default function(actions: Array<Action>, action: Action) {
+export default function(cards: {[actionId: number]: boolean}, action: Action) {
   console.log('action', action)
   switch (action.type) {
     case '@@redux/INIT':
       break // Ignore
     case 'ADD_CARD':
-      actions = actions.concat([action])
+      cards[action.actionId] = true
       break
     default:
       throw new Error(`Unknown action.type ${action.type}`)
   }
-  console.log('actions', actions)
-  return actions
+  console.log('cards', cards)
+  return cards
 }

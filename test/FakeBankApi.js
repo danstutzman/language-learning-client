@@ -18,7 +18,7 @@ class FakeBankApi {
     for (const action of this.actions) {
       const clientId = action.actionId % 10
       if (action.actionId >
-          (request.clientIdToMaxSyncedActionId.get(clientId) || 0)) {
+          (request.clientIdToMaxSyncedActionId[clientId.toString()] || 0)) {
         actionsToClient.push(action)
       }
     }

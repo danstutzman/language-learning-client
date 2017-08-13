@@ -22,7 +22,7 @@ class LocalBank {
   syncedActions: Array<Action>
   unsyncedActions: Array<Action>
   nextActionId: number // for this clientId
-  clientIdToMaxSyncedActionId: Map<number, number>
+  clientIdToMaxSyncedActionId: {[clientId: string]: number}
 
   constructor(bankApi: BankApi, localStorage: LocalStorage) {
     this.bankApi = bankApi
@@ -36,7 +36,7 @@ class LocalBank {
       this.clientId        = nonNull(unjsoned.clientId)
       this.syncedActions   = nonNull(unjsoned.syncedActions)
       this.clientIdToMaxSyncedActionId =
-        this._objectToMapNumNum(nonNull(unjsoned.clientIdToMaxSyncedActionId))
+        nonNull(unjsoned.clientIdToMaxSyncedActionId)
     }
 
     const storedDataUnsynced = this.localStorage.getItem(UNSYNCED_KEY)
@@ -50,7 +50,7 @@ class LocalBank {
     }
   }
 
-  sync(): Promise<void> {
+  sync(): Promise<Array<Action>> {
     const request: BankApiRequest = {
       clientId:                    this.clientId,
       clientIdToMaxSyncedActionId: this.clientIdToMaxSyncedActionId,
@@ -62,20 +62,28 @@ class LocalBank {
       .then(this._handleSyncResponse.bind(this))
   }
 
-  _handleSyncResponse(response: BankApiResponse) {
+  _handleSyncResponse(response: BankApiResponse): Array<Action> {
     console.log(`Sync response: ${JSON.stringify(response)}`)
     nonNull(response.actionsToClient)
 
+    const newActions = []
     for (const action of response.actionsToClient) {
+      nonNull(action.actionId)
+      nonNull(action.type)
       this.syncedActions.push(action)
+      newActions.push(action)
       
       const clientId = action.actionId % 10
       const existing: number =
-        this.clientIdToMaxSyncedActionId.get(clientId) || 0
+        this.clientIdToMaxSyncedActionId[clientId.toString()] || 0
       if (action.actionId > existing) {
-        this.clientIdToMaxSyncedActionId.set(clientId, action.actionId)
+        this.clientIdToMaxSyncedActionId[clientId.toString()] = action.actionId
+      }
+      if (clientId === this.clientId && action.actionId >= this.nextActionId) {
+        this.nextActionId = action.actionId + 10
       }
     }
+    this._saveSynced()
 
     let actionIdsToDelete = {}
     for (const action of response.actionsToClient) {
@@ -85,29 +93,32 @@ class LocalBank {
     }
     let newUnsyncedActions = []
     for (const action of this.unsyncedActions) {
-      if (!actionIdsToDelete[action.actionId]) {
+      if (actionIdsToDelete[action.actionId] !== true) {
         newUnsyncedActions.push(action)
       }
     }
     this.unsyncedActions = newUnsyncedActions
     this._saveUnsynced()
+
+    return newActions
   }
 
-  addAction() {
-    this.unsyncedActions.push({
+  addAction(): Action {
+    const action = {
       type: 'ADD_CARD',
       actionId: this.nextActionId
-    })
+    }
+    this.unsyncedActions.push(action)
     this.nextActionId += 10
     this._saveUnsynced()
+    return action
   }
 
   _saveSynced() {
     this.localStorage.setItem(SYNCED_KEY, JSON.stringify({
       clientId:       nonNull(this.clientId),
       syncedActions:  nonNull(this.syncedActions),
-      clientIdToMaxSyncedActionId:
-        this._mapNumNumToObject(nonNull(this.clientIdToMaxSyncedActionId))
+      clientIdToMaxSyncedActionId: nonNull(this.clientIdToMaxSyncedActionId)
     }))
   }
 
@@ -116,28 +127,6 @@ class LocalBank {
       unsyncedActions: nonNull(this.unsyncedActions),
       nextActionId:    nonNull(this.nextActionId)
     }))
-  }
-
-  _objectToMapNumNum(object: {[key: string]: number}): Map<number, number> {
-    const map: Map<number, number> = new Map()
-    for (const key of Object.keys(object)) {
-      const value = object[key]
-      if (typeof(value) === 'number') {
-        map.set(parseInt(key), value)
-      } else {
-        throw new Error(
-            `Unexpected non-number value in object ${JSON.stringify(object)}`)
-      }
-    }
-    return map
-  }
-
-  _mapNumNumToObject(map: Map<number, number>): {[key: string]: number} {
-    const object: {[key: string]: number} = {}
-    for (const [key, value] of map.entries()) {
-      object[key.toString()] = value
-    }
-    return map
   }
 }
 

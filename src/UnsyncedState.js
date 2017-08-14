@@ -10,7 +10,7 @@ import SyncedState from './SyncedState'
 
 export default class UnsyncedState {
   localStorage: LocalStorage
-  unsyncedActions: Array<Action>
+  actions:      Array<Action>
   nextActionId: number // for this clientId
 
   constructor(localStorage: LocalStorage) {
@@ -25,10 +25,10 @@ export default class UnsyncedState {
     } else {
       const unjsoned: {} = assertObj(JSON.parse(storedDataUnsynced))
 
-      if (unjsoned.unsyncedActions === undefined) {
-        throw new Error("No unsyncedActions")
+      if (unjsoned.actions === undefined) {
+        throw new Error("No actions")
       }
-      this.unsyncedActions = assertArrayAction(unjsoned.unsyncedActions)
+      this.actions = assertArrayAction(unjsoned.actions)
 
       if (unjsoned.nextActionId === undefined) {
         throw new Error("No nextActionId")
@@ -44,13 +44,13 @@ export default class UnsyncedState {
         actionIdsToDelete[action.actionId] = true
       }
     }
-    let newUnsyncedActions = []
-    for (const action of this.unsyncedActions) {
+    let newActions = []
+    for (const action of this.actions) {
       if (actionIdsToDelete[action.actionId] !== true) {
-        newUnsyncedActions.push(action)
+        newActions.push(action)
       }
     }
-    this.unsyncedActions = newUnsyncedActions
+    this.actions = newActions
     this._saveUnsynced()
   }
 
@@ -59,7 +59,7 @@ export default class UnsyncedState {
       type: 'ADD_CARD',
       actionId: this.nextActionId
     }
-    this.unsyncedActions.push(action)
+    this.actions.push(action)
     this.nextActionId += 10
     this._saveUnsynced()
     return action
@@ -67,8 +67,8 @@ export default class UnsyncedState {
 
   _saveUnsynced() {
     this.localStorage.setItem(UNSYNCED_KEY, JSON.stringify({
-      unsyncedActions: this.unsyncedActions,
-      nextActionId:    this.nextActionId
+      actions:      this.actions,
+      nextActionId: this.nextActionId
     }))
   }
 }

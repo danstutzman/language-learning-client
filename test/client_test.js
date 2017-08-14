@@ -20,7 +20,7 @@ suite('LocalBank persistence to LocalStorage', ()=>{
     })
     assert.deepEqual(JSON.parse(storage.getItem(UNSYNCED_KEY) || '{}'), {
       nextActionId: 21,
-      unsyncedActions: [{ actionId: 11, type: 'ADD_CARD' }]
+      actions: [{ actionId: 11, type: 'ADD_CARD' }]
     })
 
     const clientLater = new LocalBank(api, storage)
@@ -30,7 +30,7 @@ suite('LocalBank persistence to LocalStorage', ()=>{
           clientLater.syncedState.clientIdToMaxSyncedActionId).length, 0)
     assert.equal(clientLater.syncedState.actions.length, 0)
     assert.equal(clientLater.unsyncedState.nextActionId, 21)
-    assert.deepEqual(clientLater.unsyncedState.unsyncedActions,
+    assert.deepEqual(clientLater.unsyncedState.actions,
       [{ actionId: 11, type: 'ADD_CARD' }])
   })
 })
@@ -51,12 +51,12 @@ suite('LocalBank sync to FakeBankApi', ()=>{
   test('can add action before sync', done=>{
     client0.addAction()
     assert.equal(client0.syncedState.actions.length, 0)
-    assert.equal(client0.unsyncedState.unsyncedActions.length, 1)
-    assert.equal(client0.unsyncedState.unsyncedActions[0].actionId, 10)
+    assert.equal(client0.unsyncedState.actions.length, 1)
+    assert.equal(client0.unsyncedState.actions[0].actionId, 10)
 
     client0.sync().then(() => {
       assert.equal(client0.syncedState.actions.length, 1)
-      assert.equal(client0.unsyncedState.unsyncedActions.length, 0)
+      assert.equal(client0.unsyncedState.actions.length, 0)
       assert.equal(client0.syncedState.actions[0].actionId, 10)
       done()
     }).catch(e => { done(e) })
@@ -76,17 +76,17 @@ suite('LocalBank sync to FakeBankApi', ()=>{
     client1.addAction()
 
     client0.sync().then(() => {
-      assert.equal(client0.unsyncedState.unsyncedActions.length, 0)
+      assert.equal(client0.unsyncedState.actions.length, 0)
       assert.equal(client0.syncedState.actions.length, 1)
       assert.equal(client0.syncedState.actions[0].actionId, 10)
 
       client1.sync().then(() => {
-        assert.equal(client1.unsyncedState.unsyncedActions.length, 0)
+        assert.equal(client1.unsyncedState.actions.length, 0)
         assert.equal(client1.syncedState.actions[0].actionId, 10)
         assert.equal(client1.syncedState.actions[1].actionId, 11)
 
         client0.sync().then(() => {
-          assert.equal(client0.unsyncedState.unsyncedActions.length, 0)
+          assert.equal(client0.unsyncedState.actions.length, 0)
           assert.equal(client0.syncedState.actions.length, 2)
           assert.equal(client0.syncedState.actions[0].actionId, 10)
           assert.equal(client0.syncedState.actions[1].actionId, 11)

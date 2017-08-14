@@ -11,8 +11,8 @@ export default class FakeLocalStorage {
       clientIdToMaxSyncedActionId: new Map()
     }))
     this.setItem(UNSYNCED_KEY, JSON.stringify({
-      unsyncedActions: [],
-      nextActionId:    10 + clientId,
+      actions:      [],
+      nextActionId: 10 + clientId,
     }))
   }
 

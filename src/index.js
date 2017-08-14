@@ -17,8 +17,8 @@ if (localStorage.getItem(SYNCED_KEY) === null) {
 		clientIdToMaxSyncedActionId: new Map()
 	}))
 	localStorage.setItem(UNSYNCED_KEY, JSON.stringify({
-		unsyncedActions: [],
-		nextActionId:    10 + clientId,
+		actions:      [],
+		nextActionId: 10 + clientId,
 	}))
 }
 
@@ -28,7 +28,7 @@ const bank = new LocalBank(
 bank.initFromLocalStorage()
 const store = createStore(reducer, {})
 for (const action of bank.syncedState.actions.concat(
-      bank.unsyncedState.unsyncedActions)) {
+      bank.unsyncedState.actions)) {
   store.dispatch(action)
 }
 

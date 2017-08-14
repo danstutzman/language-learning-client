@@ -26,7 +26,7 @@ export default class LocalBank {
     const request: BankApiRequest = {
       clientId:                    this.syncedState.clientId,
       clientIdToMaxSyncedActionId: this.syncedState.clientIdToMaxSyncedActionId,
-      actionsFromClient:           this.unsyncedState.unsyncedActions
+      actionsFromClient:           this.unsyncedState.actions
     }
     console.log(`Sync request: ${JSON.stringify(request)}`)
 

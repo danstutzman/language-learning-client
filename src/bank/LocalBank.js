@@ -2,12 +2,13 @@ import type { Action }          from './Action'
 import type { BankApi }         from './api/BankApi'
 import type { BankApiRequest }  from './api/BankApiRequest'
 import type { BankApiResponse } from './api/BankApiResponse'
+import type { Card }            from '../Card'
 import type { LocalStorage }    from '../LocalStorage'
 import type { Store }           from 'redux'
+import { createStore }          from 'redux'
+import reducer                  from './reducer'
 import SyncedState              from './SyncedState'
 import UnsyncedState            from './UnsyncedState'
-import reducer                  from './reducer'
-import { createStore }          from 'redux'
 
 export default class LocalBank {
   bankApi:       BankApi
@@ -59,8 +60,13 @@ export default class LocalBank {
     this.unsyncedState.handleSyncResponse(response, this.syncedState.clientId)
   }
 
-  addAction() {
-    const action = this.unsyncedState.addAction()
+  addNoopAction() {
+    const action = this.unsyncedState.addAction('NOOP', undefined)
+    this.reduxStore.dispatch(action)
+  }
+
+  addActionAddCard(card: Card) {
+    const action = this.unsyncedState.addAction('ADD_CARD', card)
     this.reduxStore.dispatch(action)
   }
 }

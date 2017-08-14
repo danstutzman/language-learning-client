@@ -5,7 +5,7 @@ export default function(cards: {[actionId: number]: boolean}, action: Action) {
   switch (action.type) {
     case '@@redux/INIT':
       break // Ignore
-    case 'ADD_CARD':
+    case 'NOOP': case 'ADD_CARD':
       cards[action.actionId] = true
       break
     default:

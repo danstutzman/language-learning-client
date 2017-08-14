@@ -1,13 +1,16 @@
 import { assertNum, assertObj } from '../assertType'
+import type { Card }            from '../Card'
+import { assertCard }           from '../Card'
 
 export type Action = {
-  type: 'ADD_CARD',
-  actionId: number,
-  createdAtMillis: number
+  type:            'NOOP' | 'ADD_CARD',
+  actionId:        number,
+  createdAtMillis: number,
+  card?:           Card
 }
 
-function assertActionType(x: any): 'ADD_CARD' {
-  if (x !== 'ADD_CARD') {
+function assertActionType(x: any): 'NOOP' | 'ADD_CARD' {
+  if (x !== 'NOOP' && x !== 'ADD_CARD') {
     throw new Error(`Expected Action Type but got ${x}`)
   }
   return x
@@ -31,7 +34,15 @@ export function assertAction(x: any): Action {
 	}
   const createdAtMillis = assertNum(y.createdAtMillis)
 
-  return { type, actionId, createdAtMillis }
+  let card: Card | void = undefined
+  if (y.type === 'ADD_CARD') {
+    if (!y.card) {
+  		throw new Error(`No card on ${JSON.stringify(y)} despite type=ADD_CARD`)
+  	}
+    card = assertCard(y.card)
+  }
+
+  return { type, actionId, createdAtMillis, card }
 }
 
 export function assertArrayAction(x: any): Array<Action> {

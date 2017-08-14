@@ -26,3 +26,11 @@ export function assertObjNum(x: any): {[key: string]: number} {
   }
   return y
 }
+
+export function assertStr(x: any): string {
+  if (typeof x !== 'string') {
+    throw new Error(`Unexpected type ${typeof x}`)
+  } else {
+    return x
+  }
+}

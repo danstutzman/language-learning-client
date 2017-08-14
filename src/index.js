@@ -29,7 +29,7 @@ function render() {
     React.createElement(App, {
       cards: bank.getReduxStoreState(),
       addCard: ()=>{
-        bank.addAction()
+        bank.addNoopAction()
         render()
       },
       sync: ()=>{

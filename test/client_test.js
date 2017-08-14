@@ -12,7 +12,7 @@ suite('LocalBank persistence to LocalStorage', ()=>{
     const client = new LocalBank(api, storage)
 
     client.initFromLocalStorage()
-    client.addAction()
+    client.addNoopAction()
     assert.deepEqual(JSON.parse(storage.getItem(SYNCED_KEY) || '{}'), {
       clientId: 1,
       clientIdToMaxSyncedActionId: {},
@@ -23,7 +23,7 @@ suite('LocalBank persistence to LocalStorage', ()=>{
     assert.equal(unsynced.nextActionId, 21)
     assert.equal(unsynced.actions.length, 1)
     assert.equal(unsynced.actions[0].actionId, 11)
-    assert.equal(unsynced.actions[0].type, 'ADD_CARD')
+    assert.equal(unsynced.actions[0].type, 'NOOP')
 
     const clientLater = new LocalBank(api, storage)
     clientLater.initFromLocalStorage()
@@ -34,7 +34,7 @@ suite('LocalBank persistence to LocalStorage', ()=>{
     assert.equal(clientLater.unsyncedState.nextActionId, 21)
     assert.equal(clientLater.unsyncedState.actions.length, 1)
     assert.equal(clientLater.unsyncedState.actions[0].actionId, 11)
-    assert.equal(clientLater.unsyncedState.actions[0].type, 'ADD_CARD')
+    assert.equal(clientLater.unsyncedState.actions[0].type, 'NOOP')
   })
 })
 
@@ -52,7 +52,7 @@ suite('LocalBank sync to FakeBankApi', ()=>{
   })
 
   test('can add action before sync', done=>{
-    client0.addAction()
+    client0.addNoopAction()
     assert.equal(client0.syncedState.actions.length, 0)
     assert.equal(client0.unsyncedState.actions.length, 1)
     assert.equal(client0.unsyncedState.actions[0].actionId, 10)
@@ -65,7 +65,7 @@ suite('LocalBank sync to FakeBankApi', ()=>{
     }).catch(e => { done(e) })
   })
   test("client1 sees client0's action", done=>{
-    client0.addAction()
+    client0.addNoopAction()
     client0.sync().then(() => {
       client1.sync().then(() => {
         assert.equal(client1.syncedState.actions.length, 1)
@@ -75,8 +75,8 @@ suite('LocalBank sync to FakeBankApi', ()=>{
     }).catch(e => { done(e) })
   })
   test("client0 and client1 see each others' actions", done=>{
-    client0.addAction()
-    client1.addAction()
+    client0.addNoopAction()
+    client1.addNoopAction()
 
     client0.sync().then(() => {
       assert.equal(client0.unsyncedState.actions.length, 0)

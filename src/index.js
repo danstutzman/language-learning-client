@@ -1,6 +1,6 @@
 import type { Action } from './Action'
 import Ajax            from './Ajax'
-import AjaxBankApi     from './bank/AjaxBankApi'
+import AjaxBankApi     from './bank/api/AjaxBankApi'
 import App             from './App'
 import LocalBank       from './bank/LocalBank'
 import React           from 'react'

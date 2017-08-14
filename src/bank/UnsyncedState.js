@@ -1,5 +1,5 @@
 import type { Action } from '../Action'
-import type { BankApiResponse } from './BankApiResponse'
+import type { BankApiResponse } from './api/BankApiResponse'
 import type { LocalStorage } from '../LocalStorage'
 import { UNSYNCED_KEY } from '../LocalStorage'
 import { assertArrayAction } from '../Action'

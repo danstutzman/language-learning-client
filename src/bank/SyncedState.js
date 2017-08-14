@@ -1,6 +1,6 @@
 import type { LocalStorage } from '../LocalStorage'
 import type { Action } from '../Action'
-import { BankApiResponse } from './BankApiResponse'
+import { BankApiResponse } from './api/BankApiResponse'
 import { assertNum, assertObj, assertObjNum } from '../assertType'
 import { assertArrayAction } from '../Action'
 import { SYNCED_KEY } from '../LocalStorage'

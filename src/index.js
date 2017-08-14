@@ -27,8 +27,8 @@ const bank = new LocalBank(
   window.localStorage)
 bank.initFromLocalStorage()
 const store = createStore(reducer, {})
-for (const action of
-    bank.syncedState.syncedActions.concat(bank.unsyncedActions)) {
+for (const action of bank.syncedState.syncedActions.concat(
+      bank.unsyncedState.unsyncedActions)) {
   store.dispatch(action)
 }
 

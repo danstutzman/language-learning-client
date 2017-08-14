@@ -29,8 +29,8 @@ suite('LocalBank persistence to LocalStorage', ()=>{
     assert.equal(Object.keys(
           clientLater.syncedState.clientIdToMaxSyncedActionId).length, 0)
     assert.equal(clientLater.syncedState.syncedActions.length, 0)
-    assert.equal(clientLater.nextActionId, 21)
-    assert.deepEqual(clientLater.unsyncedActions,
+    assert.equal(clientLater.unsyncedState.nextActionId, 21)
+    assert.deepEqual(clientLater.unsyncedState.unsyncedActions,
       [{ actionId: 11, type: 'ADD_CARD' }])
   })
 })
@@ -51,12 +51,12 @@ suite('LocalBank sync to FakeBankApi', ()=>{
   test('can add action before sync', done=>{
     client0.addAction()
     assert.equal(client0.syncedState.syncedActions.length, 0)
-    assert.equal(client0.unsyncedActions.length, 1)
-    assert.equal(client0.unsyncedActions[0].actionId, 10)
+    assert.equal(client0.unsyncedState.unsyncedActions.length, 1)
+    assert.equal(client0.unsyncedState.unsyncedActions[0].actionId, 10)
 
     client0.sync().then(() => {
       assert.equal(client0.syncedState.syncedActions.length, 1)
-      assert.equal(client0.unsyncedActions.length, 0)
+      assert.equal(client0.unsyncedState.unsyncedActions.length, 0)
       assert.equal(client0.syncedState.syncedActions[0].actionId, 10)
       done()
     }).catch(e => { done(e) })
@@ -76,17 +76,17 @@ suite('LocalBank sync to FakeBankApi', ()=>{
     client1.addAction()
 
     client0.sync().then(() => {
-      assert.equal(client0.unsyncedActions.length, 0)
+      assert.equal(client0.unsyncedState.unsyncedActions.length, 0)
       assert.equal(client0.syncedState.syncedActions.length, 1)
       assert.equal(client0.syncedState.syncedActions[0].actionId, 10)
 
       client1.sync().then(() => {
-        assert.equal(client1.unsyncedActions.length, 0)
+        assert.equal(client1.unsyncedState.unsyncedActions.length, 0)
         assert.equal(client1.syncedState.syncedActions[0].actionId, 10)
         assert.equal(client1.syncedState.syncedActions[1].actionId, 11)
 
         client0.sync().then(() => {
-          assert.equal(client0.unsyncedActions.length, 0)
+          assert.equal(client0.unsyncedState.unsyncedActions.length, 0)
           assert.equal(client0.syncedState.syncedActions.length, 2)
           assert.equal(client0.syncedState.syncedActions[0].actionId, 10)
           assert.equal(client0.syncedState.syncedActions[1].actionId, 11)

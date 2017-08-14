@@ -4,6 +4,16 @@
   <body>
     <h1>Hello world</h1>
     <div id='mount'></div>
+
+    <script src='../node_modules/react/dist/react.js'></script>
+    <script src='../node_modules/react-dom/dist/react-dom.js'></script>
+    <script>
+      function require(moduleName) {
+        if (moduleName === 'react') return window.React;
+        if (moduleName === 'react-dom') return window.ReactDOM;
+        throw new Error("Don't know how to require " + moduleName);
+      }
+    </script>
     <script src='browserified.js'></script>
   </body>
 </html>

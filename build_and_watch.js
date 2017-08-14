@@ -10,7 +10,9 @@ const kexec           = require('kexec')
 const CHOKIDAR_OPTIONS = {'ignored':/[\/\\]\./, 'ignoreInitial':true}
 const REQUIRED_NODE_VERSION = 'v6.11.1'
 const BROWSERIFY_ARGS = `-o build/browserified.js --ignore node-localstorage \
-  --ignore xmlhttprequest --debug src/index.js -t babelify`
+  --ignore xmlhttprequest --debug src/index.js \
+  --exclude react --exclude react-dom \
+  -t babelify`
 
 if (process.version !== REQUIRED_NODE_VERSION) {
   throw new Error(`Currently running ${process.version}.  Please first run:

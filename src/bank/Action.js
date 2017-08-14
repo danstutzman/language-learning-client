@@ -20,25 +20,25 @@ export function assertAction(x: any): Action {
   const y = assertObj(x)
 
   if (!y.type) {
-		throw new Error(`No type on ${JSON.stringify(y)}`)
-	}
+    throw new Error(`No type on ${JSON.stringify(y)}`)
+  }
   const type = assertActionType(y.type)
 
   if (!y.actionId) {
-		throw new Error(`No actionId on ${JSON.stringify(y)}`)
-	}
+    throw new Error(`No actionId on ${JSON.stringify(y)}`)
+  }
   const actionId = assertNum(y.actionId)
 
   if (!y.createdAtMillis) {
-		throw new Error(`No createdAtMillis on ${JSON.stringify(y)}`)
-	}
+    throw new Error(`No createdAtMillis on ${JSON.stringify(y)}`)
+  }
   const createdAtMillis = assertNum(y.createdAtMillis)
 
   let card: Card | void = undefined
   if (y.type === 'ADD_CARD') {
     if (!y.card) {
-  		throw new Error(`No card on ${JSON.stringify(y)} despite type=ADD_CARD`)
-  	}
+      throw new Error(`No card on ${JSON.stringify(y)} despite type=ADD_CARD`)
+    }
     card = assertCard(y.card)
   }
 

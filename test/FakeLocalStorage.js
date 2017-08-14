@@ -1,6 +1,6 @@
 import { SYNCED_KEY, UNSYNCED_KEY } from '../src/LocalStorage'
 
-class FakeLocalStorage {
+export default class FakeLocalStorage {
   map: Map<string, string>
 
   constructor(clientId: number) {
@@ -25,5 +25,3 @@ class FakeLocalStorage {
     this.map.set(key, value)
   }
 }
-
-module.exports = FakeLocalStorage

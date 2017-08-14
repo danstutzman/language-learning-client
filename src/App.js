@@ -1,7 +1,8 @@
 import React from 'react'
+import type { Card } from './Card'
 
 type Props = {
-  cards:              {[actionId: number]: boolean},
+  cards:              {[actionId: number]: Card},
   addCard:            () => void,
   sync:               () => void
 }

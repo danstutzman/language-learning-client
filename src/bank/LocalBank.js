@@ -14,7 +14,7 @@ export default class LocalBank {
   bankApi:       BankApi
   syncedState:   SyncedState
   unsyncedState: UnsyncedState
-  reduxStore:    Store<{[actionId: number]: boolean}, Action>
+  reduxStore:    Store<{[actionId: number]: Card}, Action>
 
   constructor(bankApi: BankApi, localStorage: LocalStorage) {
     this.bankApi       = bankApi

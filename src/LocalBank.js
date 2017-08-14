@@ -8,13 +8,11 @@ import UnsyncedState from './UnsyncedState'
 
 export default class LocalBank {
   bankApi: BankApi
-  localStorage: LocalStorage
   syncedState: SyncedState
   unsyncedState: UnsyncedState
 
   constructor(bankApi: BankApi, localStorage: LocalStorage) {
     this.bankApi = bankApi
-    this.localStorage = localStorage
     this.syncedState = new SyncedState(localStorage)
     this.unsyncedState = new UnsyncedState(localStorage)
   }

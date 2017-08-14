@@ -1,4 +1,4 @@
-import { assertNum, assertObj } from './assertType'
+import { assertNum, assertObj } from '../assertType'
 
 export type Action = {
   type: 'ADD_CARD',

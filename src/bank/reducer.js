@@ -1,4 +1,4 @@
-import type { Action } from '../Action'
+import type { Action } from './Action'
 
 export default function(cards: {[actionId: number]: boolean}, action: Action) {
   console.log('action', action)

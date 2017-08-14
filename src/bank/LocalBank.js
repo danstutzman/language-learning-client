@@ -1,4 +1,4 @@
-import type { Action }          from '../Action'
+import type { Action }          from './Action'
 import type { BankApi }         from './api/BankApi'
 import type { BankApiRequest }  from './api/BankApiRequest'
 import type { BankApiResponse } from './api/BankApiResponse'

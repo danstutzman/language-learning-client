@@ -8,7 +8,7 @@ import { SYNCED_KEY } from './LocalStorage'
 export default class SyncedState {
   localStorage: LocalStorage
   clientId: number
-  syncedActions: Array<Action>
+  actions: Array<Action>
   clientIdToMaxSyncedActionId: {[clientId: string]: number}
 
   constructor(localStorage: LocalStorage) {
@@ -27,10 +27,10 @@ export default class SyncedState {
       }
       this.clientId = assertNum(unjsoned.clientId)
 
-      if (unjsoned.syncedActions === undefined) {
-        throw new Error("No syncedActions")
+      if (unjsoned.actions === undefined) {
+        throw new Error("No actions")
       }
-      this.syncedActions = assertArrayAction(unjsoned.syncedActions)
+      this.actions = assertArrayAction(unjsoned.actions)
 
       if (unjsoned.clientIdToMaxSyncedActionId === undefined) {
         throw new Error("No clientIdToMaxSyncedActionId")
@@ -43,7 +43,7 @@ export default class SyncedState {
   handleSyncResponse(response: BankApiResponse) {
     const newActions = []
     for (const action of response.actionsToClient) {
-      this.syncedActions.push(action)
+      this.actions.push(action)
       newActions.push(action)
 
       const clientId = action.actionId % 10
@@ -61,8 +61,8 @@ export default class SyncedState {
 
   _saveSynced() {
     this.localStorage.setItem(SYNCED_KEY, JSON.stringify({
-      clientId:       this.clientId,
-      syncedActions:  this.syncedActions,
+      clientId:                    this.clientId,
+      actions:                     this.actions,
       clientIdToMaxSyncedActionId: this.clientIdToMaxSyncedActionId
     }))
   }

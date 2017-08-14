@@ -6,8 +6,8 @@ class FakeLocalStorage {
   constructor(clientId: number) {
     this.map = new Map()
     this.setItem(SYNCED_KEY, JSON.stringify({
-      clientId:        clientId,
-      syncedActions:   [],
+      clientId:                    clientId,
+      actions:                     [],
       clientIdToMaxSyncedActionId: new Map()
     }))
     this.setItem(UNSYNCED_KEY, JSON.stringify({

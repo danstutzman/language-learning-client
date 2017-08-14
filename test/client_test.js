@@ -11,6 +11,7 @@ suite('LocalBank persistence to LocalStorage', ()=>{
     const storage = new FakeLocalStorage(1)
     const client = new LocalBank(api, storage)
 
+    client.initFromLocalStorage()
     client.addAction()
     assert.deepEqual(JSON.parse(storage.getItem(SYNCED_KEY) || '{}'), {
       clientId: 1,
@@ -23,6 +24,7 @@ suite('LocalBank persistence to LocalStorage', ()=>{
     })
 
     const clientLater = new LocalBank(api, storage)
+    clientLater.initFromLocalStorage()
     assert.equal(clientLater.clientId, 1)
     assert.equal(Object.keys(clientLater.clientIdToMaxSyncedActionId).length, 0)
     assert.equal(clientLater.syncedActions.length, 0)
@@ -40,7 +42,9 @@ suite('LocalBank sync to FakeBankApi', ()=>{
   setup(() => {
     api = new FakeBankApi()
     client0 = new LocalBank(api, new FakeLocalStorage(0))
+    client0.initFromLocalStorage()
     client1 = new LocalBank(api, new FakeLocalStorage(1))
+    client1.initFromLocalStorage()
   })
 
   test('can add action before sync', done=>{

@@ -29,7 +29,9 @@ class LocalBank {
   constructor(bankApi: BankApi, localStorage: LocalStorage) {
     this.bankApi = bankApi
     this.localStorage = localStorage
+  }
 
+  initFromLocalStorage() {
     const storedDataSynced = this.localStorage.getItem(SYNCED_KEY)
     if (storedDataSynced === null){
       throw new Error(`Expected initialized LocalStorage ${SYNCED_KEY}`)

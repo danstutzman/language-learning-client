@@ -1,6 +1,6 @@
-import type { Action } from './Action'
-import { assertObj } from './assertType'
-import { assertArrayAction } from './Action'
+import type { Action } from '../Action'
+import { assertObj } from '../assertType'
+import { assertArrayAction } from '../Action'
 
 export interface BankApiResponse {
   actionsToClient: Array<Action>

@@ -1,12 +1,9 @@
-import type { Action } from './Action'
-import type { BankApi } from './BankApi'
-import type { BankApiRequest } from './BankApiRequest'
+import type { Action } from '../Action'
 import type { BankApiResponse } from './BankApiResponse'
-import type { LocalStorage } from './LocalStorage'
-import { UNSYNCED_KEY } from './LocalStorage'
-import { assertArrayAction } from './Action'
-import { assertNum, assertObj } from './assertType'
-import SyncedState from './SyncedState'
+import type { LocalStorage } from '../LocalStorage'
+import { UNSYNCED_KEY } from '../LocalStorage'
+import { assertArrayAction } from '../Action'
+import { assertNum, assertObj } from '../assertType'
 
 export default class UnsyncedState {
   localStorage: LocalStorage
@@ -16,10 +13,10 @@ export default class UnsyncedState {
   constructor(localStorage: LocalStorage) {
     this.localStorage = localStorage
   }
-  
+
   initFromLocalStorage() {
     const storedDataUnsynced = this.localStorage.getItem(UNSYNCED_KEY)
-    if (storedDataUnsynced === null){
+    if (storedDataUnsynced === null) {
       throw new Error(
         `Expected initialized LocalStorage ${UNSYNCED_KEY}`)
     } else {

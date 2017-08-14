@@ -1,5 +1,5 @@
 import assert                       from 'assert'
-import LocalBank                    from '../src/LocalBank'
+import LocalBank                    from '../src/bank/LocalBank'
 import FakeBankApi                  from './FakeBankApi'
 import FakeLocalStorage             from './FakeLocalStorage'
 import { SYNCED_KEY, UNSYNCED_KEY } from '../src/LocalStorage'

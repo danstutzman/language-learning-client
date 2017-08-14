@@ -1,6 +1,6 @@
 import type { BankApiRequest } from './BankApiRequest'
 import type { BankApiResponse } from './BankApiResponse'
-import type Ajax from './Ajax'
+import type Ajax from '../Ajax'
 import { assertBankApiResponse } from './BankApiResponse'
 
 class AjaxBankApi {

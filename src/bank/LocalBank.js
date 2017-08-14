@@ -1,8 +1,8 @@
-import type { Action } from './Action'
+import type { Action } from '../Action'
 import type { BankApi } from './BankApi'
 import type { BankApiRequest } from './BankApiRequest'
 import type { BankApiResponse } from './BankApiResponse'
-import type { LocalStorage } from './LocalStorage'
+import type { LocalStorage } from '../LocalStorage'
 import SyncedState from './SyncedState'
 import UnsyncedState from './UnsyncedState'
 

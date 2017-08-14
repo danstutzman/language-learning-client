@@ -1,9 +1,9 @@
-import type { LocalStorage } from './LocalStorage'
-import type { Action } from './Action'
+import type { LocalStorage } from '../LocalStorage'
+import type { Action } from '../Action'
 import { BankApiResponse } from './BankApiResponse'
-import { assertNum, assertObj, assertObjNum } from './assertType'
-import { assertArrayAction } from './Action'
-import { SYNCED_KEY } from './LocalStorage'
+import { assertNum, assertObj, assertObjNum } from '../assertType'
+import { assertArrayAction } from '../Action'
+import { SYNCED_KEY } from '../LocalStorage'
 
 export default class SyncedState {
   localStorage: LocalStorage

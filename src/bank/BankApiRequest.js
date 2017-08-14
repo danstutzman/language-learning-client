@@ -1,4 +1,4 @@
-import type { Action } from './Action'
+import type { Action } from '../Action'
 
 export type BankApiRequest = {
   clientId: number,

@@ -25,8 +25,10 @@ if (localStorage.getItem(SYNCED_KEY) === null) {
 const bank = new LocalBank(
   new AjaxBankApi(new Ajax(), 'http://localhost:3000/api/sync'),
   window.localStorage)
+bank.initFromLocalStorage()
 const store = createStore(reducer, {})
-for (const action of bank.syncedActions.concat(bank.unsyncedActions)) {
+for (const action of
+    bank.syncedState.syncedActions.concat(bank.unsyncedActions)) {
   store.dispatch(action)
 }
 

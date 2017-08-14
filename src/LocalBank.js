@@ -3,57 +3,26 @@ import type { BankApi } from './BankApi'
 import type { BankApiRequest } from './BankApiRequest'
 import type { BankApiResponse } from './BankApiResponse'
 import type { LocalStorage } from './LocalStorage'
-import { SYNCED_KEY, UNSYNCED_KEY } from './LocalStorage'
+import { UNSYNCED_KEY } from './LocalStorage'
 import { assertArrayAction } from './Action'
 import { assertNum, assertObj } from './assertType'
-
-function nonNull(a: any): any {
-  if (a === null) {
-    throw new Error("Got unexpected null")
-  } else if (a === undefined) {
-    throw new Error("Got unexpected undefined")
-  } else {
-    return a
-  }
-}
+import SyncedState from './SyncedState'
 
 class LocalBank {
   bankApi: BankApi
   localStorage: LocalStorage
-  clientId: number
-  syncedActions: Array<Action>
+  syncedState: SyncedState
   unsyncedActions: Array<Action>
   nextActionId: number // for this clientId
-  clientIdToMaxSyncedActionId: {[clientId: string]: number}
 
   constructor(bankApi: BankApi, localStorage: LocalStorage) {
     this.bankApi = bankApi
     this.localStorage = localStorage
+    this.syncedState = new SyncedState(localStorage)
   }
 
   initFromLocalStorage() {
-    const storedDataSynced = this.localStorage.getItem(SYNCED_KEY)
-    if (storedDataSynced === null){
-      throw new Error(`Expected initialized LocalStorage ${SYNCED_KEY}`)
-    } else {
-      const unjsoned: {} = assertObj(JSON.parse(storedDataSynced))
-
-      if (unjsoned.clientId === undefined) {
-        throw new Error("No clientId")
-      }
-      this.clientId = assertNum(unjsoned.clientId)
-
-      if (unjsoned.syncedActions === undefined) {
-        throw new Error("No syncedActions")
-      }
-      this.syncedActions = assertArrayAction(unjsoned.syncedActions)
-
-      if (unjsoned.clientIdToMaxSyncedActionId === undefined) {
-        throw new Error("No clientIdToMaxSyncedActionId")
-      }
-      this.clientIdToMaxSyncedActionId =
-        nonNull(unjsoned.clientIdToMaxSyncedActionId)
-    }
+    this.syncedState.initFromLocalStorage()
 
     const storedDataUnsynced = this.localStorage.getItem(UNSYNCED_KEY)
     if (storedDataUnsynced === null){
@@ -76,8 +45,8 @@ class LocalBank {
 
   sync(): Promise<Array<Action>> {
     const request: BankApiRequest = {
-      clientId:                    this.clientId,
-      clientIdToMaxSyncedActionId: this.clientIdToMaxSyncedActionId,
+      clientId:                    this.syncedState.clientId,
+      clientIdToMaxSyncedActionId: this.syncedState.clientIdToMaxSyncedActionId,
       actionsFromClient:           this.unsyncedActions
     }
     console.log(`Sync request: ${JSON.stringify(request)}`)
@@ -88,27 +57,12 @@ class LocalBank {
 
   _handleSyncResponse(response: BankApiResponse): Array<Action> {
     console.log(`Sync response: ${JSON.stringify(response)}`)
-    nonNull(response.actionsToClient)
 
-    const newActions = []
-    for (const action of response.actionsToClient) {
-      nonNull(action.actionId)
-      nonNull(action.type)
-      this.syncedActions.push(action)
-      newActions.push(action)
-
-      const clientId = action.actionId % 10
-      const existing: number =
-        this.clientIdToMaxSyncedActionId[clientId.toString()] || 0
-      if (action.actionId > existing) {
-        this.clientIdToMaxSyncedActionId[clientId.toString()] = action.actionId
-      }
-    }
-    this._saveSynced()
+    const newActions = this.syncedState.handleSyncResponse(response)
 
     let actionIdsToDelete = {}
     for (const action of response.actionsToClient) {
-      if (action.actionId % 10 === this.clientId) {
+      if (action.actionId % 10 === this.syncedState.clientId) {
         actionIdsToDelete[action.actionId] = true
       }
     }
@@ -135,18 +89,10 @@ class LocalBank {
     return action
   }
 
-  _saveSynced() {
-    this.localStorage.setItem(SYNCED_KEY, JSON.stringify({
-      clientId:       nonNull(this.clientId),
-      syncedActions:  nonNull(this.syncedActions),
-      clientIdToMaxSyncedActionId: nonNull(this.clientIdToMaxSyncedActionId)
-    }))
-  }
-
   _saveUnsynced() {
     this.localStorage.setItem(UNSYNCED_KEY, JSON.stringify({
-      unsyncedActions: nonNull(this.unsyncedActions),
-      nextActionId:    nonNull(this.nextActionId)
+      unsyncedActions: this.unsyncedActions,
+      nextActionId:    this.nextActionId
     }))
   }
 }

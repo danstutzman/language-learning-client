@@ -17,3 +17,12 @@ export function assertObj(x: any): {} {
     return x
   }
 }
+
+export function assertObjNum(x: any): {[key: string]: number} {
+  const copy: {[key:string]: number} = {}
+  const y = assertObj(x)
+  for (const key in y) {
+    copy[key] = y[key]
+  }
+  return y
+}

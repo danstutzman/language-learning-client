@@ -18,10 +18,12 @@ suite('LocalBank persistence to LocalStorage', ()=>{
       clientIdToMaxSyncedActionId: {},
       actions: []
     })
-    assert.deepEqual(JSON.parse(storage.getItem(UNSYNCED_KEY) || '{}'), {
-      nextActionId: 21,
-      actions: [{ actionId: 11, type: 'ADD_CARD' }]
-    })
+
+    const unsynced = JSON.parse(storage.getItem(UNSYNCED_KEY) || '{}')
+    assert.equal(unsynced.nextActionId, 21)
+    assert.equal(unsynced.actions.length, 1)
+    assert.equal(unsynced.actions[0].actionId, 11)
+    assert.equal(unsynced.actions[0].type, 'ADD_CARD')
 
     const clientLater = new LocalBank(api, storage)
     clientLater.initFromLocalStorage()
@@ -30,8 +32,9 @@ suite('LocalBank persistence to LocalStorage', ()=>{
           clientLater.syncedState.clientIdToMaxSyncedActionId).length, 0)
     assert.equal(clientLater.syncedState.actions.length, 0)
     assert.equal(clientLater.unsyncedState.nextActionId, 21)
-    assert.deepEqual(clientLater.unsyncedState.actions,
-      [{ actionId: 11, type: 'ADD_CARD' }])
+    assert.equal(clientLater.unsyncedState.actions.length, 1)
+    assert.equal(clientLater.unsyncedState.actions[0].actionId, 11)
+    assert.equal(clientLater.unsyncedState.actions[0].type, 'ADD_CARD')
   })
 })
 

@@ -54,7 +54,8 @@ export default class UnsyncedState {
   addAction(): Action {
     const action = {
       type: 'ADD_CARD',
-      actionId: this.nextActionId
+      actionId: this.nextActionId,
+      createdAtMillis: new Date().getTime()
     }
     this.actions.push(action)
     this.nextActionId += 10

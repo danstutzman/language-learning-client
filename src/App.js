@@ -67,7 +67,7 @@ export default class App extends React.Component<void, Props, State> {
       </div>
       <div style={{ display:
           (this.state.currentTab === 'FAST_QUIZ' ? 'block' : 'none') }}>
-        { this.newCardAction === null ? 'No cards' :
+        { this.props.newCardAction === null ? 'No cards' :
           this.state.startedFastQuiz ?
             <FastQuiz newCardAction={assertAction(this.props.newCardAction)}
               addExposure={this.props.addExposure}

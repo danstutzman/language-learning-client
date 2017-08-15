@@ -47,26 +47,14 @@ export default class FastQuiz extends React.Component<void, Props, State> {
     this.setState({ secondsLeft: 0 })
   }
 
-  onClickIForget() {
-    this.props.addExposure({
-      cardId:     this.props.newCardAction.actionId,
-      remembered: false
-    })
-    this.setState({ secondsLeft: 0 })
-  }
-
   render() {
     return <div>
       {this.props.newCardAction === null ? 'No cards' :
         <div>
-          <p>Translate the following to Spanish:</p>
-          <p>{(this.props.newCardAction.card || { en: '?' }).en}</p>
+          <p>{(this.props.newCardAction.card || { es: '?' }).es}</p>
           <div>Time: {this.state.secondsLeft}</div>
           <button onClick={this.onClickIRemember.bind(this)}>
-            I Remember
-          </button>
-          <button onClick={this.onClickIForget.bind(this)}>
-            I Forget
+            I Understand
           </button>
         </div>}
     </div>

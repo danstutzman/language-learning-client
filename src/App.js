@@ -38,6 +38,13 @@ class App extends React.Component<void, Props, State> {
     }
   }
 
+  isAddCardDisabled() {
+    const { newGender, newEs, newEn } = this.state
+    return !(newGender === 'M' || newGender === 'F') ||
+      newEs === '' ||
+      newEn === ''
+  }
+
   render() {
     const { cards, sync } = this.props
     const { newGender, newEs, newEn } = this.state
@@ -67,8 +74,12 @@ class App extends React.Component<void, Props, State> {
             <td>(new)</td>
             <td>EsN</td>
             <td>
-              <input value={newGender} onChange={e =>
-                this.setState({newGender: e.target.value})}/>
+              <select value={newGender} onChange={e =>
+                  this.setState({newGender: e.target.value})}>
+                 <option></option>
+                <option>M</option>
+                <option>F</option>
+              </select>
             </td>
             <td>
               <input value={newEs} onChange={e =>
@@ -81,7 +92,9 @@ class App extends React.Component<void, Props, State> {
           </tr>
         </tbody>
       </table>
-      <button onClick={this.onClickAddCard.bind(this)}>Add Card</button>
+      <button onClick={this.onClickAddCard.bind(this)}
+          disabled={this.isAddCardDisabled()}>
+        Add Card</button>
       <button onClick={sync}>Sync</button>
     </div>
   }

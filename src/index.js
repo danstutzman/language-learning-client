@@ -1,3 +1,4 @@
+import type { Card }   from './Card'
 import Ajax            from './Ajax'
 import AjaxBankApi     from './bank/api/AjaxBankApi'
 import App             from './App'
@@ -28,8 +29,8 @@ function render() {
   ReactDOM.render(
     React.createElement(App, {
       cards: bank.getReduxStoreState(),
-      addCard: ()=>{
-        bank.addNoopAction()
+      addCard: (card: Card) => {
+        bank.addActionAddCard(card)
         render()
       },
       sync: ()=>{

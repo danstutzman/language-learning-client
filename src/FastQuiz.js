@@ -59,14 +59,14 @@ export default class FastQuiz extends React.Component<void, Props, State> {
 
   render() {
     const es = (this.props.newCardAction.card || { es: '?' }).es
-    const wavUrl = this.props.speakUrlPrefix + es + ".wav"
+    const audioUrl = this.props.speakUrlPrefix + es + ".mp3"
     return <div>
       {this.props.newCardAction === null ? 'No cards' :
         <div>
           <p>{es}</p>
           <audio controls='controls'
               ref={element => { this.audioElement = element }}>
-            <source src={wavUrl} />
+            <source src={audioUrl} />
           </audio>
           <div>Time: {this.state.secondsLeft}</div>
           <button onClick={this.onClickIRemember.bind(this)}>

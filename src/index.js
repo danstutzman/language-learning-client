@@ -1,7 +1,7 @@
 import type { Card }   from './Card'
 import Ajax            from './Ajax'
 import AjaxBankApi     from './bank/api/AjaxBankApi'
-import App             from './App'
+import NounBrowser     from './NounBrowser'
 import LocalBank       from './bank/LocalBank'
 import React           from 'react'
 import ReactDOM        from 'react-dom'
@@ -27,7 +27,7 @@ bank.initFromLocalStorage()
 
 function render() {
   ReactDOM.render(
-    React.createElement(App, {
+    React.createElement(NounBrowser, {
       cards: bank.getReduxStoreState(),
       addCard: (card: Card) => {
         bank.addActionAddCard(card)

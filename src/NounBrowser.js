@@ -13,7 +13,7 @@ type State = {
   newEn: string
 }
 
-class App extends React.Component<void, Props, State> {
+export default class NounBrowser extends React.Component<void, Props, State> {
   state: State
 
   constructor() {
@@ -99,5 +99,3 @@ class App extends React.Component<void, Props, State> {
     </div>
   }
 }
-
-export default App

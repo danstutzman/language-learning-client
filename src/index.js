@@ -23,7 +23,7 @@ if (localStorage.getItem(SYNCED_KEY) === null) {
 }
 
 const bank = new LocalBank(
-  new AjaxBankApi(new Ajax(), 'http://localhost:3000/api/sync'),
+  new AjaxBankApi(new Ajax(), 'https://serverdts.localtunnel.me/api/sync'),
   window.localStorage)
 bank.initFromLocalStorage()
 
@@ -41,7 +41,7 @@ function render() {
       cards: bank.getReduxStoreState(),
       newCardAction: chooseRandomCard(
         bank.syncedState.actions.concat(bank.unsyncedState.actions)),
-      speakUrlPrefix: 'http://localhost:3000/speak/',
+      speakUrlPrefix: 'https://serverdts.localtunnel.me/speak/',
       addCard: (card: Card) => {
         bank.addActionAddCard(card)
         render()

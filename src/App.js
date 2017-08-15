@@ -51,6 +51,26 @@ export default class App extends React.Component<void, Props, State> {
     })
   }
 
+  onClickPlaySound() {
+    // See http://stackoverflow.com/questions/12517000/no-sound-on-ios-6-web-audio-api#32840804
+    // If still no sound, check if hardware ringer switch is on vibrate-only
+    if (window.myAudioContext === undefined) {
+      if (window.AudioContext) {
+        window.myAudioContext = new window.AudioContext()
+      } else if (window.webkitAudioContext) {
+        window.myAudioContext = new window.webkitAudioContext()
+      } else {
+        window.alert('Your browser does not support yet Web Audio API')
+      }
+    }
+
+    const oscillator = window.myAudioContext.createOscillator()
+    oscillator.frequency.value = 400
+    oscillator.connect(window.myAudioContext.destination)
+    oscillator.start(window.myAudioContext.currentTime)
+    oscillator.stop(window.myAudioContext.currentTime + 1.0)
+  }
+
   render() {
     return <div>
       <button onClick={this.onClickNounBrowserTab.bind(this)}>
@@ -76,6 +96,7 @@ export default class App extends React.Component<void, Props, State> {
               Start Fast Quiz
             </button> }
       </div>
+      <button onClick={this.onClickPlaySound.bind(this)}>Play Sound</button>
     </div>
   }
 }

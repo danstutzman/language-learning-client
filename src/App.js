@@ -7,11 +7,12 @@ import FastQuiz from './FastQuiz' // eslint-disable-line no-unused-vars
 import { assertAction } from './bank/Action'
 
 type Props = {
-  newCardAction: Action | null,
-  cards:       {[actionId: number]: Card},
-  addCard:     (Card) => void,
-  addExposure: (Exposure) => void,
-  sync:        () => void
+  newCardAction:  Action | null,
+  cards:          {[actionId: number]: Card},
+  speakUrlPrefix: string,
+  addCard:        (Card) => void,
+  addExposure:    (Exposure) => void,
+  sync:           () => void
 }
 
 type State = {
@@ -69,7 +70,8 @@ export default class App extends React.Component<void, Props, State> {
         { this.newCardAction === null ? 'No cards' :
           this.state.startedFastQuiz ?
             <FastQuiz newCardAction={assertAction(this.props.newCardAction)}
-              addExposure={this.props.addExposure} /> :
+              addExposure={this.props.addExposure}
+              speakUrlPrefix={this.props.speakUrlPrefix} /> :
             <button onClick={this.onClickStartFastQuiz.bind(this)}>
               Start Fast Quiz
             </button> }

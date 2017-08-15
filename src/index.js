@@ -41,6 +41,7 @@ function render() {
       cards: bank.getReduxStoreState(),
       newCardAction: chooseRandomCard(
         bank.syncedState.actions.concat(bank.unsyncedState.actions)),
+      speakUrlPrefix: 'http://localhost:3000/speak/',
       addCard: (card: Card) => {
         bank.addActionAddCard(card)
         render()

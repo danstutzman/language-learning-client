@@ -1,8 +1,10 @@
+import type { Action } from './bank/ACtion'
+import type { Exposure } from './Exposure'
 import React from 'react'
-import type { Card } from './Card'
 
 type Props = {
-  card: Card | null
+  newCardAction: Action,
+  addExposure:   (Exposure) => void
 }
 
 type State = {
@@ -37,13 +39,35 @@ export default class FastQuiz extends React.Component<void, Props, State> {
     window.clearInterval(this.eachSecondInterval)
   }
 
+  onClickIRemember() {
+    this.props.addExposure({
+      cardId:     this.props.newCardAction.actionId,
+      remembered: true
+    })
+    this.setState({ secondsLeft: 0 })
+  }
+
+  onClickIForget() {
+    this.props.addExposure({
+      cardId:     this.props.newCardAction.actionId,
+      remembered: false
+    })
+    this.setState({ secondsLeft: 0 })
+  }
+
   render() {
     return <div>
-      {this.props.card === null ? 'No cards' :
+      {this.props.newCardAction === null ? 'No cards' :
         <div>
           <p>Translate the following to Spanish:</p>
-          <p>{this.props.card.en}</p>
+          <p>{(this.props.newCardAction.card || { en: '?' }).en}</p>
           <div>Time: {this.state.secondsLeft}</div>
+          <button onClick={this.onClickIRemember.bind(this)}>
+            I Remember
+          </button>
+          <button onClick={this.onClickIForget.bind(this)}>
+            I Forget
+          </button>
         </div>}
     </div>
   }

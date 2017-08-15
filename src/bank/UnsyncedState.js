@@ -2,6 +2,7 @@ import type { Action } from './Action'
 import type { BankApiResponse } from './api/BankApiResponse'
 import type { LocalStorage } from '../LocalStorage'
 import type { Card } from '../Card'
+import type { Exposure } from '../Exposure'
 import { UNSYNCED_KEY } from '../LocalStorage'
 import { assertArrayAction } from './Action'
 import { assertNum, assertObj } from '../assertType'
@@ -52,10 +53,12 @@ export default class UnsyncedState {
     this._saveUnsynced()
   }
 
-  addAction(type: 'NOOP' | 'ADD_CARD', card: Card | void): Action {
+  addAction(type: 'NOOP' | 'ADD_CARD' | 'ADD_EXPOSURE',
+            card: Card | void,
+            exposure: Exposure | void): Action {
     const actionId = this.nextActionId
     const createdAtMillis = new Date().getTime()
-    const action = { type, actionId, createdAtMillis, card }
+    const action = { type, actionId, createdAtMillis, card, exposure }
     this.actions.push(action)
     this.nextActionId += 10
     this._saveUnsynced()

@@ -1,12 +1,17 @@
-import React from 'react'
 import type { Card } from './Card'
+import type { Exposure } from './Exposure'
+import type { Action } from './bank/Action'
+import React from 'react'
 import NounBrowser from './NounBrowser' // eslint-disable-line no-unused-vars
 import FastQuiz from './FastQuiz' // eslint-disable-line no-unused-vars
+import { assertAction } from './bank/Action'
 
 type Props = {
-  cards:   {[actionId: number]: Card},
-  addCard: (Card) => void,
-  sync:    () => void
+  newCardAction: Action | null,
+  cards:       {[actionId: number]: Card},
+  addCard:     (Card) => void,
+  addExposure: (Exposure) => void,
+  sync:        () => void
 }
 
 type State = {
@@ -46,11 +51,6 @@ export default class App extends React.Component<void, Props, State> {
   }
 
   render() {
-    const actionIds = Object.keys(this.props.cards)
-		const actionId = parseInt(
-			actionIds[Math.floor(Math.random() * actionIds.length)])
-    const card = actionIds.length > 0 ? this.props.cards[actionId] : null
-
     return <div>
       <button onClick={this.onClickNounBrowserTab.bind(this)}>
         Noun Browser
@@ -66,11 +66,13 @@ export default class App extends React.Component<void, Props, State> {
       </div>
       <div style={{ display:
           (this.state.currentTab === 'FAST_QUIZ' ? 'block' : 'none') }}>
-        { this.state.startedFastQuiz ?
-          <FastQuiz cards={this.props.cards} card={card} /> :
-          <button onClick={this.onClickStartFastQuiz.bind(this)}>
-            Start Fast Quiz
-          </button> }
+        { this.newCardAction === null ? 'No cards' :
+          this.state.startedFastQuiz ?
+            <FastQuiz newCardAction={assertAction(this.props.newCardAction)}
+              addExposure={this.props.addExposure} /> :
+            <button onClick={this.onClickStartFastQuiz.bind(this)}>
+              Start Fast Quiz
+            </button> }
       </div>
     </div>
   }

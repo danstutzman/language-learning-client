@@ -1,10 +1,11 @@
 import { assertObj, assertStr } from './assertType'
 
 export type Card = {
-  type: 'EsN',
-  gender: 'M' | 'F',
-  es: string,
-  en: string
+  type:        'EsN',
+  gender:      'M' | 'F',
+  es:          string,
+  en:          string,
+  remembered?: boolean
 }
 
 function assertCardType(x: any): 'EsN' {

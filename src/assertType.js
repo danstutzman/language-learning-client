@@ -1,3 +1,11 @@
+export function assertBool(x: any): boolean {
+  if (typeof x !== 'boolean') {
+    throw new Error(`Unexpected type ${typeof x}`)
+  } else {
+    return x
+  }
+}
+
 export function assertNum(x: any): number {
   if (typeof x !== 'number') {
     throw new Error(`Unexpected type ${typeof x}`)

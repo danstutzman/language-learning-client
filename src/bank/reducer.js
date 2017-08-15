@@ -9,10 +9,18 @@ export default function(cards: {[actionId: number]: Card}, action: Action) {
     case 'NOOP':
       break // Ignore
     case 'ADD_CARD':
-      if (action.card === undefined) {
-        throw new Error(`Undefined card field for actionId=${action.actionId}`)
+      const card = action.card
+      if (card === undefined) {
+        throw new Error(`Undefined card for actionId=${action.actionId}`)
       }
-      cards[action.actionId] = action.card
+      cards[action.actionId] = card
+      break
+    case 'ADD_EXPOSURE':
+      const exposure = action.exposure
+      if (exposure === undefined) {
+        throw new Error(`Undefined exposure for actionId=${action.actionId}`)
+      }
+      cards[exposure.cardId].remembered = exposure.remembered
       break
     default:
       throw new Error(`Unknown action.type ${action.type}`)

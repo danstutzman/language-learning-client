@@ -1,16 +1,19 @@
 import { assertNum, assertObj } from '../assertType'
 import type { Card }            from '../Card'
+import type { Exposure }        from '../Exposure'
 import { assertCard }           from '../Card'
+import { assertExposure }       from '../Exposure'
 
 export type Action = {
-  type:            'NOOP' | 'ADD_CARD',
+  type:            'NOOP' | 'ADD_CARD' | 'ADD_EXPOSURE',
   actionId:        number,
   createdAtMillis: number,
-  card?:           Card
+  card?:           Card,
+  exposure?:       Exposure
 }
 
-function assertActionType(x: any): 'NOOP' | 'ADD_CARD' {
-  if (x !== 'NOOP' && x !== 'ADD_CARD') {
+function assertActionType(x: any): 'NOOP' | 'ADD_CARD' | 'ADD_EXPOSURE' {
+  if (x !== 'NOOP' && x !== 'ADD_CARD' && x != 'ADD_EXPOSURE') {
     throw new Error(`Expected Action Type but got ${x}`)
   }
   return x
@@ -42,7 +45,16 @@ export function assertAction(x: any): Action {
     card = assertCard(y.card)
   }
 
-  return { type, actionId, createdAtMillis, card }
+  let exposure: Exposure | void = undefined
+  if (y.type === 'ADD_EXPOSURE') {
+    if (!y.exposure) {
+      throw new Error(
+        `No exposure on ${JSON.stringify(y)} despite type=ADD_EXPOSURE`)
+    }
+    exposure = assertExposure(y.exposure)
+  }
+
+  return { type, actionId, createdAtMillis, card, exposure }
 }
 
 export function assertArrayAction(x: any): Array<Action> {

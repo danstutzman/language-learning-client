@@ -5,6 +5,7 @@ import type { BankApiResponse } from './api/BankApiResponse'
 import type { Card }            from '../Card'
 import type { LocalStorage }    from '../LocalStorage'
 import type { Store }           from 'redux'
+import type { Exposure }        from '../Exposure'
 import { createStore }          from 'redux'
 import reducer                  from './reducer'
 import SyncedState              from './SyncedState'
@@ -61,12 +62,20 @@ export default class LocalBank {
   }
 
   addNoopAction() {
-    const action = this.unsyncedState.addAction('NOOP', undefined)
+    const action = this.unsyncedState.addAction(
+        'NOOP', undefined, undefined)
     this.reduxStore.dispatch(action)
   }
 
   addActionAddCard(card: Card) {
-    const action = this.unsyncedState.addAction('ADD_CARD', card)
+    const action = this.unsyncedState.addAction(
+        'ADD_CARD', card, undefined)
+    this.reduxStore.dispatch(action)
+  }
+
+  addActionAddExposure(exposure: Exposure) {
+    const action = this.unsyncedState.addAction('ADD_EXPOSURE',
+        undefined, exposure)
     this.reduxStore.dispatch(action)
   }
 }

@@ -23,17 +23,19 @@ assets = JSON.load(File.read('dist/assets.json'))
 assets.each do |key, value|
   value.gsub! 'dist/', ''
 end
+
 index = File.read('src/index.html')
 index.gsub! '/js/vendor.js', assets.fetch('dist/js/vendor.js')
 index.gsub! '/js/browserified.js', assets.fetch('dist/js/browserified.js')
 File.open('dist/index.html', 'w') do |f|
   f.write index
 end
-"
 
-node_modules/.bin/sw-precache \
-  --root=dist \
-  --dontCacheBustUrlsMatching=/\\.[0-9a-f]{5}\\./ \
-  --staticFileGlobs=dist/js/*.js \
-  --staticFileGlobs=dist/index.html
-node_modules/.bin/uglifyjs dist/service-worker.js -o dist/service-worker.min.js
+File.open('dist/cache.manifest', 'w') do |f|
+  f.write 'CACHE MANIFEST' + 10.chr
+  f.write '# MD5 of dist/index.html is ' + \`md5 dist/index.html\` + 10.chr
+  assets.each do |key, value|
+    f.write value + 10.chr
+  end
+end
+"

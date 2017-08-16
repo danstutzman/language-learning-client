@@ -64,4 +64,3 @@ function render() {
 //document.addEventListener('DOMContentLoaded', ()=>{
   render()
 //})
-window.alert('loaded index.js')

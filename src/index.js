@@ -61,6 +61,7 @@ function render() {
     document.getElementById('mount'))
 }
 
-document.addEventListener('DOMContentLoaded', ()=>{
+//document.addEventListener('DOMContentLoaded', ()=>{
   render()
-})
+//})
+window.alert('loaded index.js')

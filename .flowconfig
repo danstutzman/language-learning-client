@@ -6,6 +6,7 @@
 .*/vendor/.*
 .*/build_and_watch.js
 .*/build/.*
+.*/dist/.*
 
 [libs]
 ./interfaces

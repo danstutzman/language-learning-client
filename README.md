@@ -4,9 +4,11 @@
 
 `./build_and_watch.js`
 
-`node_modules/.bin/http-server`
+`cd build`
 
-Go to http://localhost:8080/build/index.html
+`../node_modules/.bin/http-server -c-1`
+
+Go to http://localhost:8080
 
 ## How to run automated tests
 

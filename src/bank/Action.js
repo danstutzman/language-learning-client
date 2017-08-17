@@ -63,19 +63,17 @@ export function assertAction(x: any): Action {
   return (y:any)
 }
 
-export function assertAddCardAction(x: any): AddCardAction {
-  const y = assertAction(x)
-
-  if (y.type !== 'ADD_CARD') {
-    throw new Error(`Unexpected type ${JSON.stringify(y.type)}`)
+export function assertAddCardAction(x: Action): AddCardAction {
+  if (x.type !== 'ADD_CARD') {
+    throw new Error(`Unexpected type ${JSON.stringify(x.type)}`)
   }
 
-  if (y.card === undefined) {
-    throw new Error(`No card on ${JSON.stringify(y)} despite type=ADD_CARD`)
+  if (x.card === undefined) {
+    throw new Error(`No card on ${JSON.stringify(x)}`)
   }
-  assertCard(y.card)
+  assertCard(x.card)
 
-  return (y: any)
+  return (x: any)
 }
 
 export function assertArrayAction(x: any): Array<Action> {

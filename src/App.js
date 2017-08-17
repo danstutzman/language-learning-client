@@ -11,7 +11,7 @@ type Props = {
   saveCardEdit:   (Card) => void,
   addExposure:    (Exposure) => void,
   sync:           () => void,
-  playEs:         (string) => void,
+  playEs:         (string) => Promise<void>,
   playSound:      () => void
 }
 

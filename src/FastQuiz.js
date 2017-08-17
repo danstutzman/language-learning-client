@@ -6,22 +6,29 @@ import { assertNonBlankStr } from './assertType'
 type Props = {
   topCard:     Card,
   addExposure: (Exposure) => void,
-  playEs:      (string) => void
+  playEs:      (string) => Promise<void>
 }
 
 type State = {
-  secondsLeft: number
+  secondsLeft: 'WAITING' | number
 }
 
 export default class FastQuiz extends React.Component<void, Props, State> {
   state: State
   eachSecondInterval: number
 
+  constructor() {
+    super()
+    this.state = {
+      secondsLeft: 'WAITING'
+    }
+  }
+
   _restartCounter() {
     this.setState({ secondsLeft: 3 })
     this.eachSecondInterval = window.setInterval(() => {
       this.setState(prevState => {
-        if (prevState.secondsLeft > 0) {
+        if (prevState.secondsLeft !== 'WAITING' && prevState.secondsLeft > 0) {
           return { secondsLeft: prevState.secondsLeft - 1 }
         } else {
           window.clearInterval(this.eachSecondInterval)
@@ -29,7 +36,7 @@ export default class FastQuiz extends React.Component<void, Props, State> {
             cardId:     this.props.topCard.cardId,
             remembered: false
           })
-          return {}
+          return { secondsLeft: 0 }
         }
       })
     }, 1000)
@@ -41,13 +48,14 @@ export default class FastQuiz extends React.Component<void, Props, State> {
 
   componentWillMount() {
     this.props.playEs(this._getEs(this.props))
-    this._restartCounter()
+      .then(this._restartCounter.bind(this))
   }
 
   componentWillUpdate(nextProps: Props) {
     if (nextProps.topCard.cardId !== this.props.topCard.cardId) {
+    this.setState({ secondsLeft: 'WAITING' })
       this.props.playEs(this._getEs(nextProps))
-      this._restartCounter()
+        .then(this._restartCounter.bind(this))
     }
   }
 

@@ -33,8 +33,8 @@ export default class FastQuiz extends React.Component<void, Props, State> {
         } else {
           window.clearInterval(this.eachSecondInterval)
           this.props.addExposure({
-            cardId:     this.props.topCard.cardId,
-            remembered: false
+            type:   'FAST_BLINK',
+            cardId: this.props.topCard.cardId
           })
           return { secondsLeft: 0 }
         }
@@ -65,8 +65,8 @@ export default class FastQuiz extends React.Component<void, Props, State> {
 
   _onClickIRemember() {
     this.props.addExposure({
-      cardId:     this.props.topCard.cardId,
-      remembered: true
+      type:   'FAST_NOD',
+      cardId: this.props.topCard.cardId
     })
     window.clearInterval(this.eachSecondInterval)
     this.setState({ secondsLeft: 0 })

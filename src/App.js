@@ -94,7 +94,7 @@ export default class App extends React.Component<void, Props, State> {
     const { appState, addExposure, playEs } = this.props
     if (this.state.currentTab === 'FAST_QUIZ') {
       if (appState.fastHeap.empty() || appState.cardByCardId[
-            appState.fastHeap.peek()].remembered === false) {
+            appState.fastHeap.peek()].hadFastBlink) {
         return <div>No cards</div>
       } else if (this.state.startedFastQuiz) {
         return <FastQuiz
@@ -112,8 +112,7 @@ export default class App extends React.Component<void, Props, State> {
   _renderSlowQuizMaybe() {
     const { appState, addExposure } = this.props
     if (this.state.currentTab === 'SLOW_QUIZ') {
-      if (appState.slowHeap.empty() || appState.cardByCardId[
-          appState.slowHeap.peek()].remembered === false) {
+      if (appState.slowHeap.empty()) {
         return <div>No cards</div>
       } else if (this.state.startedSlowQuiz) {
         return <SlowQuiz

@@ -1,22 +1,38 @@
-import { assertBool, assertNum, assertObj } from './assertType'
+import { assertNum, assertObj } from './assertType'
 
-export type Exposure = {
-  cardId: number,
-  remembered: boolean
+// Time ran out on Fast Quiz screen
+export type FastBlink = {
+  type: 'FAST_BLINK',
+  cardId: number
 }
 
+// Clicked 'I remember this' on Fast Quiz screen
+export type FastNod = {
+  type: 'FAST_NOD',
+  cardId: number
+}
+
+// Clicked 'I remember this' on Slow Quiz screen
+export type SlowNod = {
+  type: 'SLOW_NOD',
+  cardId: number
+}
+
+export type Exposure = FastBlink | FastNod | SlowNod
+
 export function assertExposure(x: any): Exposure {
-  const y = assertObj(x)
+  assertObj(x)
 
-  if (!y.cardId) {
-    throw new Error(`No cardId on ${JSON.stringify(y)}`)
+  if (!(x.type === 'FAST_BLINK' ||
+        x.type === 'FAST_NOD' ||
+        x.type === 'SLOW_NOD')) {
+    throw new Error(`Unknown type on ${JSON.stringify(x)}`)
   }
-  const cardId = assertNum(y.cardId)
 
-  if (y.remembered === undefined || y.remembered === null) {
-    throw new Error(`No remembered on ${JSON.stringify(y)}`)
+  if (!x.cardId) {
+    throw new Error(`No cardId on ${JSON.stringify(x)}`)
   }
-  const remembered = assertBool(y.remembered)
+  assertNum(x.cardId)
 
-  return { cardId, remembered }
+  return x
 }

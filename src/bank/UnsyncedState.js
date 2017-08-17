@@ -36,21 +36,27 @@ export default class UnsyncedState {
     }
   }
 
-  handleSyncResponse(response: BankApiResponse, clientId: number) {
+  handleSyncResponse(response: BankApiResponse, clientId: number):
+      {[actionId: number]: boolean} {
     let actionIdsToDelete = {}
     for (const action of response.actionsToClient) {
       if (action.actionId % 10 === clientId) {
         actionIdsToDelete[action.actionId] = true
       }
     }
+
     let newActions = []
+    let deletedActionIds = {}
     for (const action of this.actions) {
       if (actionIdsToDelete[action.actionId] !== true) {
         newActions.push(action)
+      } else {
+        deletedActionIds[action.actionId] = true
       }
     }
     this.actions = newActions
     this._saveUnsynced()
+    return deletedActionIds
   }
 
   addAction(actionFields: {

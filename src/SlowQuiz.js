@@ -10,8 +10,8 @@ type Props = {
 export default class FastQuiz extends React.Component<void, Props, void> {
   _onClickIRemember() {
     this.props.addExposure({
-      cardId:     this.props.topCard.cardId,
-      remembered: true
+      type:   'SLOW_NOD',
+      cardId: this.props.topCard.cardId
     })
   }
 

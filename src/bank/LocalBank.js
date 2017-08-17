@@ -31,8 +31,12 @@ export default class LocalBank {
 
     const cardByCardId: {[cardId: number]: Card} = {}
     const comparer = (cardId1: number, cardId2: number) => {
-      return (cardByCardId[cardId1].remembered === false ? 1 : 0) -
-             (cardByCardId[cardId2].remembered === false ? 1 : 0)
+      // sort cards with hadFastBlink=true to the end
+      const _1 = (cardByCardId[cardId1].hadFastBlink ? 1 : 0) -
+                 (cardByCardId[cardId2].hadFastBlink ? 1 : 0)
+      if (_1 !== 0) return _1
+
+      return 0
     }
     this.reduxStore = createStore(reducer, {
       cardByCardId,
@@ -65,11 +69,15 @@ export default class LocalBank {
     console.log(`Sync response: ${JSON.stringify(response)}`)
 
     const newActions = this.syncedState.handleSyncResponse(response)
-    for (const action of newActions) {
-      this.reduxStore.dispatch(action)
-    }
 
-    this.unsyncedState.handleSyncResponse(response, this.syncedState.clientId)
+    const actionIdsToIgnore: {[actionId: number]: boolean} =
+      this.unsyncedState.handleSyncResponse(response, this.syncedState.clientId)
+
+    for (const action of newActions) {
+      if (!actionIdsToIgnore[action.actionId]) {
+        this.reduxStore.dispatch(action)
+      }
+    }
   }
 
   addNoopAction() {

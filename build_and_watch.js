@@ -42,7 +42,8 @@ const spawned = spawn('/bin/bash', ['-c', `echo Running flow &&
   node_modules/.bin/eslint $(find src -name '*.js') &&
   echo Running browserify &&
   node_modules/.bin/browserify ${BROWSERIFY_ARGS} &&
-  cp src/index.html build/index.html
+  cat src/index.html | sed "s/<html manifest='cache.manifest'/<html/" \
+    > build/index.html
 `])
 spawned.stdout.on('data', (data) => { console.log(data.toString().trim()) })
 spawned.stderr.on('data', (data) => { console.log(data.toString().trim()) })

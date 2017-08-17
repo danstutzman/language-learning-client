@@ -3,7 +3,7 @@ import type { Exposure } from './Exposure'
 import React from 'react'
 
 type Props = {
-  newCardAction:  Action | void,
+  newCardAction:  Action,
   addExposure:    (Exposure) => void,
   playEs:         (string) => void,
   nextCard:       () => void
@@ -33,9 +33,7 @@ export default class FastQuiz extends React.Component<void, Props, State> {
   }
 
   _getEs(props: Props) {
-    if (props.newCardAction === undefined) {
-      return '?'
-    } else if (props.newCardAction.card === undefined) {
+    if (props.newCardAction.card === undefined) {
       return '?'
     } else {
       return props.newCardAction.card.es
@@ -48,9 +46,7 @@ export default class FastQuiz extends React.Component<void, Props, State> {
   }
 
   componentWillUpdate(nextProps: Props) {
-    if (nextProps.newCardAction !== undefined &&
-        this.props.newCardAction !== undefined &&
-        nextProps.newCardAction.actionId !==
+    if (nextProps.newCardAction.actionId !==
         this.props.newCardAction.actionId) {
       this.props.playEs(this._getEs(nextProps))
       this._restartCounter()
@@ -62,29 +58,24 @@ export default class FastQuiz extends React.Component<void, Props, State> {
   }
 
   _onClickIRemember() {
-    if (this.props.newCardAction !== undefined) {
-			this.props.addExposure({
-				cardId:     this.props.newCardAction.actionId,
-				remembered: true
-			})
-			window.clearInterval(this.eachSecondInterval)
-			this.setState({ secondsLeft: 0 })
-			this.props.nextCard()
-    }
+    this.props.addExposure({
+      cardId:     this.props.newCardAction.actionId,
+      remembered: true
+    })
+    window.clearInterval(this.eachSecondInterval)
+    this.setState({ secondsLeft: 0 })
+    this.props.nextCard()
   }
 
   render() {
     const es = this._getEs(this.props)
     return <div>
-      {this.props.newCardAction === null ? 'No more cards to quiz' :
-        <div>
-          <p>{es}</p>
-          <button onClick={()=>{this.props.playEs(es)}}>Play</button>
-          <div>Time: {this.state.secondsLeft}</div>
-          <button onClick={this._onClickIRemember.bind(this)}>
-            I Understand
-          </button>
-        </div>}
+      <p>{es}</p>
+      <button onClick={()=>{this.props.playEs(es)}}>Play</button>
+      <div>Time: {this.state.secondsLeft}</div>
+      <button onClick={this._onClickIRemember.bind(this)}>
+        I Understand
+      </button>
     </div>
   }
 }

@@ -5,7 +5,8 @@
     <h1>Hello world</h1>
 
     <div id='mount'>
-      progress: <div id='progress'></div>
+      progress: <div id='progress'>0</div>
+      <div id='download-errors'></div>
     </div>
 
     <script>
@@ -29,14 +30,19 @@
       function predownloadScripts() {
         var progresses = [0, 0];
         for (var i = 0; i < scriptPaths.length; i++) {
-          var scriptPath = scriptPaths[i];
           (function(i) {
+            var scriptPath = scriptPaths[i];
             var xhr = new XMLHttpRequest();
             xhr.onreadystatechange = function(e) {
               if (xhr.readyState === XMLHttpRequest.DONE) {
-                progresses[i] = 1;
-                if (progresses[0] + progresses[1] === 2) {
-                  loadVendorScript();
+                if (xhr.status == 200) {
+                  progresses[i] = 1;
+                  if (progresses[0] + progresses[1] === 2) {
+                    loadVendorScript();
+                  }
+                } else {
+                  document.getElementById('download-errors').innerHTML +=
+                    `${xhr.status} from GET ${scriptPath}<br>`
                 }
               }
             };

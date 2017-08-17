@@ -61,14 +61,31 @@ function playTestSound() {
 	oscillator.stop(context.currentTime + 1.0)
 }
 
+const esToPromiseBuffer: {[es: string]: Promise<Blob>} = {}
+
 function playEs(es: string) {
   const context = initAudioContext()
   const audioUrl = `${SERVER_URL_ROOT}/speak/${es}.mp3`
 
-	let xhr = new XMLHttpRequest()
-	xhr.open('GET', audioUrl, true)
-	xhr.responseType = 'arraybuffer'
-  xhr.addEventListener('load', () => {
+  if (esToPromiseBuffer[es] === undefined) {
+    esToPromiseBuffer[es] = new Promise((resolve, reject) => {
+      const xhr = new XMLHttpRequest()
+      xhr.open('GET', audioUrl, true)
+      xhr.responseType = 'arraybuffer'
+      xhr.onreadystatechange = ()=>{
+        if (xhr.readyState === 4) {
+          if (xhr.status === 200) {
+            const blob = new Blob([xhr.response], {type: 'audio/mpeg'})
+            resolve(blob)
+          } else {
+            reject(`Got ${xhr.status} from ${audioUrl}`)
+          }
+        }
+      }
+      xhr.send()
+    })
+  }
+  esToPromiseBuffer[es].then(blob => {
     const success = buffer => {
       const source = context.createBufferSource()
       source.buffer = buffer
@@ -78,9 +95,16 @@ function playEs(es: string) {
     const error = e => {
       throw new Error(`Error decoding audio data: ${e && e.err}`)
     }
-    context.decodeAudioData(xhr.response, success, error)
+
+    let fileReader = new FileReader()
+    fileReader.onloadend = ()=>{
+      const arrayBuffer: ArrayBuffer = (fileReader.result: any)
+      context.decodeAudioData(arrayBuffer, success, error)
+    }
+    fileReader.readAsArrayBuffer(blob)
+  }).catch(e => {
+    throw new Error(e)
   })
-	xhr.send()
 }
 
 function render() {

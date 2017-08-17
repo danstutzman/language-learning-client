@@ -1,13 +1,13 @@
 import type { Card } from './Card'
 import type { Exposure } from './Exposure'
-import type { Action } from './bank/Action'
+import type { AddCardAction } from './bank/Action'
 import React from 'react'
 import NounBrowser from './NounBrowser' // eslint-disable-line no-unused-vars
 import FastQuiz from './FastQuiz' // eslint-disable-line no-unused-vars
-import { assertAction } from './bank/Action'
+import { assertAddCardAction } from './bank/Action'
 
 type Props = {
-  newCardAction:  Action | null,
+  newCardAction:  AddCardAction | null,
   cards:          {[actionId: number]: Card},
   addCard:        (Card) => void,
   addExposure:    (Exposure) => void,
@@ -71,7 +71,8 @@ export default class App extends React.Component<void, Props, State> {
           (this.state.currentTab === 'FAST_QUIZ' ? 'block' : 'none') }}>
         { this.props.newCardAction === undefined ? 'No cards' :
           this.state.startedFastQuiz ?
-            <FastQuiz newCardAction={assertAction(this.props.newCardAction)}
+            <FastQuiz
+              newCardAction={assertAddCardAction(this.props.newCardAction)}
               addExposure={this.props.addExposure}
               playEs={this.props.playEs} nextCard={this.props.nextCard} /> :
             <button onClick={this.onClickStartFastQuiz.bind(this)}>

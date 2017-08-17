@@ -1,9 +1,9 @@
-import type { Action } from './bank/ACtion'
+import type { AddCardAction } from './bank/ACtion'
 import type { Exposure } from './Exposure'
 import React from 'react'
 
 type Props = {
-  newCardAction:  Action,
+  newCardAction:  AddCardAction,
   addExposure:    (Exposure) => void,
   playEs:         (string) => void,
   nextCard:       () => void

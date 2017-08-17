@@ -1,5 +1,6 @@
 import type { Action } from './Action'
 import type { Card } from '../Card'
+import { assertAddCardAction } from './Action'
 
 export default function(cards: {[actionId: number]: Card}, action: Action) {
   console.log('action', action)
@@ -9,11 +10,8 @@ export default function(cards: {[actionId: number]: Card}, action: Action) {
     case 'NOOP':
       break // Ignore
     case 'ADD_CARD':
-      var card = action.card
-      if (card === undefined) {
-        throw new Error(`Undefined card for actionId=${action.actionId}`)
-      }
-      cards[action.actionId] = card
+      const action2 = assertAddCardAction(action)
+      cards[action2.actionId] = action2.card
       break
     case 'ADD_EXPOSURE':
       var exposure = action.exposure

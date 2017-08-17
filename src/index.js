@@ -1,5 +1,6 @@
 import type { Card }     from './Card'
 import type { Exposure } from './Exposure'
+import type { AddCardAction } from './bank/Action'
 import Ajax              from './Ajax'
 import AjaxBankApi       from './bank/api/AjaxBankApi'
 import App               from './App'
@@ -7,6 +8,7 @@ import LocalBank         from './bank/LocalBank'
 import React             from 'react'
 import ReactDOM          from 'react-dom'
 import { SYNCED_KEY, UNSYNCED_KEY } from '../src/LocalStorage'
+import { assertAddCardAction } from './bank/Action'
 
 const SERVER_URL_ROOT = 'https://serverdts.localtunnel.me'
 
@@ -99,9 +101,9 @@ function playEs(es: string) {
 }
 
 const allActions = bank.syncedState.actions.concat(bank.unsyncedState.actions)
-const newCardActions = allActions.filter(card => {
+const newCardActions: Array<AddCardAction> = allActions.filter(card => {
   return card.type === 'ADD_CARD'
-})
+}).map(assertAddCardAction)
 //let currentCardNum = Math.floor(Math.random() * newCardActions.length)
 let currentCardNum = 0
 

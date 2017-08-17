@@ -5,7 +5,7 @@ import React from 'react'
 type Props = {
   newCardAction:  Action,
   addExposure:    (Exposure) => void,
-  speakUrlPrefix: string
+  playEs:         (string) => void
 }
 
 type State = {
@@ -15,7 +15,6 @@ type State = {
 export default class FastQuiz extends React.Component<void, Props, State> {
   state: State
   eachSecondInterval: number
-  audioElement: any
 
   constructor() {
     super()
@@ -37,14 +36,6 @@ export default class FastQuiz extends React.Component<void, Props, State> {
     }, 1000)
   }
 
-  componentWillUpdate(nextProps: Props) {
-    if (nextProps.newCardAction.actionId !==
-        this.props.newCardAction.actionId) {
-      this.audioElement.load()
-      this.audioElement.play()
-    }
-  }
-
   componentWillUnmount() {
     window.clearInterval(this.eachSecondInterval)
   }
@@ -59,15 +50,11 @@ export default class FastQuiz extends React.Component<void, Props, State> {
 
   render() {
     const es = (this.props.newCardAction.card || { es: '?' }).es
-    const audioUrl = this.props.speakUrlPrefix + es + ".mp3"
     return <div>
       {this.props.newCardAction === null ? 'No cards' :
         <div>
           <p>{es}</p>
-          <audio controls='controls'
-              ref={element => { this.audioElement = element }}>
-            <source src={audioUrl} />
-          </audio>
+          <button onClick={()=>{this.props.playEs(es)}}>Play</button>
           <div>Time: {this.state.secondsLeft}</div>
           <button onClick={this.onClickIRemember.bind(this)}>
             I Understand

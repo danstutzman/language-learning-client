@@ -1,11 +1,10 @@
-import type { Action, NoopAction, AddCardAction, AddExposureAction,
-  UpdateCardAction } from './Action'
+import type { Action } from './Action'
 import type { BankApiResponse } from './api/BankApiResponse'
 import type { LocalStorage } from '../LocalStorage'
 import type { Card } from '../Card'
 import type { Exposure } from '../Exposure'
 import { UNSYNCED_KEY } from '../LocalStorage'
-import { assertArrayAction } from './Action'
+import { assertAction, assertArrayAction } from './Action'
 import { assertNum, assertObj } from '../assertType'
 
 export default class UnsyncedState {
@@ -54,41 +53,17 @@ export default class UnsyncedState {
     this._saveUnsynced()
   }
 
-  addAddCardAction(card: Card): AddCardAction {
-    const actionId = this.nextActionId
-    const createdAtMillis = new Date().getTime()
-    const action = { type: 'ADD_CARD', actionId, createdAtMillis, card }
-    this.actions.push(action)
-    this.nextActionId += 10
-    this._saveUnsynced()
-    return action
-  }
-
-  addUpdateCardAction(card: Card, cardId: number): UpdateCardAction {
+  addAction(actionFields: {
+      type: string,
+      card?: Card,
+      cardId?: number,
+      exposure?: Exposure
+    }): Action {
     const actionId = this.nextActionId
     const createdAtMillis = new Date().getTime()
     const action =
-      { type: 'UPDATE_CARD', actionId, createdAtMillis, card, cardId }
-    this.actions.push(action)
-    this.nextActionId += 10
-    this._saveUnsynced()
-    return action
-  }
-
-  addAddExposureAction(exposure: Exposure): AddExposureAction {
-    const actionId = this.nextActionId
-    const createdAtMillis = new Date().getTime()
-    const action = { type: 'ADD_EXPOSURE', actionId, createdAtMillis, exposure }
-    this.actions.push(action)
-    this.nextActionId += 10
-    this._saveUnsynced()
-    return action
-  }
-
-  addNoopAction(): NoopAction {
-    const actionId = this.nextActionId
-    const createdAtMillis = new Date().getTime()
-    const action = { type: 'NOOP', actionId, createdAtMillis }
+      Object.assign(({ actionId, createdAtMillis }: any), actionFields)
+    assertAction(action)
     this.actions.push(action)
     this.nextActionId += 10
     this._saveUnsynced()

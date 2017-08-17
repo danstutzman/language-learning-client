@@ -62,22 +62,24 @@ export default class LocalBank {
   }
 
   addNoopAction() {
-    const action = this.unsyncedState.addNoopAction()
+    const action = this.unsyncedState.addAction({ type: 'NOOP' })
     this.reduxStore.dispatch(action)
   }
 
   addAddCardAction(card: Card) {
-    const action = this.unsyncedState.addAddCardAction(card)
+    const action = this.unsyncedState.addAction({ type: 'ADD_CARD', card })
     this.reduxStore.dispatch(action)
   }
 
   addUpdateCardAction(card: Card, cardId: number) {
-    const action = this.unsyncedState.addUpdateCardAction(card, cardId)
+    const action = this.unsyncedState.addAction(
+      { type: 'UPDATE_CARD', card, cardId })
     this.reduxStore.dispatch(action)
   }
 
   addActionAddExposure(exposure: Exposure) {
-    const action = this.unsyncedState.addAddExposureAction(exposure)
+    const action = this.unsyncedState.addAction(
+      { type: 'ADD_EXPOSURE', exposure })
     this.reduxStore.dispatch(action)
   }
 }

@@ -1,6 +1,6 @@
 import type { Card } from './Card'
 import React from 'react'
-import { assertCardGender } from './Card'
+import AddNoun from './AddNoun' // eslint-disable-line no-unused-vars
 
 type Props = {
   cards:   {[actionId: number]: Card},
@@ -9,13 +9,7 @@ type Props = {
 }
 
 type State = {
-  newGender: string,
-  newEs: string,
-  newEn: string
-}
-
-function emptyToUndef(s: string): string | void {
-  return (s === '') ? undefined : s
+  showAddNoun: boolean
 }
 
 export default class NounBrowser extends React.Component<void, Props, State> {
@@ -23,33 +17,20 @@ export default class NounBrowser extends React.Component<void, Props, State> {
 
   constructor() {
     super()
-    this.state = {
-      newGender: '',
-      newEs:     '',
-      newEn:     ''
-    }
+    this.state = { showAddNoun: false }
   }
 
-  onClickAddCard(e: Event) {
-    e.preventDefault()
-    const { newGender, newEs, newEn } = this.state
-    this.props.addCard({
-      type:   'EsN',
-      gender: (newGender === '') ? undefined : assertCardGender(newGender),
-      es:     emptyToUndef(newEs),
-      en:     emptyToUndef(newEn)
-    })
-  }
-
-  isAddCardEnabled() {
-    const { newEs, newEn } = this.state
-    return newEs !== '' || newEn !== ''
+  _onAddCard(card: Card) {
+    this.props.addCard(card)
+    this.setState({ showAddNoun: false })
   }
 
   render() {
     const { cards, sync } = this.props
-    const { newGender, newEs, newEn } = this.state
     return <div>
+      {this.state.showAddNoun ?
+        <AddNoun addCard={this._onAddCard.bind(this)} /> :
+        null}
       <table>
         <thead>
           <tr>
@@ -71,31 +52,11 @@ export default class NounBrowser extends React.Component<void, Props, State> {
               <td>{card.en}</td>
             </tr>
           })}
-          <tr>
-            <td>(new)</td>
-            <td>EsN</td>
-            <td>
-              <select value={newGender} onChange={e =>
-                  this.setState({newGender: e.target.value})}>
-                 <option></option>
-                <option>M</option>
-                <option>F</option>
-              </select>
-            </td>
-            <td>
-              <input value={newEs} onChange={e =>
-                this.setState({newEs: e.target.value})}/>
-            </td>
-            <td>
-              <input value={newEn} onChange={e =>
-                this.setState({newEn: e.target.value})}/>
-            </td>
-          </tr>
         </tbody>
       </table>
-      <button onClick={this.onClickAddCard.bind(this)}
-          disabled={!this.isAddCardEnabled()}>
-        Add Card</button>
+      <button onClick={()=>{ this.setState({ showAddNoun: true}) }}>
+        Add Noun
+      </button>
       <button onClick={sync}>Sync</button>
     </div>
   }

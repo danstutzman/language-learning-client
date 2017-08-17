@@ -2,9 +2,9 @@ import { assertNonBlankStr, assertObj } from './assertType'
 
 export type Card = {
   type:        'EsN',
-  gender:      'M' | 'F' | void,
-  es:          string | void,
-  en:          string | void,
+  gender:      'M' | 'F' | '',
+  es:          string,
+  en:          string,
   remembered?: boolean
 }
 
@@ -15,8 +15,8 @@ export function assertCardType(x: any): 'EsN' {
   return x
 }
 
-export function assertCardGender(x: any): 'M' | 'F' {
-  if (x !== 'M' && x !== 'F') {
+export function assertCardGender(x: any): 'M' | 'F' | '' {
+  if (!(x === 'M' || x === 'F' || x === '')) {
     throw new Error(`Expected Card Gender but got ${x}`)
   }
   return x

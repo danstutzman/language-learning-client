@@ -14,7 +14,12 @@ class AjaxBankApi {
 
   sync(request: BankApiRequest): Promise<BankApiResponse> {
     return this.ajax.post(this.url, request).then(response => {
-      return assertBankApiResponse(response)
+      try {
+        return assertBankApiResponse(response)
+      } catch (e) {
+        console.error(`Bad response was: ${JSON.stringify(response)}`)
+        throw e
+      }
     })
   }
 }

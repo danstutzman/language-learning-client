@@ -4,7 +4,6 @@ import type { Action } from './bank/Action'
 import React from 'react'
 import NounBrowser from './NounBrowser' // eslint-disable-line no-unused-vars
 import FastQuiz from './FastQuiz' // eslint-disable-line no-unused-vars
-import { assertAction } from './bank/Action'
 
 type Props = {
   newCardAction:  Action | null,
@@ -13,7 +12,8 @@ type Props = {
   addExposure:    (Exposure) => void,
   sync:           () => void,
   playEs:         (string) => void,
-  playSound:      () => void
+  playSound:      () => void,
+  nextCard:       () => void
 }
 
 type State = {
@@ -70,9 +70,9 @@ export default class App extends React.Component<void, Props, State> {
           (this.state.currentTab === 'FAST_QUIZ' ? 'block' : 'none') }}>
         { this.props.newCardAction === null ? 'No cards' :
           this.state.startedFastQuiz ?
-            <FastQuiz newCardAction={assertAction(this.props.newCardAction)}
+            <FastQuiz newCardAction={this.props.newCardAction}
               addExposure={this.props.addExposure}
-              playEs={this.props.playEs} /> :
+              playEs={this.props.playEs} nextCard={this.props.nextCard} /> :
             <button onClick={this.onClickStartFastQuiz.bind(this)}>
               Start Fast Quiz
             </button> }

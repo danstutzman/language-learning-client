@@ -1,6 +1,5 @@
 import type { Card }     from './Card'
 import type { Exposure } from './Exposure'
-import type { Action }   from './bank/Action'
 import Ajax              from './Ajax'
 import AjaxBankApi       from './bank/api/AjaxBankApi'
 import App               from './App'
@@ -28,14 +27,6 @@ const bank = new LocalBank(
   new AjaxBankApi(new Ajax(), `${SERVER_URL_ROOT}/api/sync`),
   window.localStorage)
 bank.initFromLocalStorage()
-
-function chooseRandomCard(actions: Array<Action>): Action | null {
-  const newCardActions = actions.filter(card => {
-    return card.type === 'ADD_CARD'
-  })
-  const cardNum = Math.floor(Math.random() * newCardActions.length)
-  return newCardActions.length > 0 ? newCardActions[cardNum] : null
-}
 
 function initAudioContext(): AudioContext {
   // See http://stackoverflow.com/questions/12517000/no-sound-on-ios-6-web-audio-api#32840804
@@ -107,12 +98,18 @@ function playEs(es: string) {
   })
 }
 
+const allActions = bank.syncedState.actions.concat(bank.unsyncedState.actions)
+const newCardActions = allActions.filter(card => {
+  return card.type === 'ADD_CARD'
+})
+//let currentCardNum = Math.floor(Math.random() * newCardActions.length)
+let currentCardNum = 0
+
 function render() {
   ReactDOM.render(
     React.createElement(App, {
       cards: bank.getReduxStoreState(),
-      newCardAction: chooseRandomCard(
-        bank.syncedState.actions.concat(bank.unsyncedState.actions)),
+      newCardAction: newCardActions[currentCardNum],
       addCard: (card: Card) => {
         bank.addActionAddCard(card)
         render()
@@ -129,7 +126,11 @@ function render() {
         render()
       },
       playEs:    playEs,
-      playSound: playTestSound
+      playSound: playTestSound,
+      nextCard: ()=>{
+        currentCardNum += 1
+        render()
+      }
     }),
     document.getElementById('mount'))
 }

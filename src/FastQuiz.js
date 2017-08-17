@@ -1,13 +1,12 @@
-import type { AddCardAction } from './bank/ACtion'
 import type { Exposure } from './Exposure'
+import type { Card } from './Card'
 import React from 'react'
 import { assertNonBlankStr } from './assertType'
 
 type Props = {
-  newCardAction:  AddCardAction,
-  addExposure:    (Exposure) => void,
-  playEs:         (string) => void,
-  nextCard:       () => void
+  topCard:     Card,
+  addExposure: (Exposure) => void,
+  playEs:      (string) => void
 }
 
 type State = {
@@ -26,7 +25,10 @@ export default class FastQuiz extends React.Component<void, Props, State> {
           return { secondsLeft: prevState.secondsLeft - 1 }
         } else {
           window.clearInterval(this.eachSecondInterval)
-          this.props.nextCard()
+          this.props.addExposure({
+            cardId:     this.props.topCard.cardId,
+            remembered: false
+          })
           return {}
         }
       })
@@ -34,7 +36,7 @@ export default class FastQuiz extends React.Component<void, Props, State> {
   }
 
   _getEs(props: Props): string {
-    return assertNonBlankStr(props.newCardAction.card.es)
+    return assertNonBlankStr(props.topCard.es)
   }
 
   componentWillMount() {
@@ -43,8 +45,7 @@ export default class FastQuiz extends React.Component<void, Props, State> {
   }
 
   componentWillUpdate(nextProps: Props) {
-    if (nextProps.newCardAction.actionId !==
-        this.props.newCardAction.actionId) {
+    if (nextProps.topCard.cardId !== this.props.topCard.cardId) {
       this.props.playEs(this._getEs(nextProps))
       this._restartCounter()
     }
@@ -56,12 +57,11 @@ export default class FastQuiz extends React.Component<void, Props, State> {
 
   _onClickIRemember() {
     this.props.addExposure({
-      cardId:     this.props.newCardAction.actionId,
+      cardId:     this.props.topCard.cardId,
       remembered: true
     })
     window.clearInterval(this.eachSecondInterval)
     this.setState({ secondsLeft: 0 })
-    this.props.nextCard()
   }
 
   render() {

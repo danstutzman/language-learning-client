@@ -1,6 +1,5 @@
 import type { Card }     from './Card'
 import type { Exposure } from './Exposure'
-import type { AddCardAction } from './bank/Action'
 import Ajax              from './Ajax'
 import AjaxBankApi       from './bank/api/AjaxBankApi'
 import App               from './App'
@@ -8,7 +7,6 @@ import LocalBank         from './bank/LocalBank'
 import React             from 'react'
 import ReactDOM          from 'react-dom'
 import { SYNCED_KEY, UNSYNCED_KEY } from '../src/LocalStorage'
-import { assertAddCardAction } from './bank/Action'
 
 const SERVER_URL_ROOT = 'https://serverdts.localtunnel.me'
 
@@ -100,19 +98,10 @@ function playEs(es: string) {
   })
 }
 
-const allActions = bank.syncedState.actions.concat(bank.unsyncedState.actions)
-const newCardActions: Array<AddCardAction> = allActions.filter(action => {
-  return action.type === 'ADD_CARD' &&
-    action.card.es && action.card.en && action.card.gender
-}).map(assertAddCardAction)
-//let currentCardNum = Math.floor(Math.random() * newCardActions.length)
-let currentCardNum = 0
-
 function render() {
   ReactDOM.render(
     React.createElement(App, {
-      cards: bank.getReduxStoreState(),
-      newCardAction: newCardActions[currentCardNum],
+      appState: bank.getReduxStoreState(),
       saveCardEdit: (card: Card) => {
         if (card.cardId === -1) {
           bank.addAddCardAction(card)
@@ -134,10 +123,6 @@ function render() {
       },
       playEs:    playEs,
       playSound: playTestSound,
-      nextCard: ()=>{
-        currentCardNum += 1
-        render()
-      }
     }),
     document.getElementById('mount'))
 }

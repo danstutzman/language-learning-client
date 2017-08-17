@@ -1,9 +1,9 @@
 import type { Action } from './Action'
-import type { Card } from '../Card'
+import type { AppState } from '../AppState'
 import { assertAddCardAction, assertUpdateCardAction } from './Action'
 
-export default function(cards: {[actionId: number]: Card}, action: Action) {
-  console.log('action', action)
+export default function(appState: AppState, action: Action) {
+  let card
   switch (action.type) {
     case '@@redux/INIT':
       break // Ignore
@@ -11,23 +11,29 @@ export default function(cards: {[actionId: number]: Card}, action: Action) {
       break // Ignore
     case 'ADD_CARD':
       var add = assertAddCardAction(action)
-      cards[add.card.cardId] = add.card
+      appState.cardByCardId[add.card.cardId] = add.card
+      appState.fastHeap.push(add.card.cardId)
+      appState.slowHeap.push(add.card.cardId)
       break
     case 'UPDATE_CARD':
       var update = assertUpdateCardAction(action)
-      cards[update.card.cardId] =
-        Object.assign({}, cards[update.card.cardId], update.card)
+      card = appState.cardByCardId[update.card.cardId]
+      Object.assign(card, update.card)
+      appState.fastHeap.updateItem(card.cardId)
+      appState.slowHeap.updateItem(card.cardId)
       break
     case 'ADD_EXPOSURE':
       var exposure = action.exposure
       if (exposure === undefined) {
         throw new Error(`Undefined exposure for actionId=${action.actionId}`)
       }
-      cards[exposure.cardId].remembered = exposure.remembered
+      card = appState.cardByCardId[exposure.cardId]
+      card.remembered = exposure.remembered
+      appState.fastHeap.updateItem(card.cardId)
+      appState.slowHeap.updateItem(card.cardId)
       break
     default:
       throw new Error(`Unknown action.type ${action.type}`)
   }
-  console.log('cards', cards)
-  return cards
+  return appState
 }

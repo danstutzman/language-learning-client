@@ -3,7 +3,7 @@ import React from 'react'
 import EditNoun from './EditNoun' // eslint-disable-line no-unused-vars
 
 type Props = {
-  cards:        {[actionId: number]: Card},
+  cardByCardId: {[cardId: number]: Card},
   saveCardEdit: (Card) => void,
   sync:         () => void
 }
@@ -29,7 +29,7 @@ export default class NounBrowser extends React.Component<void, Props, State> {
   }
 
   render() {
-    const { cards, sync } = this.props
+    const { cardByCardId, sync } = this.props
 
     return <div>
 
@@ -37,31 +37,34 @@ export default class NounBrowser extends React.Component<void, Props, State> {
         cardId={this.state.editingCardId}
         initialState={this.state.editingCardId === ADD_NEW ?
           {cardId: ADD_NEW, type: 'EsN', gender: '', es: '', en: ''} :
-          cards[this.state.editingCardId]}
+          cardByCardId[this.state.editingCardId]}
         saveCardEdit={this._onSaveCardEdit.bind(this)} />}
 
       <table>
         <thead>
           <tr>
-            <th>actionId</th>
+            <th>cardId</th>
             <th>type</th>
             <th>gender</th>
             <th>es</th>
             <th>en</th>
+            <th>remembered</th>
           </tr>
         </thead>
         <tbody>
-          {Object.keys(cards).map(actionId => {
-            const card = cards[parseInt(actionId)]
-            return <tr key={actionId}>
-              <td>{actionId}</td>
+          {Object.keys(cardByCardId).map(cardId => {
+            const card = cardByCardId[parseInt(cardId)]
+            return <tr key={cardId}>
+              <td>{cardId}</td>
               <td>{card.type}</td>
               <td>{card.gender}</td>
               <td>{card.es}</td>
               <td>{card.en}</td>
+              <td>{card.remembered === true ? 'true' :
+                   card.remembered === false ? 'false' : null}</td>
               <td>
                 <button onClick={()=>{
-                  this.setState({ editingCardId: parseInt(actionId) })
+                  this.setState({ editingCardId: parseInt(cardId) })
                 }}>Edit</button>
               </td>
             </tr>

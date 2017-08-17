@@ -6,16 +6,18 @@ import type { Card }            from '../Card'
 import type { LocalStorage }    from '../LocalStorage'
 import type { Store }           from 'redux'
 import type { Exposure }        from '../Exposure'
+import type { AppState }        from '../AppState'
 import { createStore }          from 'redux'
 import reducer                  from './reducer'
 import SyncedState              from './SyncedState'
 import UnsyncedState            from './UnsyncedState'
+import Heap                     from 'heap'
 
 export default class LocalBank {
   bankApi:       BankApi
   syncedState:   SyncedState
   unsyncedState: UnsyncedState
-  reduxStore:    Store<{[actionId: number]: Card}, Action>
+  reduxStore:    Store<AppState, Action>
 
   constructor(bankApi: BankApi, localStorage: LocalStorage) {
     this.bankApi       = bankApi
@@ -27,14 +29,23 @@ export default class LocalBank {
     this.syncedState.initFromLocalStorage()
     this.unsyncedState.initFromLocalStorage()
 
-    this.reduxStore = createStore(reducer, {})
+    const cardByCardId: {[cardId: number]: Card} = {}
+    const comparer = (cardId1: number, cardId2: number) => {
+      return (cardByCardId[cardId1].remembered === false ? 1 : 0) -
+             (cardByCardId[cardId2].remembered === false ? 1 : 0)
+    }
+    this.reduxStore = createStore(reducer, {
+      cardByCardId,
+      fastHeap: new Heap(comparer),
+      slowHeap: new Heap(comparer)
+    })
     const actions = this.syncedState.actions.concat(this.unsyncedState.actions)
     for (const action of actions) {
       this.reduxStore.dispatch(action)
     }
   }
 
-  getReduxStoreState() {
+  getReduxStoreState(): AppState {
     return this.reduxStore.getState()
   }
 

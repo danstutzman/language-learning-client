@@ -1,24 +1,22 @@
-import type { AddCardAction } from './bank/ACtion'
 import type { Exposure } from './Exposure'
+import type { Card } from './Card'
 import React from 'react'
 
 type Props = {
-  newCardAction:  AddCardAction,
-  addExposure:    (Exposure) => void,
-  nextCard:       () => void
+  topCard:      Card,
+  addExposure:  (Exposure) => void
 }
 
 export default class FastQuiz extends React.Component<void, Props, void> {
   _onClickIRemember() {
     this.props.addExposure({
-      cardId:     this.props.newCardAction.actionId,
+      cardId:     this.props.topCard.cardId,
       remembered: true
     })
-    this.props.nextCard()
   }
 
   render() {
-    const en = this.props.newCardAction.card.en
+    const en = this.props.topCard.en
     return <div>
       <p>{en}</p>
       <button onClick={this._onClickIRemember.bind(this)}>

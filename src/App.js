@@ -1,20 +1,18 @@
 import type { Card } from './Card'
 import type { Exposure } from './Exposure'
-import type { AddCardAction } from './bank/Action'
+import type { AppState } from './AppState'
 import React from 'react'
 import NounBrowser from './NounBrowser' // eslint-disable-line no-unused-vars
 import FastQuiz from './FastQuiz' // eslint-disable-line no-unused-vars
 import SlowQuiz from './SlowQuiz' // eslint-disable-line no-unused-vars
 
 type Props = {
-  newCardAction:  AddCardAction | void,
-  cards:          {[actionId: number]: Card},
+  appState:       AppState,
   saveCardEdit:   (Card) => void,
   addExposure:    (Exposure) => void,
   sync:           () => void,
   playEs:         (string) => void,
-  playSound:      () => void,
-  nextCard:       () => void
+  playSound:      () => void
 }
 
 type State = {
@@ -84,28 +82,35 @@ export default class App extends React.Component<void, Props, State> {
 
       <div style={{ display:
           (this.state.currentTab === 'NOUN_BROWSER' ? 'block' : 'none') }}>
-        <NounBrowser cards={this.props.cards}
+        <NounBrowser cardByCardId={this.props.appState.cardByCardId}
           saveCardEdit={this.props.saveCardEdit}
           sync={this.props.sync}/>
       </div>
       <div style={{ display:
           (this.state.currentTab === 'FAST_QUIZ' ? 'block' : 'none') }}>
-        { this.props.newCardAction === undefined ? 'No cards' :
+        { this.props.appState.fastHeap.empty() ||
+          this.props.appState.cardByCardId[
+            this.props.appState.fastHeap.peek()].remembered === false ?
+          'No cards' :
           this.state.startedFastQuiz ?
-            <FastQuiz newCardAction={this.props.newCardAction}
+            <FastQuiz topCard={this.props.appState.cardByCardId[
+              this.props.appState.fastHeap.peek()]}
               addExposure={this.props.addExposure}
-              playEs={this.props.playEs} nextCard={this.props.nextCard} /> :
+              playEs={this.props.playEs} /> :
             <button onClick={this.onClickStartFastQuiz.bind(this)}>
               Start Fast Quiz
             </button> }
       </div>
       <div style={{ display:
           (this.state.currentTab === 'SLOW_QUIZ' ? 'block' : 'none') }}>
-        { this.props.newCardAction === undefined ? 'No cards' :
+        { this.props.appState.slowHeap.empty() ||
+          this.props.appState.cardByCardId[
+            this.props.appState.slowHeap.peek()].remembered === false ?
+          'No cards' :
           this.state.startedSlowQuiz ?
-            <SlowQuiz newCardAction={this.props.newCardAction}
-              addExposure={this.props.addExposure}
-              nextCard={this.props.nextCard} /> :
+            <SlowQuiz topCard={this.props.appState.cardByCardId[
+              this.props.appState.slowHeap.peek()]}
+              addExposure={this.props.addExposure} /> :
             <button onClick={this.onClickStartSlowQuiz.bind(this)}>
               Start Slow Quiz
             </button> }

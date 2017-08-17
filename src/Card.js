@@ -6,6 +6,7 @@ export type Card = {
   gender:      'M' | 'F' | '',
   es:          string,
   en:          string,
+  mnemonic?:   string,
   remembered?: boolean
 }
 

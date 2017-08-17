@@ -49,6 +49,7 @@ export default class NounBrowser extends React.Component<void, Props, State> {
             <th>es</th>
             <th>en</th>
             <th>remembered</th>
+            <th>mnemonic</th>
           </tr>
         </thead>
         <tbody>
@@ -62,6 +63,7 @@ export default class NounBrowser extends React.Component<void, Props, State> {
               <td>{card.en}</td>
               <td>{card.remembered === true ? 'true' :
                    card.remembered === false ? 'false' : null}</td>
+              <td>{card.mnemonic}</td>
               <td>
                 <button onClick={()=>{
                   this.setState({ editingCardId: parseInt(cardId) })

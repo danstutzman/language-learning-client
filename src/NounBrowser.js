@@ -1,15 +1,18 @@
 import type { Card } from './Card'
 import React from 'react'
-import AddNoun from './AddNoun' // eslint-disable-line no-unused-vars
+import EditNoun from './EditNoun' // eslint-disable-line no-unused-vars
 
 type Props = {
-  cards:   {[actionId: number]: Card},
-  addCard: (Card) => void,
-  sync:    () => void
+  cards:        {[actionId: number]: Card},
+  saveCardEdit: (cardId: number, Card) => void,
+  sync:         () => void
 }
 
+const NOT_EDITING = 0
+const ADD_NEW = -1
+
 type State = {
-  showAddNoun: boolean
+  editingCardId: number
 }
 
 export default class NounBrowser extends React.Component<void, Props, State> {
@@ -17,20 +20,26 @@ export default class NounBrowser extends React.Component<void, Props, State> {
 
   constructor() {
     super()
-    this.state = { showAddNoun: false }
+    this.state = { editingCardId: NOT_EDITING }
   }
 
-  _onAddCard(card: Card) {
-    this.props.addCard(card)
-    this.setState({ showAddNoun: false })
+  _onSaveCardEdit(cardId: number, card: Card) {
+    this.props.saveCardEdit(cardId, card)
+    this.setState({ editingCardId: NOT_EDITING })
   }
 
   render() {
     const { cards, sync } = this.props
+
     return <div>
-      {this.state.showAddNoun ?
-        <AddNoun addCard={this._onAddCard.bind(this)} /> :
-        null}
+
+      {this.state.editingCardId === NOT_EDITING ? null : <EditNoun
+        cardId={this.state.editingCardId}
+        initialState={this.state.editingCardId === ADD_NEW ?
+          {type: 'EsN', gender: '', es: '', en: ''} :
+          cards[this.state.editingCardId]}
+        saveCardEdit={this._onSaveCardEdit.bind(this)} />}
+
       <table>
         <thead>
           <tr>
@@ -50,11 +59,16 @@ export default class NounBrowser extends React.Component<void, Props, State> {
               <td>{card.gender}</td>
               <td>{card.es}</td>
               <td>{card.en}</td>
+              <td>
+                <button onClick={()=>{
+                  this.setState({ editingCardId: parseInt(actionId) })
+                }}>Edit</button>
+              </td>
             </tr>
           })}
         </tbody>
       </table>
-      <button onClick={()=>{ this.setState({ showAddNoun: true}) }}>
+      <button onClick={()=>{ this.setState({ editingCardId: ADD_NEW }) }}>
         Add Noun
       </button>
       <button onClick={sync}>Sync</button>

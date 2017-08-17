@@ -1,5 +1,5 @@
-import type { Action, NoopAction, AddCardAction, AddExposureAction
-  } from './Action'
+import type { Action, NoopAction, AddCardAction, AddExposureAction,
+  UpdateCardAction } from './Action'
 import type { BankApiResponse } from './api/BankApiResponse'
 import type { LocalStorage } from '../LocalStorage'
 import type { Card } from '../Card'
@@ -58,6 +58,17 @@ export default class UnsyncedState {
     const actionId = this.nextActionId
     const createdAtMillis = new Date().getTime()
     const action = { type: 'ADD_CARD', actionId, createdAtMillis, card }
+    this.actions.push(action)
+    this.nextActionId += 10
+    this._saveUnsynced()
+    return action
+  }
+
+  addUpdateCardAction(card: Card, cardId: number): UpdateCardAction {
+    const actionId = this.nextActionId
+    const createdAtMillis = new Date().getTime()
+    const action =
+      { type: 'UPDATE_CARD', actionId, createdAtMillis, card, cardId }
     this.actions.push(action)
     this.nextActionId += 10
     this._saveUnsynced()

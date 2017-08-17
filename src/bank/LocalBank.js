@@ -66,8 +66,13 @@ export default class LocalBank {
     this.reduxStore.dispatch(action)
   }
 
-  addActionAddCard(card: Card) {
+  addAddCardAction(card: Card) {
     const action = this.unsyncedState.addAddCardAction(card)
+    this.reduxStore.dispatch(action)
+  }
+
+  addUpdateCardAction(card: Card, cardId: number) {
+    const action = this.unsyncedState.addUpdateCardAction(card, cardId)
     this.reduxStore.dispatch(action)
   }
 

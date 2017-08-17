@@ -9,7 +9,7 @@ import SlowQuiz from './SlowQuiz' // eslint-disable-line no-unused-vars
 type Props = {
   newCardAction:  AddCardAction | void,
   cards:          {[actionId: number]: Card},
-  addCard:        (Card) => void,
+  saveCardEdit:   (cardId: number, Card) => void,
   addExposure:    (Exposure) => void,
   sync:           () => void,
   playEs:         (string) => void,
@@ -84,7 +84,8 @@ export default class App extends React.Component<void, Props, State> {
 
       <div style={{ display:
           (this.state.currentTab === 'NOUN_BROWSER' ? 'block' : 'none') }}>
-        <NounBrowser cards={this.props.cards} addCard={this.props.addCard}
+        <NounBrowser cards={this.props.cards}
+          saveCardEdit={this.props.saveCardEdit}
           sync={this.props.sync}/>
       </div>
       <div style={{ display:

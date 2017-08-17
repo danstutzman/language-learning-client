@@ -1,6 +1,6 @@
 import type { Action } from './Action'
 import type { Card } from '../Card'
-import { assertAddCardAction } from './Action'
+import { assertAddCardAction, assertUpdateCardAction } from './Action'
 
 export default function(cards: {[actionId: number]: Card}, action: Action) {
   console.log('action', action)
@@ -10,8 +10,13 @@ export default function(cards: {[actionId: number]: Card}, action: Action) {
     case 'NOOP':
       break // Ignore
     case 'ADD_CARD':
-      var action2 = assertAddCardAction(action)
-      cards[action2.actionId] = action2.card
+      var add = assertAddCardAction(action)
+      cards[add.actionId] = add.card
+      break
+    case 'UPDATE_CARD':
+      var update = assertUpdateCardAction(action)
+      cards[update.cardId] =
+        Object.assign({}, cards[update.cardId], update.card)
       break
     case 'ADD_EXPOSURE':
       var exposure = action.exposure

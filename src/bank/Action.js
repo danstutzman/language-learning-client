@@ -17,6 +17,14 @@ export type AddCardAction = {
   card:            Card
 }
 
+export type UpdateCardAction = {
+  type:            'UPDATE_CARD',
+  actionId:        number,
+  createdAtMillis: number,
+  cardId:          number,
+  card:            Card
+}
+
 export type AddExposureAction = {
   type:            'ADD_EXPOSURE',
   actionId:        number,
@@ -24,10 +32,17 @@ export type AddExposureAction = {
   exposure:        Exposure
 }
 
-export type Action = NoopAction | AddCardAction | AddExposureAction
+export type Action = NoopAction
+ | AddCardAction
+ | UpdateCardAction
+ | AddExposureAction
 
-function assertActionType(x: any): 'NOOP' | 'ADD_CARD' | 'ADD_EXPOSURE' {
-  if (x !== 'NOOP' && x !== 'ADD_CARD' && x != 'ADD_EXPOSURE') {
+function assertActionType(x: any):
+    'NOOP' | 'ADD_CARD' | 'UPDATE_CARD' | 'ADD_EXPOSURE' {
+  if (!(x === 'NOOP' ||
+        x === 'ADD_CARD' ||
+        x === 'UPDATE_CARD' ||
+        x === 'ADD_EXPOSURE')) {
     throw new Error(`Expected Action Type but got ${x}`)
   }
   return x
@@ -51,11 +66,19 @@ export function assertAction(x: any): Action {
   }
   assertNum(y.createdAtMillis)
 
-  if (y.type === 'ADD_CARD') {
+  if (y.type === 'ADD_CARD' || y.type === 'UPDATE_CARD') {
     if (!y.card) {
-      throw new Error(`No card on ${JSON.stringify(x)} despite type=ADD_CARD`)
+      throw new Error(`No card on ${JSON.stringify(x)} despite type=${x.type}`)
     }
     assertCard(x.card)
+  }
+
+  if (y.type === 'UPDATE_CARD') {
+    if (!y.cardId) {
+      throw new Error(
+          `No cardId on ${JSON.stringify(x)} despite type=${x.type}`)
+    }
+    assertNum(x.cardId)
   }
 
   if (y.type === 'ADD_EXPOSURE') {
@@ -78,6 +101,24 @@ export function assertAddCardAction(x: Action): AddCardAction {
     throw new Error(`No card on ${JSON.stringify(x)}`)
   }
   assertCard(x.card)
+
+  return (x: any)
+}
+
+export function assertUpdateCardAction(x: Action): UpdateCardAction {
+  if (x.type !== 'UPDATE_CARD') {
+    throw new Error(`Unexpected type ${JSON.stringify(x.type)}`)
+  }
+
+  if (x.card === undefined) {
+    throw new Error(`No card on ${JSON.stringify(x)}`)
+  }
+  assertCard(x.card)
+
+  if (!x.cardId) {
+    throw new Error(`No cardId on ${JSON.stringify(x)}`)
+  }
+  assertNum(x.cardId)
 
   return (x: any)
 }

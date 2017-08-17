@@ -4,7 +4,7 @@ import EditNoun from './EditNoun' // eslint-disable-line no-unused-vars
 
 type Props = {
   cards:        {[actionId: number]: Card},
-  saveCardEdit: (cardId: number, Card) => void,
+  saveCardEdit: (Card) => void,
   sync:         () => void
 }
 
@@ -23,8 +23,8 @@ export default class NounBrowser extends React.Component<void, Props, State> {
     this.state = { editingCardId: NOT_EDITING }
   }
 
-  _onSaveCardEdit(cardId: number, card: Card) {
-    this.props.saveCardEdit(cardId, card)
+  _onSaveCardEdit(card: Card) {
+    this.props.saveCardEdit(card)
     this.setState({ editingCardId: NOT_EDITING })
   }
 
@@ -36,7 +36,7 @@ export default class NounBrowser extends React.Component<void, Props, State> {
       {this.state.editingCardId === NOT_EDITING ? null : <EditNoun
         cardId={this.state.editingCardId}
         initialState={this.state.editingCardId === ADD_NEW ?
-          {type: 'EsN', gender: '', es: '', en: ''} :
+          {cardId: ADD_NEW, type: 'EsN', gender: '', es: '', en: ''} :
           cards[this.state.editingCardId]}
         saveCardEdit={this._onSaveCardEdit.bind(this)} />}
 

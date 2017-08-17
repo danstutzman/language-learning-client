@@ -1,6 +1,7 @@
-import { assertNonBlankStr, assertObj } from './assertType'
+import { assertNonBlankStr, assertNum, assertObj } from './assertType'
 
 export type Card = {
+  cardId:      number,
   type:        'EsN',
   gender:      'M' | 'F' | '',
   es:          string,
@@ -23,10 +24,18 @@ export function assertCardGender(x: any): 'M' | 'F' | '' {
 }
 
 export function assertCard(x: any): Card {
-  const y = assertObj(x)
+  assertObj(x)
 
-  if (y.type !== 'EsN') {
-    throw new Error(`Unknown type on ${JSON.stringify(y)}`)
+  if (x.cardId === undefined) {
+    throw new Error(`No cardId on ${JSON.stringify(x)}`)
+  }
+  assertNum(x.cardId)
+  if (x.cardId <= 0) {
+    throw new Error(`Non-positive cardId on ${JSON.stringify(x)}`)
+  }
+
+  if (x.type !== 'EsN') {
+    throw new Error(`Unknown type on ${JSON.stringify(x)}`)
   }
 
   return x

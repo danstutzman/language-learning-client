@@ -113,11 +113,11 @@ function render() {
     React.createElement(App, {
       cards: bank.getReduxStoreState(),
       newCardAction: newCardActions[currentCardNum],
-      saveCardEdit: (cardId: number, card: Card) => {
-        if (cardId === -1) {
+      saveCardEdit: (card: Card) => {
+        if (card.cardId === -1) {
           bank.addAddCardAction(card)
         } else {
-          bank.addUpdateCardAction(card, cardId)
+          bank.addUpdateCardAction(card)
         }
         render()
       },

@@ -56,13 +56,15 @@ export default class UnsyncedState {
   addAction(actionFields: {
       type: string,
       card?: Card,
-      cardId?: number,
       exposure?: Exposure
     }): Action {
     const actionId = this.nextActionId
     const createdAtMillis = new Date().getTime()
     const action =
       Object.assign(({ actionId, createdAtMillis }: any), actionFields)
+    if (action.type === 'ADD_CARD') {
+      action.card.actionId = actionId
+    }
     assertAction(action)
     this.actions.push(action)
     this.nextActionId += 10

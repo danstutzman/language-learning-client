@@ -9,7 +9,7 @@ import SlowQuiz from './SlowQuiz' // eslint-disable-line no-unused-vars
 type Props = {
   newCardAction:  AddCardAction | void,
   cards:          {[actionId: number]: Card},
-  saveCardEdit:   (cardId: number, Card) => void,
+  saveCardEdit:   (Card) => void,
   addExposure:    (Exposure) => void,
   sync:           () => void,
   playEs:         (string) => void,

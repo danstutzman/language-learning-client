@@ -21,7 +21,6 @@ export type UpdateCardAction = {
   type:            'UPDATE_CARD',
   actionId:        number,
   createdAtMillis: number,
-  cardId:          number,
   card:            Card
 }
 
@@ -73,14 +72,6 @@ export function assertAction(x: any): Action {
     assertCard(x.card)
   }
 
-  if (y.type === 'UPDATE_CARD') {
-    if (!y.cardId) {
-      throw new Error(
-          `No cardId on ${JSON.stringify(x)} despite type=${x.type}`)
-    }
-    assertNum(x.cardId)
-  }
-
   if (y.type === 'ADD_EXPOSURE') {
     if (!y.exposure) {
       throw new Error(
@@ -114,11 +105,6 @@ export function assertUpdateCardAction(x: Action): UpdateCardAction {
     throw new Error(`No card on ${JSON.stringify(x)}`)
   }
   assertCard(x.card)
-
-  if (!x.cardId) {
-    throw new Error(`No cardId on ${JSON.stringify(x)}`)
-  }
-  assertNum(x.cardId)
 
   return (x: any)
 }

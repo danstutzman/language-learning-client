@@ -11,12 +11,12 @@ export default function(cards: {[actionId: number]: Card}, action: Action) {
       break // Ignore
     case 'ADD_CARD':
       var add = assertAddCardAction(action)
-      cards[add.actionId] = add.card
+      cards[add.card.cardId] = add.card
       break
     case 'UPDATE_CARD':
       var update = assertUpdateCardAction(action)
-      cards[update.cardId] =
-        Object.assign({}, cards[update.cardId], update.card)
+      cards[update.card.cardId] =
+        Object.assign({}, cards[update.card.cardId], update.card)
       break
     case 'ADD_EXPOSURE':
       var exposure = action.exposure

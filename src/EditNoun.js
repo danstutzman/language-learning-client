@@ -5,7 +5,7 @@ import { assertCardGender } from './Card'
 type Props = {
   cardId:       number,
   initialState: Card,
-  saveCardEdit: (cardId: number, Card) => void
+  saveCardEdit: (Card) => void
 }
 
 type State = Card
@@ -19,7 +19,7 @@ export default class EditNoun extends React.Component<void, Props, State> {
   }
 
   onClickSave() {
-    this.props.saveCardEdit(this.props.cardId, this.state)
+    this.props.saveCardEdit(this.state)
   }
 
   isAddCardEnabled() {
@@ -47,7 +47,7 @@ export default class EditNoun extends React.Component<void, Props, State> {
       <input value={en} onChange={e => this.setState({en: e.target.value})}/>
 
       <button onClick={this.onClickSave.bind(this)}>
-        {this.props.cardId === -1 ? 'Add' : 'Edit'} Noun
+        {this.state.cardId === -1 ? 'Add' : 'Edit'} Noun
       </button>
     </div>
   }

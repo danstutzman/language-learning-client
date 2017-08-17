@@ -9,10 +9,12 @@ const kexec           = require('kexec')
 
 const CHOKIDAR_OPTIONS = {'ignored':/[\/\\]\./, 'ignoreInitial':true}
 const REQUIRED_NODE_VERSION = 'v6.11.1'
-const BROWSERIFY_ARGS = `-o build/browserified.js --ignore node-localstorage \
-  --ignore xmlhttprequest --debug src/index.js \
+const BROWSERIFY_ARGS = `-o build/js/browserified.js \
+  -t babelify \
+  --ignore node-localstorage --ignore xmlhttprequest \
   --exclude react --exclude react-dom \
-  -t babelify`
+  --debug \
+  src/index.js`
 
 if (process.version !== REQUIRED_NODE_VERSION) {
   throw new Error(`Currently running ${process.version}.  Please first run:
@@ -37,7 +39,10 @@ if (process.argv.length > 3) {
 const spawned = spawn('/bin/bash', ['-c', `echo Running flow &&
   node_modules/.bin/flow &&
   JS_FILES="$(find src -name '*.js') $(find test -name '*.js')" &&
-  mkdir -p build &&
+  mkdir -p build/js &&
+  echo > build/js/vendor.js &&
+  cat node_modules/react/dist/react.min.js >> build/js/vendor.js &&
+  cat node_modules/react-dom/dist/react-dom.min.js >> build/js/vendor.js &&
   echo Running eslint &&
   node_modules/.bin/eslint $(find src -name '*.js') &&
   echo Running browserify &&

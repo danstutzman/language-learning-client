@@ -66,9 +66,8 @@ export default class App extends React.Component<void, Props, State> {
     })
   }
 
-  render() {
+  _renderTabs() {
     return <div>
-
       <button onClick={this.onClickNounBrowserTab.bind(this)}>
         Noun Browser
       </button>
@@ -79,42 +78,61 @@ export default class App extends React.Component<void, Props, State> {
         Slow Quiz
       </button>
       <hr/>
+    </div>
+  }
 
-      <div style={{ display:
-          (this.state.currentTab === 'NOUN_BROWSER' ? 'block' : 'none') }}>
-        <NounBrowser cardByCardId={this.props.appState.cardByCardId}
-          saveCardEdit={this.props.saveCardEdit}
-          sync={this.props.sync}/>
-      </div>
-      <div style={{ display:
-          (this.state.currentTab === 'FAST_QUIZ' ? 'block' : 'none') }}>
-        { this.props.appState.fastHeap.empty() ||
-          this.props.appState.cardByCardId[
-            this.props.appState.fastHeap.peek()].remembered === false ?
-          'No cards' :
-          this.state.startedFastQuiz ?
-            <FastQuiz topCard={this.props.appState.cardByCardId[
-              this.props.appState.fastHeap.peek()]}
-              addExposure={this.props.addExposure}
-              playEs={this.props.playEs} /> :
-            <button onClick={this.onClickStartFastQuiz.bind(this)}>
-              Start Fast Quiz
-            </button> }
-      </div>
-      <div style={{ display:
-          (this.state.currentTab === 'SLOW_QUIZ' ? 'block' : 'none') }}>
-        { this.props.appState.slowHeap.empty() ||
-          this.props.appState.cardByCardId[
-            this.props.appState.slowHeap.peek()].remembered === false ?
-          'No cards' :
-          this.state.startedSlowQuiz ?
-            <SlowQuiz topCard={this.props.appState.cardByCardId[
-              this.props.appState.slowHeap.peek()]}
-              addExposure={this.props.addExposure} /> :
-            <button onClick={this.onClickStartSlowQuiz.bind(this)}>
-              Start Slow Quiz
-            </button> }
-      </div>
+  _renderNounBrowserMaybe() {
+    if (this.state.currentTab === 'NOUN_BROWSER') {
+      return <NounBrowser
+        cardByCardId={this.props.appState.cardByCardId}
+        saveCardEdit={this.props.saveCardEdit}
+        sync={this.props.sync}/>
+    }
+  }
+
+  _renderFastQuizMaybe() {
+    const { appState, addExposure, playEs } = this.props
+    if (this.state.currentTab === 'FAST_QUIZ') {
+      if (appState.fastHeap.empty() || appState.cardByCardId[
+            appState.fastHeap.peek()].remembered === false) {
+        return <div>No cards</div>
+      } else if (this.state.startedFastQuiz) {
+        return <FastQuiz
+          topCard={appState.cardByCardId[appState.fastHeap.peek()]}
+          addExposure={addExposure}
+          playEs={playEs} />
+      } else {
+        return <button onClick={this.onClickStartFastQuiz.bind(this)}>
+          Start Fast Quiz
+        </button>
+      }
+    }
+  }
+
+  _renderSlowQuizMaybe() {
+    const { appState, addExposure } = this.props
+    if (this.state.currentTab === 'SLOW_QUIZ') {
+      if (appState.slowHeap.empty() || appState.cardByCardId[
+          appState.slowHeap.peek()].remembered === false) {
+        return <div>No cards</div>
+      } else if (this.state.startedSlowQuiz) {
+        return <SlowQuiz
+          topCard={appState.cardByCardId[appState.slowHeap.peek()]}
+          addExposure={addExposure} />
+      } else {
+        return <button onClick={this.onClickStartSlowQuiz.bind(this)}>
+          Start Slow Quiz
+        </button>
+      }
+    }
+  }
+
+  render() {
+    return <div>
+      { this._renderTabs() }
+      { this._renderNounBrowserMaybe() }
+      { this._renderFastQuizMaybe() }
+      { this._renderSlowQuizMaybe() }
       <button onClick={this.props.playSound}>Play Sound</button>
     </div>
   }

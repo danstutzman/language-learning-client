@@ -10,7 +10,7 @@ export default function(cards: {[actionId: number]: Card}, action: Action) {
     case 'NOOP':
       break // Ignore
     case 'ADD_CARD':
-      const action2 = assertAddCardAction(action)
+      var action2 = assertAddCardAction(action)
       cards[action2.actionId] = action2.card
       break
     case 'ADD_EXPOSURE':

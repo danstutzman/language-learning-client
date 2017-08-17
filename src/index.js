@@ -13,15 +13,15 @@ const SERVER_URL_ROOT = 'https://serverdts.localtunnel.me'
 
 const clientId = 1
 if (localStorage.getItem(SYNCED_KEY) === null) {
-	localStorage.setItem(SYNCED_KEY, JSON.stringify({
-		clientId:                    clientId,
-		actions:                     [],
-		clientIdToMaxSyncedActionId: new Map()
-	}))
-	localStorage.setItem(UNSYNCED_KEY, JSON.stringify({
-		actions:      [],
-		nextActionId: 10 + clientId,
-	}))
+  localStorage.setItem(SYNCED_KEY, JSON.stringify({
+    clientId:                    clientId,
+    actions:                     [],
+    clientIdToMaxSyncedActionId: new Map()
+  }))
+  localStorage.setItem(UNSYNCED_KEY, JSON.stringify({
+    actions:      [],
+    nextActionId: 10 + clientId,
+  }))
 }
 
 const bank = new LocalBank(
@@ -38,27 +38,27 @@ function chooseRandomCard(actions: Array<Action>): Action | null {
 }
 
 function initAudioContext(): AudioContext {
-	// See http://stackoverflow.com/questions/12517000/no-sound-on-ios-6-web-audio-api#32840804
-	// If still no sound, check if hardware ringer switch is on vibrate-only
-	if (window.myAudioContext === undefined) {
-		if (window.AudioContext) {
-			window.myAudioContext = new window.AudioContext()
-		} else if (window.webkitAudioContext) {
-			window.myAudioContext = new window.webkitAudioContext()
-		} else {
-			window.alert('Your browser does not support yet Web Audio API')
-		}
-	}
+  // See http://stackoverflow.com/questions/12517000/no-sound-on-ios-6-web-audio-api#32840804
+  // If still no sound, check if hardware ringer switch is on vibrate-only
+  if (window.myAudioContext === undefined) {
+    if (window.AudioContext) {
+      window.myAudioContext = new window.AudioContext()
+    } else if (window.webkitAudioContext) {
+      window.myAudioContext = new window.webkitAudioContext()
+    } else {
+      window.alert('Your browser does not support yet Web Audio API')
+    }
+  }
   return window.myAudioContext
 }
 
 function playTestSound() {
   const context = initAudioContext()
-	const oscillator = context.createOscillator()
-	oscillator.frequency.value = 400
-	oscillator.connect(context.destination)
-	oscillator.start(context.currentTime)
-	oscillator.stop(context.currentTime + 1.0)
+  const oscillator = context.createOscillator()
+  oscillator.frequency.value = 400
+  oscillator.connect(context.destination)
+  oscillator.start(context.currentTime)
+  oscillator.stop(context.currentTime + 1.0)
 }
 
 const esToPromiseBuffer: {[es: string]: Promise<Blob>} = {}

@@ -1,21 +1,21 @@
-import { assertObj, assertStr } from './assertType'
+import { assertNonBlankStr, assertObj } from './assertType'
 
 export type Card = {
   type:        'EsN',
-  gender:      'M' | 'F',
-  es:          string,
-  en:          string,
+  gender:      'M' | 'F' | void,
+  es:          string | void,
+  en:          string | void,
   remembered?: boolean
 }
 
-function assertCardType(x: any): 'EsN' {
+export function assertCardType(x: any): 'EsN' {
   if (x !== 'EsN') {
     throw new Error(`Expected Card Type but got ${x}`)
   }
   return x
 }
 
-function assertCardGender(x: any): 'M' | 'F' {
+export function assertCardGender(x: any): 'M' | 'F' {
   if (x !== 'M' && x !== 'F') {
     throw new Error(`Expected Card Gender but got ${x}`)
   }
@@ -25,25 +25,26 @@ function assertCardGender(x: any): 'M' | 'F' {
 export function assertCard(x: any): Card {
   const y = assertObj(x)
 
-  if (!y.type) {
-    throw new Error(`No type on ${JSON.stringify(y)}`)
+  if (y.type !== 'EsN') {
+    throw new Error(`Unknown type on ${JSON.stringify(y)}`)
   }
-  const type = assertCardType(y.type)
 
-  if (!y.gender) {
-    throw new Error(`No gender on ${JSON.stringify(y)}`)
+  return x
+}
+
+export function assertQuizzableCard(x: any): Card {
+  const y = assertObj(x)
+
+  if (y.type !== 'EsN') {
+    throw new Error(`Unknown type on ${JSON.stringify(y)}`)
   }
-  const gender = assertCardGender(y.gender)
 
-  if (!y.es) {
-    throw new Error(`No es on ${JSON.stringify(y)}`)
+  if (!(y.gender === 'M' || y.gender === 'F')) {
+    throw new Error(`Unknown gender on ${JSON.stringify(y)}`)
   }
-  const es = assertStr(y.es)
 
-  if (!y.en) {
-    throw new Error(`No en on ${JSON.stringify(y)}`)
-  }
-  const en = assertStr(y.en)
+  assertNonBlankStr(x.es)
+  assertNonBlankStr(x.en)
 
-  return { type, gender, es, en }
+  return x
 }

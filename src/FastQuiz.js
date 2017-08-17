@@ -1,6 +1,7 @@
 import type { AddCardAction } from './bank/ACtion'
 import type { Exposure } from './Exposure'
 import React from 'react'
+import { assertNonBlankStr } from './assertType'
 
 type Props = {
   newCardAction:  AddCardAction,
@@ -32,12 +33,8 @@ export default class FastQuiz extends React.Component<void, Props, State> {
     }, 1000)
   }
 
-  _getEs(props: Props) {
-    if (props.newCardAction.card === undefined) {
-      return '?'
-    } else {
-      return props.newCardAction.card.es
-    }
+  _getEs(props: Props): string {
+    return assertNonBlankStr(props.newCardAction.card.es)
   }
 
   componentWillMount() {

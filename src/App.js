@@ -5,7 +5,6 @@ import React from 'react'
 import NounBrowser from './NounBrowser' // eslint-disable-line no-unused-vars
 import FastQuiz from './FastQuiz' // eslint-disable-line no-unused-vars
 import SlowQuiz from './SlowQuiz' // eslint-disable-line no-unused-vars
-import { assertAddCardAction } from './bank/Action'
 
 type Props = {
   newCardAction:  AddCardAction | void,

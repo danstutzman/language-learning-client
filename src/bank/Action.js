@@ -51,7 +51,13 @@ export function assertAction(x: any): Action {
   }
   assertNum(y.createdAtMillis)
 
-  let exposure: Exposure | void = undefined
+  if (y.type === 'ADD_CARD') {
+    if (!y.card) {
+      throw new Error(`No card on ${JSON.stringify(x)} despite type=ADD_CARD`)
+    }
+    assertCard(x.card)
+  }
+
   if (y.type === 'ADD_EXPOSURE') {
     if (!y.exposure) {
       throw new Error(

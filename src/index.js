@@ -101,8 +101,9 @@ function playEs(es: string) {
 }
 
 const allActions = bank.syncedState.actions.concat(bank.unsyncedState.actions)
-const newCardActions: Array<AddCardAction> = allActions.filter(card => {
-  return card.type === 'ADD_CARD'
+const newCardActions: Array<AddCardAction> = allActions.filter(action => {
+  return action.type === 'ADD_CARD' &&
+    action.card.es && action.card.en && action.card.gender
 }).map(assertAddCardAction)
 //let currentCardNum = Math.floor(Math.random() * newCardActions.length)
 let currentCardNum = 0

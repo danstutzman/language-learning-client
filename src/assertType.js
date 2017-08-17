@@ -6,6 +6,16 @@ export function assertBool(x: any): boolean {
   }
 }
 
+export function assertNonBlankStr(x: any): string {
+  if (typeof x !== 'string') {
+    throw new Error(`Unexpected type ${typeof x}`)
+  } else if (x === '') {
+    throw new Error(`Unexpected blank`)
+  } else {
+    return x
+  }
+}
+
 export function assertNum(x: any): number {
   if (typeof x !== 'number') {
     throw new Error(`Unexpected type ${typeof x}`)
@@ -33,12 +43,4 @@ export function assertObjNum(x: any): {[key: string]: number} {
     copy[key] = y[key]
   }
   return y
-}
-
-export function assertStr(x: any): string {
-  if (typeof x !== 'string') {
-    throw new Error(`Unexpected type ${typeof x}`)
-  } else {
-    return x
-  }
 }

@@ -1,5 +1,6 @@
-import React from 'react'
 import type { Card } from './Card'
+import React from 'react'
+import { assertCardGender } from './Card'
 
 type Props = {
   cards:   {[actionId: number]: Card},
@@ -11,6 +12,10 @@ type State = {
   newGender: string,
   newEs: string,
   newEn: string
+}
+
+function emptyToUndef(s: string): string | void {
+  return (s === '') ? undefined : s
 }
 
 export default class NounBrowser extends React.Component<void, Props, State> {
@@ -28,21 +33,17 @@ export default class NounBrowser extends React.Component<void, Props, State> {
   onClickAddCard(e: Event) {
     e.preventDefault()
     const { newGender, newEs, newEn } = this.state
-    if (newGender === 'M' || newGender === 'F') {
-      this.props.addCard({
-        type:   'EsN',
-        gender: newGender,
-        es:     newEs,
-        en:     newEn
-      })
-    }
+    this.props.addCard({
+      type:   'EsN',
+      gender: (newGender === '') ? undefined : assertCardGender(newGender),
+      es:     emptyToUndef(newEs),
+      en:     emptyToUndef(newEn)
+    })
   }
 
-  isAddCardDisabled() {
-    const { newGender, newEs, newEn } = this.state
-    return !(newGender === 'M' || newGender === 'F') ||
-      newEs === '' ||
-      newEn === ''
+  isAddCardEnabled() {
+    const { newEs, newEn } = this.state
+    return newEs !== '' || newEn !== ''
   }
 
   render() {
@@ -93,7 +94,7 @@ export default class NounBrowser extends React.Component<void, Props, State> {
         </tbody>
       </table>
       <button onClick={this.onClickAddCard.bind(this)}
-          disabled={this.isAddCardDisabled()}>
+          disabled={!this.isAddCardEnabled()}>
         Add Card</button>
       <button onClick={sync}>Sync</button>
     </div>

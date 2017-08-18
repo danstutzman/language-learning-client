@@ -26,7 +26,9 @@ export default class Repair extends React.Component<void, Props, State> {
         <span> &rarr; </span>
         <span className='es'>{this.props.topCard.es}</span>
       </p>
-      <textarea></textarea>
+      <div className='horizontal-margins'>
+        <textarea></textarea>
+      </div>
 
       <p>
         <span>Example for </span>
@@ -35,8 +37,10 @@ export default class Repair extends React.Component<void, Props, State> {
         <span className='es'>pluma</span>
         <span>:</span>
       </p>
-      <blockquote>pen&apos;s end has feather plumage</blockquote>
-      <br/>
+      <div className='horizontal-margins'>
+        <blockquote>pen&apos;s end has feather plumage</blockquote>
+      </div>
+
       <button className='big'>Save</button>
     </div>
   }

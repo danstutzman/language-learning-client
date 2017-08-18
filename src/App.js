@@ -17,7 +17,7 @@ type Props = {
 }
 
 type State = {
-  currentTab:      'NOUN_BROWSER' | 'FAST_QUIZ' | 'SLOW_QUIZ',
+  currentTab:      'NOUN_BROWSER' | 'FAST_QUIZ' | 'REPAIR' | 'SLOW_QUIZ',
   startedFastQuiz: boolean,
   startedSlowQuiz: boolean
 }
@@ -34,23 +34,10 @@ export default class App extends React.Component<void, Props, State> {
     }
   }
 
-  onClickNounBrowserTab() {
+  _setTab(newTab: 'NOUN_BROWSER' | 'FAST_QUIZ' | 'REPAIR' | 'SLOW_QUIZ') {
     this.setState({
-      currentTab: 'NOUN_BROWSER',
-      startedFastQuiz: false
-    })
-  }
-
-  onClickFastQuizTab() {
-    this.setState({
-      currentTab: 'FAST_QUIZ',
-      startedFastQuiz: false
-    })
-  }
-
-  onClickSlowQuizTab() {
-    this.setState({
-      currentTab: 'SLOW_QUIZ',
+      currentTab: newTab,
+      startedFastQuiz: false,
       startedSlowQuiz: false
     })
   }
@@ -71,15 +58,19 @@ export default class App extends React.Component<void, Props, State> {
     const { currentTab } = this.state
     return <div className='tabs'>
       <button className={cx({ current: currentTab === 'NOUN_BROWSER' })}
-          onClick={this.onClickNounBrowserTab.bind(this)}>
+          onClick={()=>{ this._setTab('NOUN_BROWSER') }}>
         Noun Browser
       </button>
       <button className={cx({ current: currentTab === 'FAST_QUIZ' })}
-          onClick={this.onClickFastQuizTab.bind(this)}>
+          onClick={()=>{ this._setTab('FAST_QUIZ') }}>
         Fast Quiz
       </button>
+      <button className={cx({ current: currentTab === 'REPAIR' })}
+          onClick={()=>{ this._setTab('REPAIR') }}>
+        Repair
+      </button>
       <button className={cx({ current: currentTab === 'SLOW_QUIZ' })}
-          onClick={this.onClickSlowQuizTab.bind(this)}>
+          onClick={()=>{ this._setTab('SLOW_QUIZ') }}>
         Slow Quiz
       </button>
     </div>
@@ -138,9 +129,6 @@ export default class App extends React.Component<void, Props, State> {
       { this._renderNounBrowserMaybe() }
       { this._renderFastQuizMaybe() }
       { this._renderSlowQuizMaybe() }
-      <button className='big' onClick={this.props.playSound}>
-        Play Sound
-      </button>
     </div>
   }
 }

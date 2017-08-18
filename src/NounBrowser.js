@@ -25,6 +25,9 @@ export default class NounBrowser extends React.Component<void, Props, State> {
 
   _onSaveCardEdit(card: Card) {
     this.props.saveCardEdit(card)
+  }
+
+  _onCloseCardEdit() {
     this.setState({ editingCardId: NOT_EDITING })
   }
 
@@ -38,7 +41,8 @@ export default class NounBrowser extends React.Component<void, Props, State> {
         initialState={this.state.editingCardId === ADD_NEW ?
           {cardId: ADD_NEW, type: 'EsN', gender: '', es: '', en: ''} :
           cardByCardId[this.state.editingCardId]}
-        saveCardEdit={this._onSaveCardEdit.bind(this)} />}
+        saveCardEdit={this._onSaveCardEdit.bind(this)}
+        close={this._onCloseCardEdit.bind(this)} />}
 
       <table>
         <thead>

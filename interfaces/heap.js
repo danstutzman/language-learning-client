@@ -6,5 +6,6 @@ declare module "heap" {
     push(item: any): void;
     pop(): any;
     updateItem(item: any): void;
+    size(): number;
   }
 }

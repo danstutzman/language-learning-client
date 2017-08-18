@@ -93,15 +93,21 @@ export default class App extends React.Component<void, Props, State> {
             appState.fastHeap.peek()].hadFastBlink) {
         return <div>No cards</div>
       } else if (this.state.startedFastQuiz) {
-        return <FastQuiz
-          topCard={appState.cardByCardId[appState.fastHeap.peek()]}
-          addExposure={addExposure}
-          playEs={playEs} />
+        return <div>
+          <FastQuiz
+            topCard={appState.cardByCardId[appState.fastHeap.peek()]}
+            addExposure={addExposure}
+            playEs={playEs} />
+          ({appState.fastHeap.size()} cards)
+        </div>
       } else {
-        return <button className='big'
-            onClick={this.onClickStartFastQuiz.bind(this)}>
-          Start Fast Quiz
-        </button>
+        return <div>
+          <button className='big'
+              onClick={this.onClickStartFastQuiz.bind(this)}>
+            Start Fast Quiz
+          </button>
+          ({appState.fastHeap.size()} cards)
+        </div>
       }
     }
   }

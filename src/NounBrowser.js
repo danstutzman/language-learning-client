@@ -11,8 +11,23 @@ type Props = {
 const NOT_EDITING = 0
 const ADD_NEW = -1
 
+type StateSortBy = 'CARD_ID' | 'ES' | '-ES' | 'EN' | '-EN'
+
 type State = {
-  editingCardId: number
+  editingCardId: number,
+  sortBy: StateSortBy
+}
+
+function strcmp(s1: string, s2: string) {
+  return (s1 < s2) ? -1 : (s1 > s2 ? 1 : 0)
+}
+
+const sortByToComparer = {
+  CARD_ID: (c1, c2) => { return c1.cardId - c2.cardId },
+  ES:      (c1, c2) => { return  strcmp(c1.es, c2.es) },
+  '-ES':   (c1, c2) => { return -strcmp(c1.es, c2.es) },
+  EN:      (c1, c2) => { return  strcmp(c1.en, c2.en) },
+  '-EN':   (c1, c2) => { return -strcmp(c1.en, c2.en) }
 }
 
 export default class NounBrowser extends React.Component<void, Props, State> {
@@ -20,7 +35,10 @@ export default class NounBrowser extends React.Component<void, Props, State> {
 
   constructor() {
     super()
-    this.state = { editingCardId: NOT_EDITING }
+    this.state = {
+      editingCardId: NOT_EDITING,
+      sortBy:        'CARD_ID'
+    }
   }
 
   _onSaveCardEdit(card: Card) {
@@ -29,6 +47,23 @@ export default class NounBrowser extends React.Component<void, Props, State> {
 
   _onCloseCardEdit() {
     this.setState({ editingCardId: NOT_EDITING })
+  }
+
+  _sortBy(e: Event, sortBy: StateSortBy) {
+    e.preventDefault()
+    this.setState(prevState => {
+      return (prevState.sortBy === sortBy) ?
+        { sortBy: '-' + sortBy } : { sortBy }
+    })
+  }
+
+  _cardsSorted() {
+    const { cardByCardId } = this.props
+    const cards = Object.keys(cardByCardId).map(cardId => {
+      return cardByCardId[parseInt(cardId)]
+    })
+    cards.sort(sortByToComparer[this.state.sortBy])
+    return cards
   }
 
   render() {
@@ -47,23 +82,26 @@ export default class NounBrowser extends React.Component<void, Props, State> {
       <table className='noun-browser'>
         <thead>
           <tr>
-            <th>Spanish</th>
-            <th>English</th>
+            <th>
+              <a href='#' onClick={e=>{this._sortBy(e, 'ES')}}>Spanish</a>
+            </th>
+            <th>
+              <a href='#' onClick={e=>{this._sortBy(e, 'EN')}}>English</a>
+            </th>
             <th>fast<br/>nods</th>
             <th>fast<br/>blink?</th>
           </tr>
         </thead>
         <tbody>
-          {Object.keys(cardByCardId).map(cardId => {
-            const card = cardByCardId[parseInt(cardId)]
-            return <tr key={cardId}>
+          {this._cardsSorted().map(card => {
+            return <tr key={card.cardId}>
               <td className='es'>{card.es}</td>
               <td className='en'>{card.en}</td>
               <td>{card.numFastNods}</td>
               <td>{card.hadFastBlink ? 'true' : ''}</td>
               <td>
                 <button onClick={()=>{
-                  this.setState({ editingCardId: parseInt(cardId) })
+                  this.setState({ editingCardId: parseInt(card.cardId) })
                 }}>Edit</button>
               </td>
             </tr>

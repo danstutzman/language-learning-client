@@ -15,6 +15,16 @@ button.big {
   height: 50px;
 }
 
+textarea,
+blockquote {
+  width: 100%;
+  background-color: #eee;
+  border: 0;
+  padding: 3px;
+  margin: 0;
+  font-size: 16pt;
+}
+
 .es {
   font-style: italic;
   font-family: serif;
@@ -40,6 +50,10 @@ button.big {
 .tabs button.current {
   background-color: black;
   color: white;
+}
+
+p {
+  text-align: center;
 }
 
 tr {

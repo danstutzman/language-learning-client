@@ -19,11 +19,23 @@ export default class Repair extends React.Component<void, Props, State> {
 
   render() {
     return <div>
-      <span className='en'>{this.props.topCard.en}</span>
-      to
-      <span className='es'>{this.props.topCard.es}</span>
-      <br/>
-      Mnemonic: <input type='text'/>
+      <p>
+        Write a mnemonic sentence for
+        <br/>
+        <span className='en'>{this.props.topCard.en}</span>
+        <span> &rarr; </span>
+        <span className='es'>{this.props.topCard.es}</span>
+      </p>
+      <textarea></textarea>
+
+      <p>
+        <span>Example for </span>
+        <span className='en'>pen</span>
+        <span> &rarr; </span>
+        <span className='es'>pluma</span>
+        <span>:</span>
+      </p>
+      <blockquote>pen&apos;s end has feather plumage</blockquote>
       <br/>
       <button className='big'>Save</button>
     </div>

@@ -72,10 +72,11 @@ export default class NounBrowser extends React.Component<void, Props, State> {
           })}
         </tbody>
       </table>
-      <button onClick={()=>{ this.setState({ editingCardId: ADD_NEW }) }}>
+      <button className='big'
+          onClick={()=>{ this.setState({ editingCardId: ADD_NEW }) }}>
         Add Noun
       </button>
-      <button onClick={sync}>Sync</button>
+      <button className='big' onClick={sync}>Sync</button>
     </div>
   }
 }

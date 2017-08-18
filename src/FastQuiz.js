@@ -76,9 +76,11 @@ export default class FastQuiz extends React.Component<void, Props, State> {
     const es = this._getEs(this.props)
     return <div>
       <p>{es}</p>
-      <button onClick={()=>{this.props.playEs(es)}}>Play</button>
+      <button className='big' onClick={()=>{this.props.playEs(es)}}>
+        Play
+      </button>
       <div>Time: {this.state.secondsLeft}</div>
-      <button onClick={this._onClickIRemember.bind(this)}>
+      <button className='big' onClick={this._onClickIRemember.bind(this)}>
         I Understand
       </button>
     </div>

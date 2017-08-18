@@ -5,6 +5,7 @@ import React from 'react'
 import NounBrowser from './NounBrowser' // eslint-disable-line no-unused-vars
 import FastQuiz from './FastQuiz' // eslint-disable-line no-unused-vars
 import SlowQuiz from './SlowQuiz' // eslint-disable-line no-unused-vars
+import cx from 'classnames'
 
 type Props = {
   appState:       AppState,
@@ -67,17 +68,20 @@ export default class App extends React.Component<void, Props, State> {
   }
 
   _renderTabs() {
-    return <div>
-      <button onClick={this.onClickNounBrowserTab.bind(this)}>
+    const { currentTab } = this.state
+    return <div className='tabs'>
+      <button className={cx({ current: currentTab === 'NOUN_BROWSER' })}
+          onClick={this.onClickNounBrowserTab.bind(this)}>
         Noun Browser
       </button>
-      <button onClick={this.onClickFastQuizTab.bind(this)}>
+      <button className={cx({ current: currentTab === 'FAST_QUIZ' })}
+          onClick={this.onClickFastQuizTab.bind(this)}>
         Fast Quiz
       </button>
-      <button onClick={this.onClickSlowQuizTab.bind(this)}>
+      <button className={cx({ current: currentTab === 'SLOW_QUIZ' })}
+          onClick={this.onClickSlowQuizTab.bind(this)}>
         Slow Quiz
       </button>
-      <hr/>
     </div>
   }
 
@@ -102,7 +106,8 @@ export default class App extends React.Component<void, Props, State> {
           addExposure={addExposure}
           playEs={playEs} />
       } else {
-        return <button onClick={this.onClickStartFastQuiz.bind(this)}>
+        return <button className='big'
+            onClick={this.onClickStartFastQuiz.bind(this)}>
           Start Fast Quiz
         </button>
       }
@@ -119,7 +124,8 @@ export default class App extends React.Component<void, Props, State> {
           topCard={appState.cardByCardId[appState.slowHeap.peek()]}
           addExposure={addExposure} />
       } else {
-        return <button onClick={this.onClickStartSlowQuiz.bind(this)}>
+        return <button className='big'
+            onClick={this.onClickStartSlowQuiz.bind(this)}>
           Start Slow Quiz
         </button>
       }
@@ -132,7 +138,9 @@ export default class App extends React.Component<void, Props, State> {
       { this._renderNounBrowserMaybe() }
       { this._renderFastQuizMaybe() }
       { this._renderSlowQuizMaybe() }
-      <button onClick={this.props.playSound}>Play Sound</button>
+      <button className='big' onClick={this.props.playSound}>
+        Play Sound
+      </button>
     </div>
   }
 }

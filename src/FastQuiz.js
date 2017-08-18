@@ -79,7 +79,7 @@ export default class FastQuiz extends React.Component<void, Props, State> {
   render() {
     const es = this._getEs(this.props)
     return <div>
-      <p>{es}</p>
+      <p className='es'>{es}</p>
       <button className='big' onClick={()=>{this.props.playEs(es)}}>
         Play
       </button>

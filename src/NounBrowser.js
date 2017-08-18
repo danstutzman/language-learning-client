@@ -59,8 +59,8 @@ export default class NounBrowser extends React.Component<void, Props, State> {
               <td>{cardId}</td>
               <td>{card.type}</td>
               <td>{card.gender}</td>
-              <td>{card.es}</td>
-              <td>{card.en}</td>
+              <td className='es'>{card.es}</td>
+              <td className='en'>{card.en}</td>
               <td>{card.numFastNods}</td>
               <td>{card.hadFastBlink ? 'true' : ''}</td>
               <td>

@@ -18,7 +18,7 @@ export default class FastQuiz extends React.Component<void, Props, void> {
   render() {
     const en = this.props.topCard.en
     return <div>
-      <p>{en}</p>
+      <p className='en'>{en}</p>
       <button onClick={this._onClickIRemember.bind(this)}>
         I Understand
       </button>

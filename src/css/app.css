@@ -10,6 +10,18 @@ button.big {
   height: 50px;
 }
 
+.es {
+  font-style: italic;
+  font-family: serif;
+  font-size: 115%;
+}
+.en::before {
+  content: "(";
+}
+.en::after {
+  content: ")";
+}
+
 .tabs {
   margin-bottom: 20px;
 }

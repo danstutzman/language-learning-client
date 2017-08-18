@@ -36,6 +36,11 @@ export default class LocalBank {
                  (cardByCardId[cardId2].hadFastBlink ? 1 : 0)
       if (_1 !== 0) return _1
 
+      // sort newer cards (don't have fast nods) to the beginning
+      const _2 = (cardByCardId[cardId1].numFastNods || 0) -
+                 (cardByCardId[cardId2].numFastNods || 0)
+      if (_2 !== 0) return _2
+
       return 0
     }
     this.reduxStore = createStore(reducer, {

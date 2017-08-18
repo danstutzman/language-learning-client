@@ -25,6 +25,14 @@ export default class Repair extends React.Component<void, Props, State> {
         Object.assign({}, this.props.topCard, this.state))
   }
 
+  _onChangeMnemonic(e: Event & { target: HTMLInputElement }) {
+    const newValue = e.target.value
+    this.setState({ mnemonic: newValue })
+    if (newValue.slice(-1) === '\n') {
+      this._onClickSave()
+    }
+  }
+
   render() {
     return <div>
       <p>
@@ -36,7 +44,7 @@ export default class Repair extends React.Component<void, Props, State> {
       </p>
       <div className='horizontal-margins'>
         <textarea value={this.state.mnemonic}
-          onChange={e=>{ this.setState({ mnemonic: e.target.value }) }} />
+          onChange={this._onChangeMnemonic.bind(this)} />
       </div>
 
       <p>

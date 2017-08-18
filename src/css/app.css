@@ -1,0 +1,29 @@
+body {
+  font-size: 16pt;
+  font-family: sans-serif;
+}
+button {
+  font-size: 12pt;
+}
+button.big {
+  width: 200px;
+  height: 50px;
+}
+
+.tabs {
+  margin-bottom: 20px;
+}
+.tabs button {
+  font-size: 20pt;
+}
+.tabs button.current {
+  background-color: black;
+  color: white;
+}
+
+tr {
+  vertical-align: bottom;
+}
+th {
+  text-align: left;
+}

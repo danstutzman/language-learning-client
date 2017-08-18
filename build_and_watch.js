@@ -40,6 +40,7 @@ const spawned = spawn('/bin/bash', ['-c', `echo Running flow &&
   node_modules/.bin/flow &&
   JS_FILES="$(find src -name '*.js') $(find test -name '*.js')" &&
   mkdir -p build/js &&
+  cp -r src/css build &&
   echo > build/js/vendor.js &&
   cat node_modules/react/dist/react.min.js >> build/js/vendor.js &&
   cat node_modules/react-dom/dist/react-dom.min.js >> build/js/vendor.js &&
@@ -88,31 +89,41 @@ function buildError(message) {
 // Every time a file is edited, build that file
 chokidar.watch(['src', 'test'], CHOKIDAR_OPTIONS).on('all', (event, path) => {
   console.log(chalk.gray(`Detected ${event} of ${path}`))
-  if ((event === 'change' || event === 'add') && path.endsWith('.js')) {
-    const spawned = spawn('node_modules/.bin/flow')
-    spawned.stdout.on('data', (data) => { console.log(data.toString().trim()) })
-    spawned.stderr.on('data', (data) => { console.log(data.toString().trim()) })
-    spawned.on('close', (code) => {
-      if (code !== 0) {
-        return buildError(
-          `Got non-zero code ${code} from spawn node_modules/.bin/flow`)
-      }
-
-      const spawned3 = spawn('node_modules/.bin/eslint', [path])
-      spawned3.stdout.on('data', (data) => {
+  if (event === 'change' || event === 'add') {
+    if (path === 'src/index.html') {
+      exec(`cp ${path} build/index.html`)
+    } else if (path.endsWith('.css')) {
+      exec(`cp ${path} build/css`)
+    } else if (path.endsWith('.js')) {
+      const spawned = spawn('node_modules/.bin/flow')
+      spawned.stdout.on('data', (data) => {
         console.log(data.toString().trim())
       })
-      spawned3.stderr.on('data', (data) => {
+      spawned.stderr.on('data', (data) => {
         console.log(data.toString().trim())
       })
-      spawned3.on('close', (code) => {
-        if (code === 0) {
-          exec('afplay /System/Library/Sounds/Pop.aiff') // success sound
-        } else {
-          return buildError(`Error from eslint`)
+      spawned.on('close', (code) => {
+        if (code !== 0) {
+          return buildError(
+            `Got non-zero code ${code} from spawn node_modules/.bin/flow`)
         }
+
+        const spawned3 = spawn('node_modules/.bin/eslint', [path])
+        spawned3.stdout.on('data', (data) => {
+          console.log(data.toString().trim())
+        })
+        spawned3.stderr.on('data', (data) => {
+          console.log(data.toString().trim())
+        })
+        spawned3.on('close', (code) => {
+          if (code === 0) {
+            exec('afplay /System/Library/Sounds/Pop.aiff') // success sound
+          } else {
+            return buildError(`Error from eslint`)
+          }
+        })
       })
-    })
+    }
   }
 })
 

@@ -13,11 +13,13 @@ type State = {
 export default class Repair extends React.Component<void, Props, State> {
   state: State
 
-  constructor() {
+  constructor(props: Props) {
     super()
-    this.state = {
-      mnemonic: ''
-    }
+    this.state = { mnemonic: props.topCard.mnemonic || '' }
+  }
+
+  componentWillReceiveProps(nextProps: Props) {
+    this.setState({ mnemonic: nextProps.topCard.mnemonic || '' })
   }
 
   _onClickSave() {

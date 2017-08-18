@@ -7,6 +7,7 @@ type Props = {
 }
 
 type State = {
+  mnemonic: string
 }
 
 export default class Repair extends React.Component<void, Props, State> {
@@ -14,7 +15,14 @@ export default class Repair extends React.Component<void, Props, State> {
 
   constructor() {
     super()
-    this.state = {}
+    this.state = {
+      mnemonic: ''
+    }
+  }
+
+  _onClickSave() {
+    this.props.saveCardEdit(
+        Object.assign({}, this.props.topCard, this.state))
   }
 
   render() {
@@ -27,7 +35,8 @@ export default class Repair extends React.Component<void, Props, State> {
         <span className='es'>{this.props.topCard.es}</span>
       </p>
       <div className='horizontal-margins'>
-        <textarea></textarea>
+        <textarea value={this.state.mnemonic}
+          onChange={e=>{ this.setState({ mnemonic: e.target.value }) }} />
       </div>
 
       <p>
@@ -41,7 +50,9 @@ export default class Repair extends React.Component<void, Props, State> {
         <blockquote>pen&apos;s end has feather plumage</blockquote>
       </div>
 
-      <button className='big'>Save</button>
+      <button className='big' onClick={()=>{this._onClickSave()}}>
+        Save
+      </button>
     </div>
   }
 }

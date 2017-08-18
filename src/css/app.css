@@ -15,9 +15,16 @@ button.big {
   height: 50px;
 }
 
+th {
+  text-align: left;
+}
+tr {
+  vertical-align: bottom;
+}
+
 .horizontal-margins {
+  margin: 0 auto;
   width: 300px;
-  margin: 0 10px;
 }
 textarea,
 blockquote {
@@ -65,13 +72,7 @@ p {
   margin-bottom: 0;
 }
 
-tr {
-  vertical-align: bottom;
-}
-th {
-  text-align: left;
-}
-th,
-td {
-  font-size: 16pt;
+table.noun-browser th,
+table.noun-browser td {
+  font-size: 20pt;
 }

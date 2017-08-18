@@ -44,14 +44,11 @@ export default class NounBrowser extends React.Component<void, Props, State> {
         saveCardEdit={this._onSaveCardEdit.bind(this)}
         close={this._onCloseCardEdit.bind(this)} />}
 
-      <table>
+      <table className='noun-browser'>
         <thead>
           <tr>
-            <th>cardId</th>
-            <th>type</th>
-            <th>gender</th>
-            <th>es</th>
-            <th>en</th>
+            <th>Spanish</th>
+            <th>English</th>
             <th>fast<br/>nods</th>
             <th>fast<br/>blink?</th>
           </tr>
@@ -60,9 +57,6 @@ export default class NounBrowser extends React.Component<void, Props, State> {
           {Object.keys(cardByCardId).map(cardId => {
             const card = cardByCardId[parseInt(cardId)]
             return <tr key={cardId}>
-              <td>{cardId}</td>
-              <td>{card.type}</td>
-              <td>{card.gender}</td>
               <td className='es'>{card.es}</td>
               <td className='en'>{card.en}</td>
               <td>{card.numFastNods}</td>

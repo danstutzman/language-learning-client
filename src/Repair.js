@@ -1,10 +1,9 @@
 import type { Card } from './Card'
-import type { AppState } from './AppState'
 import React from 'react'
 
 type Props = {
-  appState:       AppState,
-  saveCardEdit:   (Card) => void
+  topCard:      Card,
+  saveCardEdit: (Card) => void
 }
 
 type State = {
@@ -20,6 +19,13 @@ export default class Repair extends React.Component<void, Props, State> {
 
   render() {
     return <div>
+      <span className='en'>{this.props.topCard.en}</span>
+      to
+      <span className='es'>{this.props.topCard.es}</span>
+      <br/>
+      Mnemonic: <input type='text'/>
+      <br/>
+      <button className='big'>Save</button>
     </div>
   }
 }

@@ -5,6 +5,7 @@ import React from 'react'
 import NounBrowser from './NounBrowser' // eslint-disable-line no-unused-vars
 import FastQuiz from './FastQuiz' // eslint-disable-line no-unused-vars
 import SlowQuiz from './SlowQuiz' // eslint-disable-line no-unused-vars
+import Repair from './Repair' // eslint-disable-line no-unused-vars
 import cx from 'classnames'
 
 type Props = {
@@ -105,6 +106,19 @@ export default class App extends React.Component<void, Props, State> {
     }
   }
 
+  _renderRepairMaybe() {
+    const { appState } = this.props
+    if (this.state.currentTab === 'REPAIR') {
+      if (appState.slowHeap.empty()) {
+        return <div>No cards</div>
+      } else {
+        return <Repair
+          topCard={appState.cardByCardId[appState.slowHeap.peek()]}
+          saveCardEdit={this.props.saveCardEdit} />
+      }
+    }
+  }
+
   _renderSlowQuizMaybe() {
     const { appState, addExposure } = this.props
     if (this.state.currentTab === 'SLOW_QUIZ') {
@@ -128,6 +142,7 @@ export default class App extends React.Component<void, Props, State> {
       { this._renderTabs() }
       { this._renderNounBrowserMaybe() }
       { this._renderFastQuizMaybe() }
+      { this._renderRepairMaybe() }
       { this._renderSlowQuizMaybe() }
     </div>
   }

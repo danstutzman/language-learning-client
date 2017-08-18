@@ -8,7 +8,7 @@ import React             from 'react'
 import ReactDOM          from 'react-dom'
 import { SYNCED_KEY, UNSYNCED_KEY } from '../src/LocalStorage'
 
-const SERVER_URL_ROOT = 'https://serverdts.localtunnel.me'
+const SERVER_URL_ROOT = 'http://localhost:3000'
 
 const clientId = 1
 if (localStorage.getItem(SYNCED_KEY) === null) {

@@ -19,6 +19,10 @@ export default class EditNoun extends React.Component<void, Props, State> {
     this.state = Object.assign({}, props.initialState)
   }
 
+  componentWillReceiveProps(nextProps: Props) {
+    this.state = Object.assign({}, nextProps.initialState)
+  }
+
   onClickSave() {
     this.props.saveCardEdit(this.state)
     this.props.close()

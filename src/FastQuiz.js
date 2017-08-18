@@ -26,9 +26,13 @@ export default class FastQuiz extends React.Component<void, Props, State> {
 
   _restartCounter() {
     this.setState({ secondsLeft: 3 })
+
+    window.clearInterval(this.eachSecondInterval)
     this.eachSecondInterval = window.setInterval(() => {
       this.setState(prevState => {
-        if (prevState.secondsLeft !== 'WAITING' && prevState.secondsLeft > 0) {
+        if (prevState.secondsLeft === 'WAITING') {
+          throw new Error("Interval shouldn't run if secondsLeft=WAITING")
+        } else if (prevState.secondsLeft > 1) {
           return { secondsLeft: prevState.secondsLeft - 1 }
         } else {
           window.clearInterval(this.eachSecondInterval)
@@ -36,7 +40,7 @@ export default class FastQuiz extends React.Component<void, Props, State> {
             type:   'FAST_BLINK',
             cardId: this.props.topCard.cardId
           })
-          return { secondsLeft: 0 }
+          return { secondsLeft: 'WAITING' }
         }
       })
     }, 1000)
@@ -53,7 +57,7 @@ export default class FastQuiz extends React.Component<void, Props, State> {
 
   componentWillUpdate(nextProps: Props) {
     if (nextProps.topCard.cardId !== this.props.topCard.cardId) {
-    this.setState({ secondsLeft: 'WAITING' })
+      this.setState({ secondsLeft: 'WAITING' })
       this.props.playEs(this._getEs(nextProps))
         .then(this._restartCounter.bind(this))
     }
@@ -69,7 +73,7 @@ export default class FastQuiz extends React.Component<void, Props, State> {
       cardId: this.props.topCard.cardId
     })
     window.clearInterval(this.eachSecondInterval)
-    this.setState({ secondsLeft: 0 })
+    this.setState({ secondsLeft: 'WAITING' })
   }
 
   render() {

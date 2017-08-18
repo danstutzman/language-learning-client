@@ -60,11 +60,11 @@ export default class App extends React.Component<void, Props, State> {
     return <div className='tabs'>
       <button className={cx({ current: currentTab === 'NOUN_BROWSER' })}
           onClick={()=>{ this._setTab('NOUN_BROWSER') }}>
-        Noun Browser
+        List
       </button>
       <button className={cx({ current: currentTab === 'FAST_QUIZ' })}
           onClick={()=>{ this._setTab('FAST_QUIZ') }}>
-        Fast Quiz
+        FastQ
       </button>
       <button className={cx({ current: currentTab === 'REPAIR' })}
           onClick={()=>{ this._setTab('REPAIR') }}>
@@ -72,7 +72,7 @@ export default class App extends React.Component<void, Props, State> {
       </button>
       <button className={cx({ current: currentTab === 'SLOW_QUIZ' })}
           onClick={()=>{ this._setTab('SLOW_QUIZ') }}>
-        Slow Quiz
+        SlowQ
       </button>
     </div>
   }

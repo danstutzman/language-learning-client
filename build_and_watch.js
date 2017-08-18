@@ -91,7 +91,9 @@ chokidar.watch(['src', 'test'], CHOKIDAR_OPTIONS).on('all', (event, path) => {
   console.log(chalk.gray(`Detected ${event} of ${path}`))
   if (event === 'change' || event === 'add') {
     if (path === 'src/index.html') {
-      exec(`cp ${path} build/index.html`)
+      exec(`cat ${path} \
+        | sed "s/<html manifest='cache.manifest'>/<html>/" \
+        > build/index.html`)
     } else if (path.endsWith('.css')) {
       exec(`cp ${path} build/css`)
     } else if (path.endsWith('.js')) {

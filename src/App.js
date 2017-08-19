@@ -5,7 +5,6 @@ import React from 'react'
 import NounBrowser from './NounBrowser' // eslint-disable-line no-unused-vars
 import FastQuiz from './FastQuiz' // eslint-disable-line no-unused-vars
 import SlowQuiz from './SlowQuiz' // eslint-disable-line no-unused-vars
-import Repair from './Repair' // eslint-disable-line no-unused-vars
 import cx from 'classnames'
 
 type Props = {
@@ -18,7 +17,7 @@ type Props = {
 }
 
 type State = {
-  currentTab:      'NOUN_BROWSER' | 'FAST_QUIZ' | 'REPAIR' | 'SLOW_QUIZ',
+  currentTab:      'NOUN_BROWSER' | 'FAST_QUIZ' | 'SLOW_QUIZ',
   startedFastQuiz: boolean,
   startedSlowQuiz: boolean
 }
@@ -35,7 +34,7 @@ export default class App extends React.Component<void, Props, State> {
     }
   }
 
-  _setTab(newTab: 'NOUN_BROWSER' | 'FAST_QUIZ' | 'REPAIR' | 'SLOW_QUIZ') {
+  _setTab(newTab: 'NOUN_BROWSER' | 'FAST_QUIZ' | 'SLOW_QUIZ') {
     this.setState({
       currentTab: newTab,
       startedFastQuiz: false,
@@ -65,10 +64,6 @@ export default class App extends React.Component<void, Props, State> {
       <button className={cx({ current: currentTab === 'FAST_QUIZ' })}
           onClick={()=>{ this._setTab('FAST_QUIZ') }}>
         FastQ
-      </button>
-      <button className={cx({ current: currentTab === 'REPAIR' })}
-          onClick={()=>{ this._setTab('REPAIR') }}>
-        Repair
       </button>
       <button className={cx({ current: currentTab === 'SLOW_QUIZ' })}
           onClick={()=>{ this._setTab('SLOW_QUIZ') }}>
@@ -111,19 +106,6 @@ export default class App extends React.Component<void, Props, State> {
     }
   }
 
-  _renderRepairMaybe() {
-    const { appState } = this.props
-    if (this.state.currentTab === 'REPAIR') {
-      if (appState.repairCards.empty()) {
-        return <div>No cards</div>
-      } else {
-        return <Repair
-          topCard={appState.repairCards.getTopCard()}
-          saveCardEdit={this.props.saveCardEdit} />
-      }
-    }
-  }
-
   _renderSlowQuizMaybe() {
     const { appState, addExposure, saveCardEdit, playEs } = this.props
     if (this.state.currentTab === 'SLOW_QUIZ') {
@@ -149,7 +131,6 @@ export default class App extends React.Component<void, Props, State> {
       { this._renderTabs() }
       { this._renderNounBrowserMaybe() }
       { this._renderFastQuizMaybe() }
-      { this._renderRepairMaybe() }
       { this._renderSlowQuizMaybe() }
     </div>
   }

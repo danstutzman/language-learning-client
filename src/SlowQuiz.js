@@ -10,8 +10,9 @@ type Props = {
 }
 
 type State = {
-  showMnemonic:  boolean,
-  mnemonic:      string
+  showMnemonic:     boolean,
+  showMnemonicHelp: boolean,
+  mnemonic:         string
 }
 
 export default class SlowQuiz extends React.Component<void, Props, State> {
@@ -20,8 +21,9 @@ export default class SlowQuiz extends React.Component<void, Props, State> {
   constructor(props: Props) {
     super()
     this.state = {
-      showMnemonic:  false,
-      mnemonic:      props.topCard.mnemonic || ''
+      showMnemonic:     false,
+      showMnemonicHelp: false,
+      mnemonic:         props.topCard.mnemonic || ''
     }
   }
 
@@ -36,7 +38,7 @@ export default class SlowQuiz extends React.Component<void, Props, State> {
         type:   'SLOW_NOD',
         cardId: this.props.topCard.cardId
       })
-      this.setState({ showMnemonic: false })
+      this.setState({ showMnemonic: false, showMnemonicHelp: false })
     })
   }
 
@@ -49,12 +51,18 @@ export default class SlowQuiz extends React.Component<void, Props, State> {
   }
 
   _onClickSave() {
-    this.setState({ showMnemonic: false })
+    this.setState({ showMnemonic: false, showMnemonicHelp: false })
     this.props.saveCardEdit(
         Object.assign({}, this.props.topCard, this.state))
     this.props.addExposure({
       type:   'SLOW_SHAKE',
       cardId: this.props.topCard.cardId
+    })
+  }
+
+  _toggleShowMnemonicHelp() {
+    this.setState(prevState => {
+      return { showMnemonicHelp: !prevState.showMnemonicHelp }
     })
   }
 
@@ -64,6 +72,23 @@ export default class SlowQuiz extends React.Component<void, Props, State> {
       return <div className='horizontal-margins'>
         <textarea value={this.state.mnemonic}
           onChange={this._onChangeMnemonic.bind(this)} />
+        <button onClick={this._toggleShowMnemonicHelp.bind(this)}>
+          Help
+        </button>
+
+        {this.state.showMnemonicHelp &&<div>
+					<p>
+						<span>Example for </span>
+						<span className='en'>pen</span>
+						<span> &rarr; </span>
+						<span className='es'>pluma</span>
+						<span>:</span>
+					</p>
+					<div className='horizontal-margins'>
+						<blockquote>pen&apos;s end has feather plumage</blockquote>
+					</div>
+        </div>}
+
         <p className='es'>{topCard.es}</p>
         <button className='big' onClick={()=>{this.props.playEs(topCard.es)}}>
           Replay sound

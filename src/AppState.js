@@ -4,6 +4,5 @@ import CardList from './CardList'
 export type AppState = {
   cardByCardId: {[cardId: number]: Card},
   fastCards:    CardList,
-  repairCards:  CardList,
   slowCards:    CardList
 }

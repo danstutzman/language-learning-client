@@ -14,7 +14,8 @@ import UnsyncedState            from './UnsyncedState'
 import CardList                 from '../CardList'
 import { assertNum }            from '../assertType'
 
-const HOURS = 60 * 60 * 1000
+const MINUTES = 60 * 1000
+const HOURS = 60 * MINUTES
 const DAYS = 24 * HOURS
 const NUM_FAST_NODS_TO_TIME_THRESHOLD = [0,
   1 * DAYS // 1 fast nod
@@ -54,6 +55,12 @@ export default class LocalBank {
       if (!card.mnemonic) return false
       if (card.lastSlowNod) {
         if (new Date().getTime() - assertNum(card.lastSlowNod) < 1 * HOURS) {
+          return false
+        }
+      }
+      if (card.lastSlowShake) {
+        if (new Date().getTime() -
+            assertNum(card.lastSlowShake) < 5 * MINUTES) {
           return false
         }
       }

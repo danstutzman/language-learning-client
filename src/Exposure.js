@@ -18,14 +18,21 @@ export type SlowNod = {
   cardId: number
 }
 
-export type Exposure = FastBlink | FastNod | SlowNod
+// Clicked 'Try again later' on Slow Quiz screen
+export type SlowShake = {
+  type: 'SLOW_SHAKE',
+  cardId: number
+}
+
+export type Exposure = FastBlink | FastNod | SlowNod | SlowShake
 
 export function assertExposure(x: any): Exposure {
   assertObj(x)
 
   if (!(x.type === 'FAST_BLINK' ||
         x.type === 'FAST_NOD' ||
-        x.type === 'SLOW_NOD')) {
+        x.type === 'SLOW_NOD' ||
+        x.type === 'SLOW_SHAKE')) {
     throw new Error(`Unknown type on ${JSON.stringify(x)}`)
   }
 

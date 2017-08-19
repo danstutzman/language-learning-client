@@ -4,19 +4,28 @@ import React from 'react'
 
 type Props = {
   topCard:      Card,
-  addExposure:  (Exposure) => void
+  addExposure:  (Exposure) => void,
+  saveCardEdit: (Card) => void
 }
 
 type State = {
-  showMnemonic: boolean
+  showMnemonic: boolean,
+  mnemonic: string
 }
 
 export default class FastQuiz extends React.Component<void, Props, State> {
   state: State
 
-  constructor() {
+  constructor(props: Props) {
     super()
-    this.state = { showMnemonic: false }
+    this.state = {
+      showMnemonic: false,
+      mnemonic: props.topCard.mnemonic || ''
+    }
+  }
+
+  componentWillReceiveProps(nextProps: Props) {
+    this.setState({ mnemonic: nextProps.topCard.mnemonic || '' })
   }
 
   _onClickIRemember() {
@@ -25,6 +34,41 @@ export default class FastQuiz extends React.Component<void, Props, State> {
       cardId: this.props.topCard.cardId
     })
     this.setState({ showMnemonic: false })
+  }
+
+  _onChangeMnemonic(e: Event & { target: HTMLInputElement }) {
+    const newValue = e.target.value
+    this.setState({ mnemonic: newValue })
+    if (newValue.slice(-1) === '\n') {
+      this._onClickSave()
+    }
+  }
+
+  _onClickSave() {
+    this.setState({ showMnemonic: false })
+    this.props.saveCardEdit(
+        Object.assign({}, this.props.topCard, this.state))
+    this.props.addExposure({
+      type:   'SLOW_SHAKE',
+      cardId: this.props.topCard.cardId
+    })
+  }
+
+  _renderMnemonicOrIRemember() {
+    if (this.state.showMnemonic) {
+      return <div className='horizontal-margins'>
+        <textarea value={this.state.mnemonic}
+          onChange={this._onChangeMnemonic.bind(this)} />
+        <button className='big' onClick={()=>{this._onClickSave()}}>
+          Save and Retry later
+        </button>
+      </div>
+    } else {
+      return <button className='big'
+          onClick={this._onClickIRemember.bind(this)}>
+        I Remember
+      </button>
+    }
   }
 
   render() {
@@ -38,12 +82,7 @@ export default class FastQuiz extends React.Component<void, Props, State> {
         Show Mnemonic
       </button>
 
-      {this.state.showMnemonic && <div>{topCard.mnemonic}</div>}
-
-      <button className='big'
-          onClick={this._onClickIRemember.bind(this)}>
-        I Understand
-      </button>
+      {this._renderMnemonicOrIRemember()}
 
     </div>
   }

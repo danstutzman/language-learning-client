@@ -43,7 +43,14 @@ export default function(appState: AppState, action: Action) {
           break
         case 'SLOW_NOD':
           appState.cardByCardId[exposure.cardId] = Object.assign({}, card, {
-            lastSlowNod: action.createdAtMillis
+            lastSlowNod: action.createdAtMillis,
+            lastSlowShake: undefined
+          })
+          break
+        case 'SLOW_SHAKE':
+          appState.cardByCardId[exposure.cardId] = Object.assign({}, card, {
+            lastSlowNod: undefined,
+            lastSlowShake: action.createdAtMillis
           })
           break
       }

@@ -1,16 +1,17 @@
 import { assertNonBlankStr, assertNum, assertObj } from './assertType'
 
 export type Card = {
-  cardId:        number,
-  type:          'EsN',
-  gender:        'M' | 'F' | '',
-  es:            string,
-  en:            string,
-  mnemonic?:     string,
-  numFastNods?:  number,
-  hadFastBlink?: boolean,
-  lastFastNod?:  number,
-  lastSlowNod?:  number
+  cardId:         number,
+  type:           'EsN',
+  gender:         'M' | 'F' | '',
+  es:             string,
+  en:             string,
+  mnemonic?:      string,
+  numFastNods?:   number,
+  hadFastBlink?:  boolean,
+  lastFastNod?:   number,
+  lastSlowNod?:   number,
+  lastSlowShake?: number
 }
 
 export function assertCardType(x: any): 'EsN' {

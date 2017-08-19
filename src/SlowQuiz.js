@@ -14,7 +14,7 @@ type State = {
   mnemonic:      string
 }
 
-export default class FastQuiz extends React.Component<void, Props, State> {
+export default class SlowQuiz extends React.Component<void, Props, State> {
   state: State
 
   constructor(props: Props) {

@@ -42,6 +42,9 @@ export default function(appState: AppState, action: Action) {
           })
           break
         case 'SLOW_NOD':
+          appState.cardByCardId[exposure.cardId] = Object.assign({}, card, {
+            lastSlowNod: action.createdAtMillis
+          })
           break
       }
       appState.fastCards.update()

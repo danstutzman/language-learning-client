@@ -14,7 +14,8 @@ import UnsyncedState            from './UnsyncedState'
 import CardList                 from '../CardList'
 import { assertNum }            from '../assertType'
 
-const DAYS = 24 * 60 * 60 * 1000
+const HOURS = 60 * 60 * 1000
+const DAYS = 24 * HOURS
 const NUM_FAST_NODS_TO_TIME_THRESHOLD = [0,
   1 * DAYS // 1 fast nod
 ]
@@ -49,7 +50,15 @@ export default class LocalBank {
     const repairFilter = (card) => {
       return (card.mnemonic) ? false : true // show if mnemonic is blank
     }
-    const noFilter = () => { return true }
+    const slowFilter = (card) => {
+      if (!card.mnemonic) return false
+      if (card.lastSlowNod) {
+        if (new Date().getTime() - assertNum(card.lastSlowNod) < 1 * HOURS) {
+          return false
+        }
+      }
+      return true
+    }
 
     const compare = (c1: Card, c2: Card) => {
       // sort newer cards (don't have fast nods) to the beginning
@@ -64,7 +73,7 @@ export default class LocalBank {
       cardByCardId,
       fastCards:   new CardList(cardByCardId, fastFilter, compare),
       repairCards: new CardList(cardByCardId, repairFilter, compare),
-      slowCards:   new CardList(cardByCardId, noFilter, compare)
+      slowCards:   new CardList(cardByCardId, slowFilter, compare)
     })
     const actions = this.syncedState.actions.concat(this.unsyncedState.actions)
     for (const action of actions) {

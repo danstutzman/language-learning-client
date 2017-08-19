@@ -1,11 +1,15 @@
 import type { Action } from './Action'
 import type { BankApiResponse } from './api/BankApiResponse'
 import type { LocalStorage } from '../LocalStorage'
-import type { Card } from '../Card'
 import type { Exposure } from '../Exposure'
+import type { CardAdd } from '../CardAdd'
+import type { CardUpdate } from '../CardUpdate'
 import { UNSYNCED_KEY } from '../LocalStorage'
 import { assertAction, assertArrayAction } from './Action'
 import { assertNum, assertObj } from '../assertType'
+import { assertCardAdd } from '../CardAdd'
+import { assertCardUpdate } from '../CardUpdate'
+import { assertExposure } from '../Exposure'
 
 export default class UnsyncedState {
   localStorage: LocalStorage
@@ -59,18 +63,35 @@ export default class UnsyncedState {
     return deletedActionIds
   }
 
-  addAction(actionFields: {
+  addNoopAction() {
+    return this._addAction({type: 'NOOP'})
+  }
+
+  addAddCardAction(cardAdd: CardAdd) {
+    assertCardAdd(cardAdd)
+    return this._addAction({type: 'ADD_CARD', cardAdd })
+  }
+
+  addUpdateCardAction(cardUpdate: CardUpdate) {
+    assertCardUpdate(cardUpdate)
+    return this._addAction({type: 'UPDATE_CARD', cardUpdate })
+  }
+
+  addAddExposureAction(exposure: Exposure) {
+    assertExposure(exposure)
+    return this._addAction({type: 'ADD_EXPOSURE', exposure })
+  }
+
+  _addAction(actionFields: {
       type: string,
-      card?: Card,
+      cardAdd?: CardAdd,
+      cardUpdate?: CardUpdate,
       exposure?: Exposure
     }): Action {
     const actionId = this.nextActionId
     const createdAtMillis = new Date().getTime()
     const action =
       Object.assign(({ actionId, createdAtMillis }: any), actionFields)
-    if (action.type === 'ADD_CARD') {
-      action.card.actionId = actionId
-    }
     assertAction(action)
     this.actions.push(action)
     this.nextActionId += 10

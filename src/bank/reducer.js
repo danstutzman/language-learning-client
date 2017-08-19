@@ -12,16 +12,16 @@ export default function(appState: AppState, action: Action) {
       break // Ignore
     case 'ADD_CARD':
       var add = assertAddCardAction(action)
-      appState.cardByCardId[add.card.cardId] = add.card
+      appState.cardByCardId[action.actionId] =
+        Object.assign({ cardId: action.actionId }, (add.cardAdd: any))
       appState.fastCards.update()
       appState.repairCards.update()
       appState.slowCards.update()
       break
     case 'UPDATE_CARD':
       var update = assertUpdateCardAction(action)
-      card = appState.cardByCardId[update.card.cardId]
-      appState.cardByCardId[update.card.cardId] =
-        Object.assign({}, card, update.card)
+      card = appState.cardByCardId[update.cardId]
+      Object.assign({}, card, update.cardUpdate)
       appState.fastCards.update()
       appState.repairCards.update()
       appState.slowCards.update()

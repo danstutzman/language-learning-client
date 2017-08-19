@@ -1,4 +1,4 @@
-import { assertNonBlankStr, assertNum, assertObj } from './assertType'
+import { assertNum, assertObj } from './assertType'
 
 export type Card = {
   cardId:         number,
@@ -6,7 +6,7 @@ export type Card = {
   gender:         'M' | 'F' | '',
   es:             string,
   en:             string,
-  mnemonic?:      string,
+  mnemonic:       string,
   numFastNods?:   number,
   hadFastBlink?:  boolean,
   lastFastNod?:   number,
@@ -43,23 +43,6 @@ export function assertCard(x: any): Card {
   if (x.type !== 'EsN') {
     throw new Error(`Unknown type on ${JSON.stringify(x)}`)
   }
-
-  return x
-}
-
-export function assertQuizzableCard(x: any): Card {
-  const y = assertObj(x)
-
-  if (y.type !== 'EsN') {
-    throw new Error(`Unknown type on ${JSON.stringify(y)}`)
-  }
-
-  if (!(y.gender === 'M' || y.gender === 'F')) {
-    throw new Error(`Unknown gender on ${JSON.stringify(y)}`)
-  }
-
-  assertNonBlankStr(x.es)
-  assertNonBlankStr(x.en)
 
   return x
 }

@@ -7,6 +7,7 @@ import type { LocalStorage }    from '../LocalStorage'
 import type { Store }           from 'redux'
 import type { Exposure }        from '../Exposure'
 import type { AppState }        from '../AppState'
+import type { CardAdd }         from '../CardAdd'
 import { createStore }          from 'redux'
 import reducer                  from './reducer'
 import SyncedState              from './SyncedState'
@@ -123,23 +124,40 @@ export default class LocalBank {
   }
 
   addNoopAction() {
-    const action = this.unsyncedState.addAction({ type: 'NOOP' })
+    const action = this.unsyncedState.addNoopAction()
     this.reduxStore.dispatch(action)
   }
 
-  addAddCardAction(card: Card) {
-    const action = this.unsyncedState.addAction({ type: 'ADD_CARD', card })
+  addAddCardAction(newCard: Card) {
+    const cardAdd: CardAdd = {
+      type:     newCard.type,
+      gender:   newCard.gender,
+      es:       newCard.es,
+      en:       newCard.en,
+      mnemonic: newCard.mnemonic
+    }
+    const action = this.unsyncedState.addAddCardAction(cardAdd)
     this.reduxStore.dispatch(action)
   }
 
-  addUpdateCardAction(card: Card) {
-    const action = this.unsyncedState.addAction({ type: 'UPDATE_CARD', card })
+  addUpdateCardAction(newCard: Card) {
+    const appState = this.reduxStore.getState()
+    const oldCard = appState.cardByCardId[newCard.cardId]
+
+    const cardUpdate = {}
+    for (const field of ['gender', 'es', 'en', 'mnemonic', 'suspended']) {
+      const newValue = (newCard[field]: any)
+      if (newValue !== undefined && newValue !== oldCard[field]) {
+        cardUpdate[field] = newValue
+      }
+    }
+
+    const action = this.unsyncedState.addUpdateCardAction(cardUpdate)
     this.reduxStore.dispatch(action)
   }
 
   addActionAddExposure(exposure: Exposure) {
-    const action = this.unsyncedState.addAction(
-      { type: 'ADD_EXPOSURE', exposure })
+    const action = this.unsyncedState.addAddExposureAction(exposure)
     this.reduxStore.dispatch(action)
   }
 }

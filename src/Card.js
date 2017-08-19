@@ -11,6 +11,7 @@ export type Card = {
   hadFastBlink?:  boolean,
   lastFastNod?:   number,
   lastSlowNod?:   number,
+  suspended?:     boolean,
   lastSlowShake?: number
 }
 

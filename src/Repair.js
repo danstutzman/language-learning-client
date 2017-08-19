@@ -27,6 +27,11 @@ export default class Repair extends React.Component<void, Props, State> {
         Object.assign({}, this.props.topCard, this.state))
   }
 
+  _onClickSuspend() {
+    this.props.saveCardEdit(
+        Object.assign({}, this.props.topCard, { suspended: true }))
+  }
+
   _onChangeMnemonic(e: Event & { target: HTMLInputElement }) {
     const newValue = e.target.value
     this.setState({ mnemonic: newValue })
@@ -62,6 +67,9 @@ export default class Repair extends React.Component<void, Props, State> {
 
       <button className='big' onClick={()=>{this._onClickSave()}}>
         Save
+      </button>
+      <button className='big' onClick={()=>{this._onClickSuspend()}}>
+        Suspend
       </button>
     </div>
   }

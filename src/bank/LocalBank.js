@@ -38,6 +38,7 @@ export default class LocalBank {
     this.unsyncedState.initFromLocalStorage()
 
     const fastFilter = (card) => {
+      if (card.suspended) return false
       if (card.hadFastBlink) return false
       if (card.lastFastNod) {
         const threshold =
@@ -49,9 +50,11 @@ export default class LocalBank {
       return true
     }
     const repairFilter = (card) => {
+      if (card.suspended) return false
       return (card.mnemonic) ? false : true // show if mnemonic is blank
     }
     const slowFilter = (card) => {
+      if (card.suspended) return false
       if (!card.mnemonic) return false
       if (card.lastSlowNod) {
         if (new Date().getTime() - assertNum(card.lastSlowNod) < 1 * HOURS) {

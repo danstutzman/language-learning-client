@@ -1,6 +1,7 @@
 import type { Card } from './Card'
 import React from 'react'
 import EditNoun from './EditNoun' // eslint-disable-line no-unused-vars
+import { newCard } from './Card'
 
 type Props = {
   cardByCardId: {[cardId: number]: Card},
@@ -74,9 +75,7 @@ export default class NounBrowser extends React.Component<void, Props, State> {
       {this.state.editingCardId === NOT_EDITING ? null : <EditNoun
         cardId={this.state.editingCardId}
         initialState={this.state.editingCardId === ADD_NEW ?
-          {cardId: ADD_NEW, type: 'EsN', gender: '', es: '', en: '',
-            mnemonic: '', suspended: false} :
-          cardByCardId[this.state.editingCardId]}
+          newCard() : cardByCardId[this.state.editingCardId]}
         saveCardEdit={this._onSaveCardEdit.bind(this)}
         close={this._onCloseCardEdit.bind(this)} />}
 

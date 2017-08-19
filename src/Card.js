@@ -31,9 +31,6 @@ export function assertCard(x: any): Card {
     throw new Error(`No cardId on ${JSON.stringify(x)}`)
   }
   assertNum(x.cardId)
-  if (x.cardId <= 0) {
-    throw new Error(`Non-positive cardId on ${JSON.stringify(x)}`)
-  }
 
   if (x.type !== 'EsN') {
     throw new Error(`Unknown type on ${JSON.stringify(x)}`)
@@ -46,4 +43,16 @@ export function assertCard(x: any): Card {
   assertBool(x.suspended)
 
   return x
+}
+
+export function newCard(): Card {
+  return {
+    cardId: -1,
+    type: 'EsN',
+    gender: '',
+    es: '',
+    en: '',
+    mnemonic: '',
+    suspended: false
+  }
 }

@@ -1,10 +1,15 @@
 import type { Action } from './Action'
 import type { AppState } from '../AppState'
+import { assertCard } from '../Card'
 import { assertAddCardAction, assertUpdateCardAction } from './Action'
 
 function addCard(appState: AppState, action: Action) {
   const add = assertAddCardAction(action)
-  const card = Object.assign({ cardId: action.actionId }, (add.cardAdd: any))
+  const card = assertCard(Object.assign({
+    cardId: action.actionId,
+    suspended: false
+  }, (add.cardAdd: any)))
+
   appState.cardByCardId[action.actionId] = card
   appState.fastCards.update()
   appState.slowCards.update()

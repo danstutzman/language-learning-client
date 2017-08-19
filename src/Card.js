@@ -1,4 +1,4 @@
-import { assertNum, assertObj } from './assertType'
+import { assertBool, assertNum, assertObj, assertStr } from './assertType'
 
 export type Card = {|
   cardId:         number,
@@ -38,6 +38,12 @@ export function assertCard(x: any): Card {
   if (x.type !== 'EsN') {
     throw new Error(`Unknown type on ${JSON.stringify(x)}`)
   }
+
+  assertCardGender(x.gender)
+  assertStr(x.es)
+  assertStr(x.en)
+  assertStr(x.mnemonic)
+  assertBool(x.suspended)
 
   return x
 }

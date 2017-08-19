@@ -14,6 +14,7 @@ export default function(appState: AppState, action: Action) {
       var add = assertAddCardAction(action)
       appState.cardByCardId[add.card.cardId] = add.card
       appState.fastCards.update()
+      appState.repairCards.update()
       appState.slowCards.update()
       break
     case 'UPDATE_CARD':
@@ -22,6 +23,7 @@ export default function(appState: AppState, action: Action) {
       appState.cardByCardId[update.card.cardId] =
         Object.assign({}, card, update.card)
       appState.fastCards.update()
+      appState.repairCards.update()
       appState.slowCards.update()
       break
     case 'ADD_EXPOSURE':
@@ -43,6 +45,7 @@ export default function(appState: AppState, action: Action) {
           break
       }
       appState.fastCards.update()
+      appState.repairCards.update()
       appState.slowCards.update()
       break
     default:

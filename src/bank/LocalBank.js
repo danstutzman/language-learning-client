@@ -13,14 +13,6 @@ import reducer                  from './reducer'
 import SyncedState              from './SyncedState'
 import UnsyncedState            from './UnsyncedState'
 import CardList                 from '../CardList'
-import { assertNum }            from '../assertType'
-
-const MINUTES = 60 * 1000
-const HOURS = 60 * MINUTES
-const DAYS = 24 * HOURS
-const NUM_FAST_NODS_TO_TIME_THRESHOLD = [0,
-  1 * DAYS // 1 fast nod
-]
 
 export default class LocalBank {
   bankApi:       BankApi
@@ -40,38 +32,17 @@ export default class LocalBank {
 
     const fastFilter = (card) => {
       if (card.suspended) return false
-      if (card.hadFastBlink) return false
-      if (card.lastFastNod) {
-        const threshold =
-          NUM_FAST_NODS_TO_TIME_THRESHOLD[card.numFastNods || 0] || 2 * DAYS
-        if (new Date().getTime() - assertNum(card.lastFastNod) < threshold) {
-          return false
-        }
-      }
+      // TODO
       return true
     }
     const slowFilter = (card) => {
       if (card.suspended) return false
-      if (!card.mnemonic) return false
-      if (card.lastSlowNod) {
-        if (new Date().getTime() - assertNum(card.lastSlowNod) < 1 * HOURS) {
-          return false
-        }
-      }
-      if (card.lastSlowShake) {
-        if (new Date().getTime() -
-            assertNum(card.lastSlowShake) < 5 * MINUTES) {
-          return false
-        }
-      }
+      // TODO
       return true
     }
 
-    const compare = (c1: Card, c2: Card) => {
-      // sort newer cards (don't have fast nods) to the beginning
-      const _1 = (c1.numFastNods || 0) - (c2.numFastNods || 0)
-      if (_1 !== 0) return _1
-
+    const compare = (c1: Card, c2: Card) => { // eslint-disable-line no-unused-vars
+      // TODO
       return 0
     }
 
@@ -95,7 +66,8 @@ export default class LocalBank {
     const request: BankApiRequest = {
       clientId:                    this.syncedState.clientId,
       clientIdToMaxSyncedActionId: this.syncedState.clientIdToMaxSyncedActionId,
-      actionsFromClient:           this.unsyncedState.actions
+      actionsFromClient:           this.unsyncedState.actions,
+      exposures:                   this.unsyncedState.exposures
     }
     console.log(`Sync request: ${JSON.stringify(request)}`)
 
@@ -151,8 +123,7 @@ export default class LocalBank {
     this.reduxStore.dispatch(action)
   }
 
-  addActionAddExposure(exposure: Exposure) {
-    const action = this.unsyncedState.addAddExposureAction(exposure)
-    this.reduxStore.dispatch(action)
+  addExposure(exposure: Exposure) {
+    this.unsyncedState.addExposure(exposure)
   }
 }

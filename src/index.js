@@ -20,6 +20,7 @@ if (localStorage.getItem(SYNCED_KEY) === null) {
   localStorage.setItem(UNSYNCED_KEY, JSON.stringify({
     actions:      [],
     nextActionId: 10 + clientId,
+    exposures:    []
   }))
 }
 
@@ -116,7 +117,7 @@ function render() {
         render()
       },
       addExposure: (exposure: Exposure) => {
-        bank.addActionAddExposure(exposure)
+        bank.addExposure(exposure)
         render()
       },
       sync: ()=>{

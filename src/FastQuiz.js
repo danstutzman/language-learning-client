@@ -10,7 +10,8 @@ type Props = {
 }
 
 type State = {
-  secondsLeft: 'WAITING' | number
+  secondsLeft: 'WAITING' | number,
+  startedCounterMillis: number
 }
 
 export default class FastQuiz extends React.Component<void, Props, State> {
@@ -20,12 +21,16 @@ export default class FastQuiz extends React.Component<void, Props, State> {
   constructor() {
     super()
     this.state = {
-      secondsLeft: 'WAITING'
+      secondsLeft: 'WAITING',
+      startedCounterMillis: 0
     }
   }
 
   _restartCounter() {
-    this.setState({ secondsLeft: 3 })
+    this.setState({
+      secondsLeft: 3,
+      startedCounterMillis: new Date().getTime()
+    })
 
     window.clearInterval(this.eachSecondInterval)
     this.eachSecondInterval = window.setInterval(() => {
@@ -37,8 +42,10 @@ export default class FastQuiz extends React.Component<void, Props, State> {
         } else {
           window.clearInterval(this.eachSecondInterval)
           this.props.addExposure({
-            type:   'FAST_BLINK',
-            cardId: this.props.topCard.cardId
+            type: 'FAST_BLINK',
+            es: this.props.topCard.es,
+            promptedAt: this.state.startedCounterMillis,
+            respondedAt: new Date().getTime()
           })
           return { secondsLeft: 'WAITING' }
         }
@@ -69,8 +76,10 @@ export default class FastQuiz extends React.Component<void, Props, State> {
 
   _onClickIRemember() {
     this.props.addExposure({
-      type:   'FAST_NOD',
-      cardId: this.props.topCard.cardId
+      type: 'FAST_NOD',
+      es: this.props.topCard.es,
+      promptedAt: this.state.startedCounterMillis,
+      respondedAt: new Date().getTime()
     })
     window.clearInterval(this.eachSecondInterval)
     this.setState({ secondsLeft: 'WAITING' })

@@ -88,8 +88,6 @@ export default class NounBrowser extends React.Component<void, Props, State> {
             <th>
               <a href='#' onClick={e=>{this._sortBy(e, 'EN')}}>English</a>
             </th>
-            <th>fast<br/>nods</th>
-            <th>fast<br/>blink?</th>
           </tr>
         </thead>
         <tbody>
@@ -97,8 +95,6 @@ export default class NounBrowser extends React.Component<void, Props, State> {
             return <tr key={card.cardId}>
               <td className='es'>{card.es}</td>
               <td className='en'>{card.en}</td>
-              <td>{card.numFastNods}</td>
-              <td>{card.hadFastBlink ? 'true' : ''}</td>
               <td>
                 <button onClick={()=>{
                   this.setState({ editingCardId: parseInt(card.cardId) })

@@ -9,12 +9,13 @@ import { assertAction, assertArrayAction } from './Action'
 import { assertNum, assertObj } from '../assertType'
 import { assertCardAdd } from '../CardAdd'
 import { assertCardUpdate } from '../CardUpdate'
-import { assertExposure } from '../Exposure'
+import { assertExposure, assertArrayExposure } from '../Exposure'
 
 export default class UnsyncedState {
   localStorage: LocalStorage
   actions:      Array<Action>
   nextActionId: number // for this clientId
+  exposures:    Array<Exposure>
 
   constructor(localStorage: LocalStorage) {
     this.localStorage = localStorage
@@ -37,6 +38,11 @@ export default class UnsyncedState {
         throw new Error("No nextActionId")
       }
       this.nextActionId = assertNum(unjsoned.nextActionId)
+
+      if (unjsoned.exposures === undefined) {
+        throw new Error("No exposures")
+      }
+      this.exposures = assertArrayExposure(unjsoned.exposures)
     }
   }
 
@@ -59,6 +65,10 @@ export default class UnsyncedState {
       }
     }
     this.actions = newActions
+
+    // TODO might have added new exposures by time sync returns
+    this.exposures = []
+
     this._saveUnsynced()
     return deletedActionIds
   }
@@ -77,16 +87,10 @@ export default class UnsyncedState {
     return this._addAction({type: 'UPDATE_CARD', cardUpdate })
   }
 
-  addAddExposureAction(exposure: Exposure) {
-    assertExposure(exposure)
-    return this._addAction({type: 'ADD_EXPOSURE', exposure })
-  }
-
   _addAction(actionFields: {
       type: string,
       cardAdd?: CardAdd,
-      cardUpdate?: CardUpdate,
-      exposure?: Exposure
+      cardUpdate?: CardUpdate
     }): Action {
     const actionId = this.nextActionId
     const createdAtMillis = new Date().getTime()
@@ -99,10 +103,16 @@ export default class UnsyncedState {
     return action
   }
 
+  addExposure(exposure: Exposure) {
+    this.exposures.push(assertExposure(exposure))
+    this._saveUnsynced()
+  }
+
   _saveUnsynced() {
     this.localStorage.setItem(UNSYNCED_KEY, JSON.stringify({
       actions:      this.actions,
-      nextActionId: this.nextActionId
+      nextActionId: this.nextActionId,
+      exposures:    this.exposures
     }))
   }
 }

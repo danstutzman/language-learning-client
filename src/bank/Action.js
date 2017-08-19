@@ -1,10 +1,8 @@
 import { assertNum, assertObj }  from '../assertType'
 import type { CardAdd }          from '../CardAdd'
 import type { CardUpdate }       from '../CardUpdate'
-import type { Exposure }         from '../Exposure'
 import { assertCardAdd }         from '../CardAdd'
 import { assertCardUpdate }      from '../CardUpdate'
-import { assertExposure }        from '../Exposure'
 
 export type NoopAction = {
   type:            'NOOP',
@@ -27,24 +25,15 @@ export type UpdateCardAction = {
   cardUpdate:      CardUpdate
 }
 
-export type AddExposureAction = {
-  type:            'ADD_EXPOSURE',
-  actionId:        number,
-  createdAtMillis: number,
-  exposure:        Exposure
-}
-
 export type Action = NoopAction
  | AddCardAction
  | UpdateCardAction
- | AddExposureAction
 
 function assertActionType(x: any):
-    'NOOP' | 'ADD_CARD' | 'UPDATE_CARD' | 'ADD_EXPOSURE' {
+    'NOOP' | 'ADD_CARD' | 'UPDATE_CARD' {
   if (!(x === 'NOOP' ||
         x === 'ADD_CARD' ||
-        x === 'UPDATE_CARD' ||
-        x === 'ADD_EXPOSURE')) {
+        x === 'UPDATE_CARD')) {
     throw new Error(`Expected Action Type but got ${x}`)
   }
   return x
@@ -82,14 +71,6 @@ export function assertAction(x: any): Action {
         `No cardUpdate on ${JSON.stringify(x)} despite type=${x.type}`)
     }
     assertCardUpdate(x.cardUpdate)
-  }
-
-  if (y.type === 'ADD_EXPOSURE') {
-    if (!y.exposure) {
-      throw new Error(
-        `No exposure on ${JSON.stringify(y)} despite type=ADD_EXPOSURE`)
-    }
-    assertExposure(y.exposure)
   }
 
   return (y:any)

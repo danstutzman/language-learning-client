@@ -10,9 +10,10 @@ type Props = {
 }
 
 type State = {
-  showMnemonic:     boolean,
-  showMnemonicHelp: boolean,
-  mnemonic:         string
+  showMnemonic:       boolean,
+  showMnemonicHelp:   boolean,
+  mnemonic:           string,
+  showedPromptMillis: number
 }
 
 export default class SlowQuiz extends React.Component<void, Props, State> {
@@ -21,22 +22,29 @@ export default class SlowQuiz extends React.Component<void, Props, State> {
   constructor(props: Props) {
     super()
     this.state = {
-      showMnemonic:     false,
-      showMnemonicHelp: false,
-      mnemonic:         props.topCard.mnemonic || ''
+      showMnemonic:       false,
+      showMnemonicHelp:   false,
+      mnemonic:           props.topCard.mnemonic || '',
+      showedPromptMillis: new Date().getTime()
     }
   }
 
   componentWillReceiveProps(nextProps: Props) {
-    this.setState({ mnemonic: nextProps.topCard.mnemonic || '' })
+    this.setState({
+      mnemonic: nextProps.topCard.mnemonic || '',
+      showedPromptMillis: new Date().getTime()
+    })
   }
 
   _onClickIRemember() {
+    const respondedAt = new Date().getTime()
     this.setState({ showMnemonic: true })
     this.props.playEs(this.props.topCard.es).then(()=>{
       this.props.addExposure({
-        type:   'SLOW_NOD',
-        cardId: this.props.topCard.cardId
+        type: 'SLOW_NOD',
+        es: this.props.topCard.es,
+        promptedAt: this.state.showedPromptMillis,
+        respondedAt
       })
       this.setState({ showMnemonic: false, showMnemonicHelp: false })
     })
@@ -55,8 +63,10 @@ export default class SlowQuiz extends React.Component<void, Props, State> {
     this.props.saveCardEdit(
         Object.assign({}, this.props.topCard, this.state))
     this.props.addExposure({
-      type:   'SLOW_SHAKE',
-      cardId: this.props.topCard.cardId
+      type: 'SLOW_SHAKE',
+      es: this.props.topCard.es,
+      promptedAt: this.state.showedPromptMillis,
+      respondedAt: new Date().getTime()
     })
   }
 
@@ -64,6 +74,11 @@ export default class SlowQuiz extends React.Component<void, Props, State> {
     this.setState(prevState => {
       return { showMnemonicHelp: !prevState.showMnemonicHelp }
     })
+  }
+
+  _onClickShowMnemonic() {
+    this.props.playEs(this.props.topCard.es)
+    this.setState({ showMnemonic: true })
   }
 
   _renderMnemonicOrIRemember() {
@@ -108,11 +123,6 @@ export default class SlowQuiz extends React.Component<void, Props, State> {
         </button>
       </div>
     }
-  }
-
-  _onClickShowMnemonic() {
-    this.props.playEs(this.props.topCard.es)
-    this.setState({ showMnemonic: true })
   }
 
   render() {

@@ -7,12 +7,7 @@ export type Card = {
   es:             string,
   en:             string,
   mnemonic:       string,
-  numFastNods?:   number,
-  hadFastBlink?:  boolean,
-  lastFastNod?:   number,
-  lastSlowNod?:   number,
-  suspended?:     boolean,
-  lastSlowShake?: number
+  suspended?:     boolean
 }
 
 export function assertCardType(x: any): 'EsN' {

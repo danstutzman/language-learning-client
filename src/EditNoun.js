@@ -34,7 +34,7 @@ export default class EditNoun extends React.Component<void, Props, State> {
   }
 
   render() {
-    const { gender, es, en, mnemonic } = this.state
+    const { gender, es, en, mnemonic, suspended } = this.state
 
     return <div>
       <button className='close' onClick={this.props.close}>X</button>
@@ -60,6 +60,11 @@ export default class EditNoun extends React.Component<void, Props, State> {
       <label>Mnemonic</label>
       <input value={mnemonic}
         onChange={e => this.setState({mnemonic: e.target.value})}/>
+      <br/>
+
+      <label>Suspended</label>
+      <input type='checkbox' checked={suspended}
+        onChange={e => this.setState({suspended: e.target.checked})}/>
       <br/>
 
       <button onClick={this.onClickSave.bind(this)}>

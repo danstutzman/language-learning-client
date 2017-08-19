@@ -3,6 +3,7 @@ import CardList from './CardList'
 
 export type AppState = {
   cardByCardId: {[cardId: number]: Card},
-  fastCards: CardList,
-  slowCards: CardList
+  fastCards:    CardList,
+  repairCards:  CardList,
+  slowCards:    CardList
 }

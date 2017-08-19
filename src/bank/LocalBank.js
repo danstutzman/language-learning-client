@@ -46,7 +46,9 @@ export default class LocalBank {
       }
       return true
     }
-
+    const repairFilter = (card) => {
+      return (card.mnemonic) ? false : true // show if mnemonic is blank
+    }
     const noFilter = () => { return true }
 
     const compare = (c1: Card, c2: Card) => {
@@ -60,8 +62,9 @@ export default class LocalBank {
     const cardByCardId: {[cardId: number]: Card} = {}
     this.reduxStore = createStore(reducer, {
       cardByCardId,
-      fastCards: new CardList(cardByCardId, fastFilter, compare),
-      slowCards: new CardList(cardByCardId, noFilter, compare)
+      fastCards:   new CardList(cardByCardId, fastFilter, compare),
+      repairCards: new CardList(cardByCardId, repairFilter, compare),
+      slowCards:   new CardList(cardByCardId, noFilter, compare)
     })
     const actions = this.syncedState.actions.concat(this.unsyncedState.actions)
     for (const action of actions) {

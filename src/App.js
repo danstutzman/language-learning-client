@@ -114,11 +114,11 @@ export default class App extends React.Component<void, Props, State> {
   _renderRepairMaybe() {
     const { appState } = this.props
     if (this.state.currentTab === 'REPAIR') {
-      if (appState.slowCards.empty()) {
+      if (appState.repairCards.empty()) {
         return <div>No cards</div>
       } else {
         return <Repair
-          topCard={appState.slowCards.getTopCard()}
+          topCard={appState.repairCards.getTopCard()}
           saveCardEdit={this.props.saveCardEdit} />
       }
     }

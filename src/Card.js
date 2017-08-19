@@ -7,7 +7,7 @@ export type Card = {
   es:             string,
   en:             string,
   mnemonic:       string,
-  suspended?:     boolean
+  suspended:      boolean
 }
 
 export function assertCardType(x: any): 'EsN' {

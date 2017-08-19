@@ -75,7 +75,8 @@ export default class NounBrowser extends React.Component<void, Props, State> {
         cardId={this.state.editingCardId}
         initialState={this.state.editingCardId === ADD_NEW ?
           {cardId: ADD_NEW, type: 'EsN', gender: '', es: '', en: '',
-            mnemonic: ''} : cardByCardId[this.state.editingCardId]}
+            mnemonic: '', suspended: false} :
+          cardByCardId[this.state.editingCardId]}
         saveCardEdit={this._onSaveCardEdit.bind(this)}
         close={this._onCloseCardEdit.bind(this)} />}
 

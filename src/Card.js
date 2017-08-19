@@ -1,6 +1,6 @@
 import { assertNum, assertObj } from './assertType'
 
-export type Card = {
+export type Card = {|
   cardId:         number,
   type:           'EsN',
   gender:         'M' | 'F' | '',
@@ -8,7 +8,7 @@ export type Card = {
   en:             string,
   mnemonic:       string,
   suspended:      boolean
-}
+|}
 
 export function assertCardType(x: any): 'EsN' {
   if (x !== 'EsN') {

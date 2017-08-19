@@ -16,11 +16,11 @@ export default class EditNoun extends React.Component<void, Props, State> {
 
   constructor(props: Props) {
     super()
-    this.state = Object.assign({}, props.initialState)
+    this.state = (Object.assign({}, props.initialState): any)
   }
 
   componentWillReceiveProps(nextProps: Props) {
-    this.state = Object.assign({}, nextProps.initialState)
+    this.state = (Object.assign({}, nextProps.initialState): any)
   }
 
   onClickSave() {

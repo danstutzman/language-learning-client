@@ -125,7 +125,7 @@ export default class App extends React.Component<void, Props, State> {
   }
 
   _renderSlowQuizMaybe() {
-    const { appState, addExposure, saveCardEdit } = this.props
+    const { appState, addExposure, saveCardEdit, playEs } = this.props
     if (this.state.currentTab === 'SLOW_QUIZ') {
       if (appState.slowCards.empty()) {
         return <div>No cards</div>
@@ -133,7 +133,8 @@ export default class App extends React.Component<void, Props, State> {
         return <SlowQuiz
           topCard={appState.slowCards.getTopCard()}
           addExposure={addExposure}
-          saveCardEdit={saveCardEdit} />
+          saveCardEdit={saveCardEdit}
+          playEs={playEs} />
       } else {
         return <button className='big'
             onClick={this.onClickStartSlowQuiz.bind(this)}>

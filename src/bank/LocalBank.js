@@ -11,7 +11,7 @@ import { createStore }          from 'redux'
 import reducer                  from './reducer'
 import SyncedState              from './SyncedState'
 import UnsyncedState            from './UnsyncedState'
-import Heap                     from 'heap'
+import CardList                 from '../CardList'
 
 export default class LocalBank {
   bankApi:       BankApi
@@ -30,23 +30,19 @@ export default class LocalBank {
     this.unsyncedState.initFromLocalStorage()
 
     const cardByCardId: {[cardId: number]: Card} = {}
-    const comparer = (cardId1: number, cardId2: number) => {
-      // sort cards with hadFastBlink=true to the end
-      const _1 = (cardByCardId[cardId1].hadFastBlink ? 1 : 0) -
-                 (cardByCardId[cardId2].hadFastBlink ? 1 : 0)
-      if (_1 !== 0) return _1
-
+    const fastFilter = (card) => { return !card.hadFastBlink }
+    const noFilter = () => { return true }
+    const compare = (c1: Card, c2: Card) => {
       // sort newer cards (don't have fast nods) to the beginning
-      const _2 = (cardByCardId[cardId1].numFastNods || 0) -
-                 (cardByCardId[cardId2].numFastNods || 0)
-      if (_2 !== 0) return _2
+      const _1 = (c1.numFastNods || 0) - (c2.numFastNods || 0)
+      if (_1 !== 0) return _1
 
       return 0
     }
     this.reduxStore = createStore(reducer, {
       cardByCardId,
-      fastHeap: new Heap(comparer),
-      slowHeap: new Heap(comparer)
+      fastCards: new CardList(cardByCardId, fastFilter, compare),
+      slowCards: new CardList(cardByCardId, noFilter, compare)
     })
     const actions = this.syncedState.actions.concat(this.unsyncedState.actions)
     for (const action of actions) {

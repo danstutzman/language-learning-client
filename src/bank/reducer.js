@@ -13,16 +13,16 @@ export default function(appState: AppState, action: Action) {
     case 'ADD_CARD':
       var add = assertAddCardAction(action)
       appState.cardByCardId[add.card.cardId] = add.card
-      appState.fastHeap.push(add.card.cardId)
-      appState.slowHeap.push(add.card.cardId)
+      appState.fastCards.update()
+      appState.slowCards.update()
       break
     case 'UPDATE_CARD':
       var update = assertUpdateCardAction(action)
       card = appState.cardByCardId[update.card.cardId]
       appState.cardByCardId[update.card.cardId] =
         Object.assign({}, card, update.card)
-      appState.fastHeap.updateItem(card.cardId)
-      appState.slowHeap.updateItem(card.cardId)
+      appState.fastCards.update()
+      appState.slowCards.update()
       break
     case 'ADD_EXPOSURE':
       var exposure = assertExposure(action.exposure)
@@ -39,8 +39,8 @@ export default function(appState: AppState, action: Action) {
         case 'SLOW_NOD':
           break
       }
-      appState.fastHeap.updateItem(card.cardId)
-      appState.slowHeap.updateItem(card.cardId)
+      appState.fastCards.update()
+      appState.slowCards.update()
       break
     default:
       throw new Error(`Unknown action.type ${action.type}`)

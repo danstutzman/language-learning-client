@@ -89,16 +89,15 @@ export default class App extends React.Component<void, Props, State> {
   _renderFastQuizMaybe() {
     const { appState, addExposure, playEs } = this.props
     if (this.state.currentTab === 'FAST_QUIZ') {
-      if (appState.fastHeap.empty() || appState.cardByCardId[
-            appState.fastHeap.peek()].hadFastBlink) {
+      if (appState.fastCards.empty()) {
         return <div>No cards</div>
       } else if (this.state.startedFastQuiz) {
         return <div>
           <FastQuiz
-            topCard={appState.cardByCardId[appState.fastHeap.peek()]}
+            topCard={appState.fastCards.getTopCard()}
             addExposure={addExposure}
             playEs={playEs} />
-          ({appState.fastHeap.size()} cards)
+          ({appState.fastCards.getNumCards()} cards)
         </div>
       } else {
         return <div>
@@ -106,7 +105,7 @@ export default class App extends React.Component<void, Props, State> {
               onClick={this.onClickStartFastQuiz.bind(this)}>
             Start Fast Quiz
           </button>
-          ({appState.fastHeap.size()} cards)
+          ({appState.fastCards.getNumCards()} cards)
         </div>
       }
     }
@@ -115,11 +114,11 @@ export default class App extends React.Component<void, Props, State> {
   _renderRepairMaybe() {
     const { appState } = this.props
     if (this.state.currentTab === 'REPAIR') {
-      if (appState.slowHeap.empty()) {
+      if (appState.slowCards.empty()) {
         return <div>No cards</div>
       } else {
         return <Repair
-          topCard={appState.cardByCardId[appState.slowHeap.peek()]}
+          topCard={appState.slowCards.getTopCard()}
           saveCardEdit={this.props.saveCardEdit} />
       }
     }
@@ -128,11 +127,11 @@ export default class App extends React.Component<void, Props, State> {
   _renderSlowQuizMaybe() {
     const { appState, addExposure } = this.props
     if (this.state.currentTab === 'SLOW_QUIZ') {
-      if (appState.slowHeap.empty()) {
+      if (appState.slowCards.empty()) {
         return <div>No cards</div>
       } else if (this.state.startedSlowQuiz) {
         return <SlowQuiz
-          topCard={appState.cardByCardId[appState.slowHeap.peek()]}
+          topCard={appState.slowCards.getTopCard()}
           addExposure={addExposure} />
       } else {
         return <button className='big'

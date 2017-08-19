@@ -8,7 +8,8 @@ export type Card = {
   en:            string,
   mnemonic?:     string,
   numFastNods?:  number,
-  hadFastBlink?: boolean
+  hadFastBlink?: boolean,
+  lastFastNod?:  number
 }
 
 export function assertCardType(x: any): 'EsN' {

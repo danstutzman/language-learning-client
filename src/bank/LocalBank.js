@@ -12,6 +12,12 @@ import reducer                  from './reducer'
 import SyncedState              from './SyncedState'
 import UnsyncedState            from './UnsyncedState'
 import CardList                 from '../CardList'
+import { assertNum }            from '../assertType'
+
+const DAYS = 24 * 60 * 60 * 1000
+const NUM_FAST_NODS_TO_TIME_THRESHOLD = [0,
+  1 * DAYS // 1 fast nod
+]
 
 export default class LocalBank {
   bankApi:       BankApi
@@ -29,9 +35,20 @@ export default class LocalBank {
     this.syncedState.initFromLocalStorage()
     this.unsyncedState.initFromLocalStorage()
 
-    const cardByCardId: {[cardId: number]: Card} = {}
-    const fastFilter = (card) => { return !card.hadFastBlink }
+    const fastFilter = (card) => {
+      if (card.hadFastBlink) return false
+      if (card.lastFastNod) {
+        const threshold =
+          NUM_FAST_NODS_TO_TIME_THRESHOLD[card.numFastNods || 0] || 2 * DAYS
+        if (new Date().getTime() - assertNum(card.lastFastNod) < threshold) {
+          return false
+        }
+      }
+      return true
+    }
+
     const noFilter = () => { return true }
+
     const compare = (c1: Card, c2: Card) => {
       // sort newer cards (don't have fast nods) to the beginning
       const _1 = (c1.numFastNods || 0) - (c2.numFastNods || 0)
@@ -39,6 +56,8 @@ export default class LocalBank {
 
       return 0
     }
+
+    const cardByCardId: {[cardId: number]: Card} = {}
     this.reduxStore = createStore(reducer, {
       cardByCardId,
       fastCards: new CardList(cardByCardId, fastFilter, compare),

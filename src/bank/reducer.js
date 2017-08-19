@@ -29,12 +29,15 @@ export default function(appState: AppState, action: Action) {
       card = appState.cardByCardId[exposure.cardId]
       switch (exposure.type) {
         case 'FAST_NOD':
-          appState.cardByCardId[exposure.cardId] = Object.assign({}, card,
-            { numFastNods: (card.numFastNods || 0) + 1 })
+          appState.cardByCardId[exposure.cardId] = Object.assign({}, card, {
+            numFastNods: (card.numFastNods || 0) + 1,
+            lastFastNod: action.createdAtMillis
+          })
           break
         case 'FAST_BLINK':
-          appState.cardByCardId[exposure.cardId] = Object.assign({}, card,
-            { hadFastBlink: true })
+          appState.cardByCardId[exposure.cardId] = Object.assign({}, card, {
+            hadFastBlink: true
+          })
           break
         case 'SLOW_NOD':
           break

@@ -15,7 +15,11 @@ type Props = {
 const NOT_EDITING = 0
 const ADD_NEW = -1
 
-type StateSortBy = 'CARD_ID' | 'ES' | '-ES' | 'EN' | '-EN' | 'STAGE' | '-STAGE'
+type StateSortBy = 'CARD_ID' |
+  'TYPE'  | '-TYPE' |
+  'ES'    | '-ES' |
+  'EN'    | '-EN' |
+  'STAGE' | '-STAGE'
 
 type State = {
   editingCardId: number,
@@ -28,6 +32,8 @@ function strcmp(s1: string, s2: string) {
 
 const sortByToComparer = {
   CARD_ID:  (c1, c2) => { return c1.cardId - c2.cardId },
+  TYPE:     (c1, c2) => { return  strcmp(c1.type, c2.type) },
+  '-TYPE':  (c1, c2) => { return -strcmp(c1.type, c2.type) },
   ES:       (c1, c2) => { return  strcmp(c1.es, c2.es) },
   '-ES':    (c1, c2) => { return -strcmp(c1.es, c2.es) },
   EN:       (c1, c2) => { return  strcmp(c1.en, c2.en) },
@@ -86,6 +92,9 @@ export default class ListBrowser extends React.Component<void, Props, State> {
     return <thead>
       <tr>
         <th>
+          <a href='#' onClick={e=>{this._sortBy(e, 'TYPE')}}>Type</a>
+        </th>
+        <th>
           <a href='#' onClick={e=>{this._sortBy(e, 'ES')}}>Spanish</a>
         </th>
         <th>
@@ -106,6 +115,7 @@ export default class ListBrowser extends React.Component<void, Props, State> {
         <tbody>
           {this._cardsSorted().map(card => {
             return <tr key={card.cardId}>
+              <td>{card.type}</td>
               <td className='es'>{card.es}</td>
               <td className='en'>{card.en}</td>
               <td>{card.stageNum}</td>

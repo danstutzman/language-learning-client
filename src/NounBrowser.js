@@ -72,7 +72,7 @@ export default class NounBrowser extends React.Component<void, Props, State> {
     const { editingCardId } = this.state
     if (editingCardId !== NOT_EDITING) {
       const initialState: Card = (editingCardId === ADD_NEW) ?
-        newCard() : assertCard(this.props.cardByCardId[editingCardId])
+        newCard('EsN') : assertCard(this.props.cardByCardId[editingCardId])
       return <EditNoun
         cardId={editingCardId}
         initialState={initialState}

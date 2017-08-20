@@ -16,10 +16,17 @@ export const STAGE_TIME_THRESHOLD = [
    1 * DAY      // 4->5
 ]
 
+const CARD_TYPE_TO_STRING = {
+  EsN: 'EsN', // noun
+  EsD: 'EsD'  // determiner
+}
+
+export type CardType = $Keys<typeof CARD_TYPE_TO_STRING>
+
 export type Card = {|
   cardId:         number,
-  type:           'EsN',
-  gender:         'M' | 'F' | '',
+  type:           CardType,
+  gender:         'M' | 'F' | '', // masculine or feminine
   es:             string,
   en:             string,
   mnemonic:       string,
@@ -28,9 +35,9 @@ export type Card = {|
   lastSeenAt:     number // milliseconds since epoch, 0 for never
 |}
 
-export function assertCardType(x: any): 'EsN' {
-  if (x !== 'EsN') {
-    throw new Error(`Expected Card Type but got ${x}`)
+export function assertCardType(x: any): CardType {
+  if (!CARD_TYPE_TO_STRING[x]) {
+    throw new Error(`Expected CardType but got ${x}`)
   }
   return x
 }
@@ -45,15 +52,8 @@ export function assertCardGender(x: any): 'M' | 'F' | '' {
 export function assertCard(x: any): Card {
   assertObj(x)
 
-  if (x.cardId === undefined) {
-    throw new Error(`No cardId on ${JSON.stringify(x)}`)
-  }
   assertNum(x.cardId)
-
-  if (x.type !== 'EsN') {
-    throw new Error(`Unknown type on ${JSON.stringify(x)}`)
-  }
-
+  assertCardType(x.type)
   assertCardGender(x.gender)
   assertStr(x.es)
   assertStr(x.en)
@@ -64,10 +64,10 @@ export function assertCard(x: any): Card {
   return x
 }
 
-export function newCard(): Card {
+export function newCard(type: CardType): Card {
   return {
     cardId: -1,
-    type: 'EsN',
+    type: type,
     gender: '',
     es: '',
     en: '',

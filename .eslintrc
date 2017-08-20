@@ -18,6 +18,7 @@
   "rules": {
     "semi": ["error", "never"],
     "no-console": "off",
-    "no-trailing-spaces": "error"
+    "no-trailing-spaces": "error",
+    "flowtype/define-flow-type": 1
   }
 }

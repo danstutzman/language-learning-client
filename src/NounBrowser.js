@@ -81,20 +81,24 @@ export default class NounBrowser extends React.Component<void, Props, State> {
     }
   }
 
+  _renderTableHeader() {
+    return <thead>
+      <tr>
+        <th>
+          <a href='#' onClick={e=>{this._sortBy(e, 'ES')}}>Spanish</a>
+        </th>
+        <th>
+          <a href='#' onClick={e=>{this._sortBy(e, 'EN')}}>English</a>
+        </th>
+      </tr>
+    </thead>
+  }
+
   render() {
     return <div>
       {this._renderCardEditMaybe()}
       <table className='noun-browser'>
-        <thead>
-          <tr>
-            <th>
-              <a href='#' onClick={e=>{this._sortBy(e, 'ES')}}>Spanish</a>
-            </th>
-            <th>
-              <a href='#' onClick={e=>{this._sortBy(e, 'EN')}}>English</a>
-            </th>
-          </tr>
-        </thead>
+        {this._renderTableHeader()}
         <tbody>
           {this._cardsSorted().map(card => {
             return <tr key={card.cardId}>

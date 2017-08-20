@@ -1,13 +1,17 @@
 import type { Action } from './Action'
 import type { AppState } from '../AppState'
-import { assertCard } from '../Card'
+import { assertCard, STAGE0_MISSING_FIELDS, STAGE1_COMPLETE_FIELDS
+  } from '../Card'
 import { assertAddCardAction, assertUpdateCardAction } from './Action'
 
 function addCard(appState: AppState, action: Action) {
   const add = assertAddCardAction(action)
+  const { gender, es, en } = add.cardAdd
   const card = assertCard(Object.assign({
     cardId: action.actionId,
-    suspended: false
+    suspended: false,
+    stageNum: (gender === '' || es === '' || en === '') ?
+      STAGE0_MISSING_FIELDS : STAGE1_COMPLETE_FIELDS
   }, (add.cardAdd: any)))
 
   appState.cardByCardId[action.actionId] = card

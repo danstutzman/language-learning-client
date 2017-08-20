@@ -1,4 +1,4 @@
-import { assertBool, assertObj, assertStr } from './assertType'
+import { assertBool, assertNum, assertObj, assertStr } from './assertType'
 import { assertCardGender } from './Card'
 
 export type CardUpdate = {|
@@ -6,7 +6,8 @@ export type CardUpdate = {|
   es?:        string,
   en?:        string,
   mnemonic?:  string,
-  suspended?: boolean
+  suspended?: boolean,
+  stageNum?:  number
 |}
 
 export function assertCardUpdate(x: any): CardUpdate {
@@ -17,6 +18,7 @@ export function assertCardUpdate(x: any): CardUpdate {
   if (x.en !== undefined)        { assertStr(x.en) }
   if (x.mnemonic !== undefined)  { assertStr(x.mnemonic) }
   if (x.suspended !== undefined) { assertBool(x.suspended) }
+  if (x.stageNum !== undefined)  { assertNum(x.stageNum) }
 
   return x
 }

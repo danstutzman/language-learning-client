@@ -1,7 +1,8 @@
 import type { Card } from './Card'
 import type { CardUpdate } from './CardUpdate'
 import React from 'react'
-import { assertCardGender } from './Card'
+import { assertCardGender, STAGE0_MISSING_FIELDS, STAGE1_COMPLETE_FIELDS
+  } from './Card'
 
 type Props = {
   initialState:   Card,
@@ -32,6 +33,16 @@ export default class EditNoun extends React.Component<void, Props, State> {
         cardUpdate[field] = newValue
       }
     }
+
+    const { gender, es, en } = this.state
+    if (this.props.initialState.stageNum === STAGE0_MISSING_FIELDS &&
+        !(gender === '' || es === '' || en === '')) {
+      cardUpdate.stageNum = STAGE1_COMPLETE_FIELDS
+    } else if (this.props.initialState.stageNum >= STAGE1_COMPLETE_FIELDS &&
+        (gender === '' || es === '' || en === '')) {
+      cardUpdate.stageNum = STAGE0_MISSING_FIELDS
+    }
+
     this.props.saveCardUpdate(this.props.initialState.cardId, cardUpdate)
     this.props.close()
   }

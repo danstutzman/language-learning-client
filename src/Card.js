@@ -1,5 +1,8 @@
 import { assertBool, assertNum, assertObj, assertStr } from './assertType'
 
+export const STAGE0_MISSING_FIELDS = 0
+export const STAGE1_COMPLETE_FIELDS = 1
+
 export type Card = {|
   cardId:         number,
   type:           'EsN',
@@ -7,7 +10,8 @@ export type Card = {|
   es:             string,
   en:             string,
   mnemonic:       string,
-  suspended:      boolean
+  suspended:      boolean,
+  stageNum:       number
 |}
 
 export function assertCardType(x: any): 'EsN' {
@@ -41,6 +45,7 @@ export function assertCard(x: any): Card {
   assertStr(x.en)
   assertStr(x.mnemonic)
   assertBool(x.suspended)
+  assertNum(x.stageNum)
 
   return x
 }
@@ -53,6 +58,7 @@ export function newCard(): Card {
     es: '',
     en: '',
     mnemonic: '',
-    suspended: false
+    suspended: false,
+    stageNum: STAGE0_MISSING_FIELDS
   }
 }

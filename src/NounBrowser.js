@@ -13,7 +13,7 @@ type Props = {
 const NOT_EDITING = 0
 const ADD_NEW = -1
 
-type StateSortBy = 'CARD_ID' | 'ES' | '-ES' | 'EN' | '-EN'
+type StateSortBy = 'CARD_ID' | 'ES' | '-ES' | 'EN' | '-EN' | 'STAGE' | '-STAGE'
 
 type State = {
   editingCardId: number,
@@ -25,11 +25,13 @@ function strcmp(s1: string, s2: string) {
 }
 
 const sortByToComparer = {
-  CARD_ID: (c1, c2) => { return c1.cardId - c2.cardId },
-  ES:      (c1, c2) => { return  strcmp(c1.es, c2.es) },
-  '-ES':   (c1, c2) => { return -strcmp(c1.es, c2.es) },
-  EN:      (c1, c2) => { return  strcmp(c1.en, c2.en) },
-  '-EN':   (c1, c2) => { return -strcmp(c1.en, c2.en) }
+  CARD_ID:  (c1, c2) => { return c1.cardId - c2.cardId },
+  ES:       (c1, c2) => { return  strcmp(c1.es, c2.es) },
+  '-ES':    (c1, c2) => { return -strcmp(c1.es, c2.es) },
+  EN:       (c1, c2) => { return  strcmp(c1.en, c2.en) },
+  '-EN':    (c1, c2) => { return -strcmp(c1.en, c2.en) },
+  STAGE:    (c1, c2) => { return c1.stageNum - c2.stageNum },
+  '-STAGE': (c1, c2) => { return c2.stageNum - c1.stageNum }
 }
 
 export default class NounBrowser extends React.Component<void, Props, State> {
@@ -90,6 +92,9 @@ export default class NounBrowser extends React.Component<void, Props, State> {
         <th>
           <a href='#' onClick={e=>{this._sortBy(e, 'EN')}}>English</a>
         </th>
+        <th>
+          <a href='#' onClick={e=>{this._sortBy(e, 'STAGE')}}>Stage</a>
+        </th>
       </tr>
     </thead>
   }
@@ -104,6 +109,7 @@ export default class NounBrowser extends React.Component<void, Props, State> {
             return <tr key={card.cardId}>
               <td className='es'>{card.es}</td>
               <td className='en'>{card.en}</td>
+              <td>{card.stageNum}</td>
               <td>
                 <button onClick={()=>{
                   this.setState({ editingCardId: parseInt(card.cardId) })

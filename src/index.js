@@ -1,11 +1,11 @@
-import type { Card }     from './Card'
-import type { Exposure } from './Exposure'
-import Ajax              from './Ajax'
-import AjaxBankApi       from './bank/api/AjaxBankApi'
-import App               from './App'
-import LocalBank         from './bank/LocalBank'
-import React             from 'react'
-import ReactDOM          from 'react-dom'
+import type { Exposure }   from './Exposure'
+import type { CardUpdate } from './CardUpdate'
+import Ajax                from './Ajax'
+import AjaxBankApi         from './bank/api/AjaxBankApi'
+import App                 from './App'
+import LocalBank           from './bank/LocalBank'
+import React               from 'react'
+import ReactDOM            from 'react-dom'
 import { SYNCED_KEY, UNSYNCED_KEY } from '../src/LocalStorage'
 
 const SERVER_URL_ROOT = 'http://localhost:3000'
@@ -108,11 +108,11 @@ function render() {
   ReactDOM.render(
     React.createElement(App, {
       appState: bank.getReduxStoreState(),
-      saveCardEdit: (card: Card) => {
-        if (card.cardId === -1) {
-          bank.addAddCardAction(card)
+      saveCardUpdate: (cardId: number, cardUpdate: CardUpdate) => {
+        if (cardId === -1) {
+          bank.addAddCardAction(cardUpdate)
         } else {
-          bank.addUpdateCardAction(card)
+          bank.addUpdateCardAction(cardId, cardUpdate)
         }
         render()
       },

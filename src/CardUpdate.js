@@ -1,4 +1,4 @@
-import { assertBool, assertNonBlankStr, assertObj } from './assertType'
+import { assertBool, assertObj, assertStr } from './assertType'
 import { assertCardGender } from './Card'
 
 export type CardUpdate = {|
@@ -13,9 +13,9 @@ export function assertCardUpdate(x: any): CardUpdate {
   assertObj(x)
 
   if (x.gender !== undefined)    { assertCardGender(x.gender) }
-  if (x.es !== undefined)        { assertNonBlankStr(x.es) }
-  if (x.en !== undefined)        { assertNonBlankStr(x.en) }
-  if (x.mnemonic !== undefined)  { assertNonBlankStr(x.mnemonic) }
+  if (x.es !== undefined)        { assertStr(x.es) }
+  if (x.en !== undefined)        { assertStr(x.en) }
+  if (x.mnemonic !== undefined)  { assertStr(x.mnemonic) }
   if (x.suspended !== undefined) { assertBool(x.suspended) }
 
   return x

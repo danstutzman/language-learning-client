@@ -18,7 +18,7 @@ function addCard(appState: AppState, action: Action) {
 function updateCard(appState: AppState, action: Action) {
   const update = assertUpdateCardAction(action)
   const card = appState.cardByCardId[update.cardId]
-  Object.assign({}, card, update.cardUpdate)
+  Object.assign(card, update.cardUpdate)
   appState.fastCards.update()
   appState.slowCards.update()
 }

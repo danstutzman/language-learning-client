@@ -1,6 +1,6 @@
-import type { Card } from './Card'
 import type { Exposure } from './Exposure'
 import type { AppState } from './AppState'
+import type { CardUpdate } from './CardUpdate'
 import React from 'react'
 import NounBrowser from './NounBrowser' // eslint-disable-line no-unused-vars
 import FastQuiz from './FastQuiz' // eslint-disable-line no-unused-vars
@@ -9,7 +9,7 @@ import cx from 'classnames'
 
 type Props = {
   appState:       AppState,
-  saveCardEdit:   (Card) => void,
+  saveCardUpdate: (cardId: number, CardUpdate) => void,
   addExposure:    (Exposure) => void,
   sync:           () => void,
   playEs:         (string) => Promise<void>,
@@ -76,7 +76,7 @@ export default class App extends React.Component<void, Props, State> {
     if (this.state.currentTab === 'NOUN_BROWSER') {
       return <NounBrowser
         cardByCardId={this.props.appState.cardByCardId}
-        saveCardEdit={this.props.saveCardEdit}
+        saveCardUpdate={this.props.saveCardUpdate}
         sync={this.props.sync}/>
     }
   }
@@ -107,7 +107,7 @@ export default class App extends React.Component<void, Props, State> {
   }
 
   _renderSlowQuizMaybe() {
-    const { appState, addExposure, saveCardEdit, playEs } = this.props
+    const { appState, addExposure, playEs } = this.props
     if (this.state.currentTab === 'SLOW_QUIZ') {
       if (appState.slowCards.empty()) {
         return <div>No cards</div>
@@ -115,7 +115,6 @@ export default class App extends React.Component<void, Props, State> {
         return <SlowQuiz
           topCard={appState.slowCards.getTopCard()}
           addExposure={addExposure}
-          saveCardEdit={saveCardEdit}
           playEs={playEs} />
       } else {
         return <button className='big'

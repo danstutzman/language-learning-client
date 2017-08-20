@@ -82,9 +82,9 @@ export default class UnsyncedState {
     return this._addAction({type: 'ADD_CARD', cardAdd })
   }
 
-  addUpdateCardAction(cardUpdate: CardUpdate) {
+  addUpdateCardAction(cardId: number, cardUpdate: CardUpdate) {
     assertCardUpdate(cardUpdate)
-    return this._addAction({type: 'UPDATE_CARD', cardUpdate })
+    return this._addAction({type: 'UPDATE_CARD', cardId, cardUpdate })
   }
 
   _addAction(actionFields: {

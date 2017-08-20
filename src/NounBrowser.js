@@ -1,12 +1,13 @@
 import type { Card } from './Card'
+import type { CardUpdate } from './CardUpdate'
 import React from 'react'
 import EditNoun from './EditNoun' // eslint-disable-line no-unused-vars
-import { newCard } from './Card'
+import { assertCard, newCard } from './Card'
 
 type Props = {
-  cardByCardId: {[cardId: number]: Card},
-  saveCardEdit: (Card) => void,
-  sync:         () => void
+  cardByCardId:   {[cardId: number]: Card},
+  saveCardUpdate: (cardId: number, CardUpdate) => void,
+  sync:           () => void
 }
 
 const NOT_EDITING = 0
@@ -42,8 +43,8 @@ export default class NounBrowser extends React.Component<void, Props, State> {
     }
   }
 
-  _onSaveCardEdit(card: Card) {
-    this.props.saveCardEdit(card)
+  _onSaveCardUpdate(cardId: number, cardUpdate: CardUpdate) {
+    this.props.saveCardUpdate(cardId, cardUpdate)
   }
 
   _onCloseCardEdit() {
@@ -67,18 +68,22 @@ export default class NounBrowser extends React.Component<void, Props, State> {
     return cards
   }
 
+  renderCardEditMaybe() {
+    const { editingCardId } = this.state
+    if (editingCardId !== NOT_EDITING) {
+      const initialState: Card = (editingCardId === ADD_NEW) ?
+        newCard() : assertCard(this.props.cardByCardId[editingCardId])
+      return <EditNoun
+        cardId={editingCardId}
+        initialState={initialState}
+        saveCardUpdate={this._onSaveCardUpdate.bind(this)}
+        close={this._onCloseCardEdit.bind(this)} />
+    }
+  }
+
   render() {
-    const { cardByCardId, sync } = this.props
-
     return <div>
-
-      {this.state.editingCardId === NOT_EDITING ? null : <EditNoun
-        cardId={this.state.editingCardId}
-        initialState={this.state.editingCardId === ADD_NEW ?
-          newCard() : cardByCardId[this.state.editingCardId]}
-        saveCardEdit={this._onSaveCardEdit.bind(this)}
-        close={this._onCloseCardEdit.bind(this)} />}
-
+      {this.renderCardEditMaybe()}
       <table className='noun-browser'>
         <thead>
           <tr>
@@ -108,7 +113,7 @@ export default class NounBrowser extends React.Component<void, Props, State> {
           onClick={()=>{ this.setState({ editingCardId: ADD_NEW }) }}>
         Add Noun
       </button>
-      <button className='big' onClick={sync}>Sync</button>
+      <button className='big' onClick={this.props.sync}>Sync</button>
     </div>
   }
 }

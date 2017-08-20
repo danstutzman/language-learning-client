@@ -5,7 +5,6 @@ import React from 'react'
 type Props = {
   topCard:      Card,
   addExposure:  (Exposure) => void,
-  saveCardEdit: (Card) => void,
   playEs:       (string) => Promise<void>
 }
 
@@ -60,8 +59,6 @@ export default class SlowQuiz extends React.Component<void, Props, State> {
 
   _onClickSave() {
     this.setState({ showMnemonic: false, showMnemonicHelp: false })
-    this.props.saveCardEdit(
-        (Object.assign({}, this.props.topCard, this.state): any))
     this.props.addExposure({
       type: 'SLOW_SHAKE',
       es: this.props.topCard.es,

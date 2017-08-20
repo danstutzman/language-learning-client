@@ -1,12 +1,12 @@
 import type { Card } from './Card'
+import type { CardUpdate } from './CardUpdate'
 import React from 'react'
 import { assertCardGender } from './Card'
 
 type Props = {
-  cardId:       number,
-  initialState: Card,
-  saveCardEdit: (Card) => void,
-  close:        () => void
+  initialState:   Card,
+  saveCardUpdate: (cardId: number, CardUpdate) => void,
+  close:          () => void
 }
 
 type State = Card
@@ -24,7 +24,15 @@ export default class EditNoun extends React.Component<void, Props, State> {
   }
 
   onClickSave() {
-    this.props.saveCardEdit(this.state)
+    const cardUpdate: CardUpdate = (({}: any): CardUpdate) // workaround
+    for (const field of ['gender', 'es', 'en', 'mnemonic', 'suspended']) {
+      const newValue = (this.state[field]: any)
+      if (newValue !== undefined &&
+          newValue !== this.props.initialState[field]) {
+        cardUpdate[field] = newValue
+      }
+    }
+    this.props.saveCardUpdate(this.props.initialState.cardId, cardUpdate)
     this.props.close()
   }
 
@@ -35,6 +43,7 @@ export default class EditNoun extends React.Component<void, Props, State> {
 
   render() {
     const { gender, es, en, mnemonic, suspended } = this.state
+    const isNew = this.props.initialState.cardId === -1
 
     return <div>
       <button className='close' onClick={this.props.close}>X</button>
@@ -62,13 +71,15 @@ export default class EditNoun extends React.Component<void, Props, State> {
         onChange={e => this.setState({mnemonic: e.target.value})}/>
       <br/>
 
-      <label>Suspended</label>
-      <input type='checkbox' checked={suspended}
-        onChange={e => this.setState({suspended: e.target.checked})}/>
-      <br/>
+      {!isNew && <div>
+        <label>Suspended</label>
+        <input type='checkbox' checked={suspended}
+          onChange={e => this.setState({suspended: e.target.checked})}/>
+        <br/>
+      </div>}
 
       <button onClick={this.onClickSave.bind(this)}>
-        {this.state.cardId === -1 ? 'Add' : 'Edit'} Noun
+        {isNew ? 'Add' : 'Edit'} Noun
       </button>
     </div>
   }

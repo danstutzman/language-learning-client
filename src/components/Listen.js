@@ -1,7 +1,7 @@
-import type { Exposure } from './Exposure'
-import type { Card } from './Card'
+import type { Exposure } from '../Exposure'
+import type { Card } from '../Card'
 import React from 'react'
-import { assertNonBlankStr } from './assertType'
+import { assertNonBlankStr } from '../assertType'
 
 type Props = {
   topCard:     Card,

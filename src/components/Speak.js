@@ -1,8 +1,8 @@
-import type { Exposure } from './Exposure'
-import type { Card } from './Card'
-import type { CardUpdate } from './CardUpdate'
+import type { Exposure } from '../Exposure'
+import type { Card } from '../Card'
+import type { CardUpdate } from '../CardUpdate'
 import React from 'react'
-import { STAGE1_COMPLETE_FIELDS, STAGE_TIME_THRESHOLD } from './Card'
+import { STAGE1_COMPLETE_FIELDS, STAGE_TIME_THRESHOLD } from '../Card'
 
 type Props = {
   topCard:        Card,

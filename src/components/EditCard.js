@@ -1,10 +1,10 @@
-import type { Card } from './Card'
-import type { CardAdd } from './CardAdd'
-import type { CardUpdate } from './CardUpdate'
+import type { Card } from '../Card'
+import type { CardAdd } from '../CardAdd'
+import type { CardUpdate } from '../CardUpdate'
 import React from 'react'
 import { assertCardGender, STAGE0_MISSING_FIELDS, STAGE1_COMPLETE_FIELDS
-  } from './Card'
-import { assertCardAdd } from './CardAdd'
+  } from '../Card'
+import { assertCardAdd } from '../CardAdd'
 
 type Props = {
   initialState:   Card,

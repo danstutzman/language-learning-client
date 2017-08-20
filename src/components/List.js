@@ -1,9 +1,9 @@
-import type { Card } from './Card'
-import type { CardAdd } from './CardAdd'
-import type { CardUpdate } from './CardUpdate'
+import type { Card } from '../Card'
+import type { CardAdd } from '../CardAdd'
+import type { CardUpdate } from '../CardUpdate'
 import React from 'react'
 import EditCard from './EditCard' // eslint-disable-line no-unused-vars
-import { assertCard, newCard } from './Card'
+import { assertCard, newCard } from '../Card'
 
 type Props = {
   cardByCardId:   {[cardId: number]: Card},

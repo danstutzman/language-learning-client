@@ -1,7 +1,7 @@
-import type { Exposure } from './Exposure'
-import type { AppState } from './AppState'
-import type { CardAdd } from './CardAdd'
-import type { CardUpdate } from './CardUpdate'
+import type { Exposure } from '../Exposure'
+import type { AppState } from '../AppState'
+import type { CardAdd } from '../CardAdd'
+import type { CardUpdate } from '../CardUpdate'
 import React from 'react'
 import List from './List' // eslint-disable-line no-unused-vars
 import Listen from './Listen' // eslint-disable-line no-unused-vars

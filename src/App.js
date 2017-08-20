@@ -99,7 +99,7 @@ export default class App extends React.Component<void, Props, State> {
         return <div>
           <button className='big'
               onClick={this.onClickStartListen.bind(this)}>
-            Start Listen 
+            Start Listen
           </button>
           ({appState.listenCards.getNumCards()} cards)
         </div>

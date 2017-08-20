@@ -5,6 +5,7 @@ import React from 'react'
 import NounBrowser from './NounBrowser' // eslint-disable-line no-unused-vars
 import FastQuiz from './FastQuiz' // eslint-disable-line no-unused-vars
 import SlowQuiz from './SlowQuiz' // eslint-disable-line no-unused-vars
+import SlowQuizSummary from './SlowQuizSummary' // eslint-disable-line no-unused-vars
 import cx from 'classnames'
 
 type Props = {
@@ -110,9 +111,7 @@ export default class App extends React.Component<void, Props, State> {
     const { appState, addExposure, playEs, saveCardUpdate } = this.props
 
     if (this.state.currentTab === 'SLOW_QUIZ') {
-      if (appState.slowCards.empty()) {
-        return <div>No cards</div>
-      } else if (this.state.startedSlowQuiz) {
+      if (this.state.startedSlowQuiz && !appState.slowCards.empty()) {
         return <SlowQuiz
           topCard={appState.slowCards.getTopCard()}
           numCardsLeft={appState.slowCards.getNumCards()}
@@ -120,10 +119,9 @@ export default class App extends React.Component<void, Props, State> {
           addExposure={addExposure}
           playEs={playEs} />
       } else {
-        return <button className='big'
-            onClick={this.onClickStartSlowQuiz.bind(this)}>
-          Start Slow Quiz
-        </button>
+        return <SlowQuizSummary
+          cardStagesSummary={appState.slowCards.getCardStagesSummary()}
+          startSlowQuiz={()=>{ this.setState({ startedSlowQuiz: true }) }} />
       }
     }
   }

@@ -16,8 +16,6 @@ import UnsyncedState            from './UnsyncedState'
 import CardList                 from '../CardList'
 import { STAGE_TIME_THRESHOLD } from '../Card'
 
-const MINUTES = 60 * 1000
-
 export default class LocalBank {
   bankApi:       BankApi
   syncedState:   SyncedState
@@ -34,18 +32,16 @@ export default class LocalBank {
     this.syncedState.initFromLocalStorage()
     this.unsyncedState.initFromLocalStorage()
 
-    const fastFilter = (card) => {
-      if (card.suspended) return false
-      // TODO
-      return true
-    }
-    const slowFilter = (card) => {
+    const contentFilter = (card) => {
       if (card.suspended) return false
       if (card.stageNum === 0) return false
-      if (new Date().getTime() - card.lastSeenAt <
-          STAGE_TIME_THRESHOLD[card.stageNum + 1]) return false
       return true
     }
+    const slowTimeFilter = (card) => {
+      return new Date().getTime() - card.lastSeenAt >=
+        STAGE_TIME_THRESHOLD[card.stageNum + 1]
+    }
+    const noTimeFilter = () => { return true }
 
     const compare = (c1: Card, c2: Card) => { // eslint-disable-line no-unused-vars
       // TODO
@@ -55,8 +51,10 @@ export default class LocalBank {
     const cardByCardId: {[cardId: number]: Card} = {}
     this.reduxStore = createStore(reducer, {
       cardByCardId,
-      fastCards:   new CardList(cardByCardId, fastFilter, compare),
-      slowCards:   new CardList(cardByCardId, slowFilter, compare)
+      fastCards: new CardList(
+        cardByCardId, contentFilter, noTimeFilter, compare),
+      slowCards: new CardList(
+        cardByCardId, contentFilter, slowTimeFilter, compare)
     })
     const actions = this.syncedState.actions.concat(this.unsyncedState.actions)
     for (const action of actions) {

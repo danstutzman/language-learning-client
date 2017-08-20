@@ -1,7 +1,9 @@
+import type {CardType} from "./CardType"
 import { assertBool, assertNum, assertObj, assertStr } from './assertType'
-import type {CardNumber} from "./CardNumber"
 import {assertCardGender} from "./CardGender"
+import {assertCardType} from "./CardType"
 import type {CardGender} from "./CardGender"
+import type {CardNumber} from "./CardNumber"
 
 const MINUTES = 60 * 1000
 const HOURS = 60 * MINUTES
@@ -19,14 +21,6 @@ export const STAGE_TIME_THRESHOLD = [
    1 * DAY      // 4->5
 ]
 
-export const CARD_TYPE_TO_STRING = {
-  '': '',
-  EsN: 'EsN', // noun
-  EsD: 'EsD'  // determiner
-}
-
-export type CardType = $Keys<typeof CARD_TYPE_TO_STRING>
-
 export type Card = {|
   cardId:         number,
   type:           CardType,
@@ -39,13 +33,6 @@ export type Card = {|
   lastSeenAt:     number, // milliseconds since epoch, 0 for never
   number:         CardNumber
 |}
-
-export function assertCardType(x: any): CardType {
-  if (CARD_TYPE_TO_STRING[x] === undefined) {
-    throw new Error(`Expected CardType but got ${x}`)
-  }
-  return x
-}
 
 export function assertCard(x: any): Card {
   assertObj(x)

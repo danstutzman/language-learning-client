@@ -1,9 +1,9 @@
 import { assertObj, assertStr } from './assertType'
-import { assertCardType } from './Card'
 import {assertCardNumber} from "./CardNumber"
-import type {CardType} from "./Card"
 import type {CardGender} from "./CardGender"
 import {assertCardGender} from "./CardGender"
+import {assertCardType} from "./CardType"
+import type {CardType} from "./CardType"
 
 export type CardAdd = {|
   type:     CardType,

@@ -1,10 +1,10 @@
-import type { CardType } from './Card'
-import { assertBool, assertNum, assertObj, assertStr } from './assertType'
-import { assertCardType } from './Card'
+import type {CardType} from "./CardType"
 import type {CardNumber} from "./CardNumber"
-import {assertCardNumber} from "./CardNumber"
 import type {CardGender} from "./CardGender"
+import { assertBool, assertNum, assertObj, assertStr } from './assertType'
+import {assertCardNumber} from "./CardNumber"
 import {assertCardGender} from "./CardGender"
+import {assertCardType} from "./CardType"
 
 export type CardUpdate = {|
   type?:      CardType,

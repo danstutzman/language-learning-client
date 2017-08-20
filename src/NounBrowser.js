@@ -68,7 +68,7 @@ export default class NounBrowser extends React.Component<void, Props, State> {
     return cards
   }
 
-  renderCardEditMaybe() {
+  _renderCardEditMaybe() {
     const { editingCardId } = this.state
     if (editingCardId !== NOT_EDITING) {
       const initialState: Card = (editingCardId === ADD_NEW) ?
@@ -83,7 +83,7 @@ export default class NounBrowser extends React.Component<void, Props, State> {
 
   render() {
     return <div>
-      {this.renderCardEditMaybe()}
+      {this._renderCardEditMaybe()}
       <table className='noun-browser'>
         <thead>
           <tr>

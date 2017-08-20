@@ -1,12 +1,15 @@
 import type { Card } from './Card'
+import type { CardAdd } from './CardAdd'
 import type { CardUpdate } from './CardUpdate'
 import React from 'react'
 import { assertCardGender, STAGE0_MISSING_FIELDS, STAGE1_COMPLETE_FIELDS
   } from './Card'
+import { assertCardAdd } from './CardAdd'
 
 type Props = {
   initialState:   Card,
-  saveCardUpdate: (cardId: number, CardUpdate) => void,
+  saveCardAdd:    (add: CardAdd) => void,
+  saveCardUpdate: (cardId: number, update: CardUpdate) => void,
   close:          () => void
 }
 
@@ -24,7 +27,18 @@ export default class EditNoun extends React.Component<void, Props, State> {
     this.state = (Object.assign({}, nextProps.initialState): any)
   }
 
-  onClickSave() {
+  onClickSaveAdd() {
+    const { gender, es, en, mnemonic } = this.state
+    const stageNum = (gender === '' || es === '' || en === '') ?
+      STAGE0_MISSING_FIELDS : STAGE1_COMPLETE_FIELDS
+    const add = { type: 'EsN', gender, es, en, stageNum, mnemonic }
+
+    this.props.saveCardAdd(assertCardAdd(add))
+
+    this.props.close()
+  }
+
+  onClickSaveUpdate() {
     const cardUpdate: CardUpdate = (({}: any): CardUpdate) // workaround
     for (const field of ['gender', 'es', 'en', 'mnemonic', 'suspended']) {
       const newValue = (this.state[field]: any)
@@ -44,6 +58,7 @@ export default class EditNoun extends React.Component<void, Props, State> {
     }
 
     this.props.saveCardUpdate(this.props.initialState.cardId, cardUpdate)
+
     this.props.close()
   }
 
@@ -52,9 +67,20 @@ export default class EditNoun extends React.Component<void, Props, State> {
     return es !== '' || en !== ''
   }
 
+  isNew() {
+    return this.props.initialState.cardId === -1
+  }
+
+  _renderSaveButton() {
+    if (this.isNew()) {
+      return <button onClick={this.onClickSaveAdd.bind(this)}>Add</button>
+    } else {
+      return <button onClick={this.onClickSaveUpdate.bind(this)}>Update</button>
+    }
+  }
+
   render() {
     const { gender, es, en, mnemonic, suspended } = this.state
-    const isNew = this.props.initialState.cardId === -1
 
     return <div>
       <button className='close' onClick={this.props.close}>X</button>
@@ -82,16 +108,14 @@ export default class EditNoun extends React.Component<void, Props, State> {
         onChange={e => this.setState({mnemonic: e.target.value})}/>
       <br/>
 
-      {!isNew && <div>
+      {!this.isNew() && <div>
         <label>Suspended</label>
         <input type='checkbox' checked={suspended}
           onChange={e => this.setState({suspended: e.target.checked})}/>
         <br/>
       </div>}
 
-      <button onClick={this.onClickSave.bind(this)}>
-        {isNew ? 'Add' : 'Edit'} Noun
-      </button>
+      {this._renderSaveButton()}
     </div>
   }
 }

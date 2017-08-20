@@ -1,5 +1,6 @@
 import type { Exposure }   from './Exposure'
 import type { CardUpdate } from './CardUpdate'
+import type { CardAdd }    from './CardAdd'
 import Ajax                from './Ajax'
 import AjaxBankApi         from './bank/api/AjaxBankApi'
 import App                 from './App'
@@ -108,12 +109,12 @@ function render() {
   ReactDOM.render(
     React.createElement(App, {
       appState: bank.getReduxStoreState(),
-      saveCardUpdate: (cardId: number, cardUpdate: CardUpdate) => {
-        if (cardId === -1) {
-          bank.addAddCardAction(cardUpdate)
-        } else {
-          bank.addUpdateCardAction(cardId, cardUpdate)
-        }
+      saveCardAdd: (add: CardAdd) => {
+        bank.addAddCardAction(add)
+        render()
+      },
+      saveCardUpdate: (cardId: number, update: CardUpdate) => {
+        bank.addUpdateCardAction(cardId, update)
         render()
       },
       addExposure: (exposure: Exposure) => {

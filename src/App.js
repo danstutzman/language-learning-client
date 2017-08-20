@@ -1,5 +1,6 @@
 import type { Exposure } from './Exposure'
 import type { AppState } from './AppState'
+import type { CardAdd } from './CardAdd'
 import type { CardUpdate } from './CardUpdate'
 import React from 'react'
 import NounBrowser from './NounBrowser' // eslint-disable-line no-unused-vars
@@ -10,7 +11,8 @@ import cx from 'classnames'
 
 type Props = {
   appState:       AppState,
-  saveCardUpdate: (cardId: number, CardUpdate) => void,
+  saveCardAdd:    (add: CardAdd) => void,
+  saveCardUpdate: (cardId: number, update: CardUpdate) => void,
   addExposure:    (Exposure) => void,
   sync:           () => void,
   playEs:         (string) => Promise<void>,
@@ -77,6 +79,7 @@ export default class App extends React.Component<void, Props, State> {
     if (this.state.currentTab === 'NOUN_BROWSER') {
       return <NounBrowser
         cardByCardId={this.props.appState.cardByCardId}
+        saveCardAdd={this.props.saveCardAdd}
         saveCardUpdate={this.props.saveCardUpdate}
         sync={this.props.sync}/>
     }

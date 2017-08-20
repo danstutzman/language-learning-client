@@ -1,4 +1,5 @@
 import type { Card } from './Card'
+import type { CardAdd } from './CardAdd'
 import type { CardUpdate } from './CardUpdate'
 import React from 'react'
 import EditNoun from './EditNoun' // eslint-disable-line no-unused-vars
@@ -6,7 +7,8 @@ import { assertCard, newCard } from './Card'
 
 type Props = {
   cardByCardId:   {[cardId: number]: Card},
-  saveCardUpdate: (cardId: number, CardUpdate) => void,
+  saveCardAdd:    (add: CardAdd) => void,
+  saveCardUpdate: (cardId: number, update: CardUpdate) => void,
   sync:           () => void
 }
 
@@ -45,10 +47,6 @@ export default class NounBrowser extends React.Component<void, Props, State> {
     }
   }
 
-  _onSaveCardUpdate(cardId: number, cardUpdate: CardUpdate) {
-    this.props.saveCardUpdate(cardId, cardUpdate)
-  }
-
   _onCloseCardEdit() {
     this.setState({ editingCardId: NOT_EDITING })
   }
@@ -78,7 +76,8 @@ export default class NounBrowser extends React.Component<void, Props, State> {
       return <EditNoun
         cardId={editingCardId}
         initialState={initialState}
-        saveCardUpdate={this._onSaveCardUpdate.bind(this)}
+        saveCardAdd={this.props.saveCardAdd}
+        saveCardUpdate={this.props.saveCardUpdate}
         close={this._onCloseCardEdit.bind(this)} />
     }
   }

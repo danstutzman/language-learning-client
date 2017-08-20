@@ -99,14 +99,7 @@ export default class LocalBank {
     this.reduxStore.dispatch(action)
   }
 
-  addAddCardAction(newCard: CardUpdate) {
-    const cardAdd: CardAdd = {
-      type:      'EsN',
-      gender:    newCard.gender    || '',
-      es:        newCard.es        || '',
-      en:        newCard.en        || '',
-      mnemonic:  newCard.mnemonic  || ''
-    }
+  addAddCardAction(cardAdd: CardAdd) {
     const action = this.unsyncedState.addAddCardAction(cardAdd)
     this.reduxStore.dispatch(action)
   }

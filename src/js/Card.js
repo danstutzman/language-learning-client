@@ -1,4 +1,5 @@
 import { assertBool, assertNum, assertObj, assertStr } from './assertType'
+import type {CardNumber} from "./CardNumber"
 
 const MINUTES = 60 * 1000
 const HOURS = 60 * MINUTES
@@ -33,7 +34,8 @@ export type Card = {|
   mnemonic:       string,
   suspended:      boolean,
   stageNum:       number,
-  lastSeenAt:     number // milliseconds since epoch, 0 for never
+  lastSeenAt:     number, // milliseconds since epoch, 0 for never
+  number:         CardNumber
 |}
 
 export function assertCardType(x: any): CardType {
@@ -75,6 +77,7 @@ export function newCard(): Card {
     mnemonic:   '',
     suspended:  false,
     stageNum:   STAGE0_MISSING_FIELDS,
-    lastSeenAt: 0
+    lastSeenAt: 0,
+    number:     ''
   }
 }

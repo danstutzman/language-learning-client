@@ -5,6 +5,7 @@ import React from 'react'
 import { assertCardGender, assertCardType, CARD_TYPE_TO_STRING,
   STAGE0_MISSING_FIELDS, STAGE1_COMPLETE_FIELDS } from '../Card'
 import { assertCardAdd } from '../CardAdd'
+import {assertCardNumber, CARD_NUMBER_TO_STRING} from '../CardNumber'
 
 type Props = {
   initialState:   Card,
@@ -28,10 +29,11 @@ export default class EditCard extends React.Component<void, Props, State> {
   }
 
   onClickSaveAdd() {
-    const { type, gender, es, en, mnemonic } = this.state
-    const stageNum = (gender === '' || es === '' || en === '') ?
-      STAGE0_MISSING_FIELDS : STAGE1_COMPLETE_FIELDS
-    const add = { type, gender, es, en, stageNum, mnemonic }
+    const { type, gender, es, en, mnemonic, number } = this.state
+    const add: CardAdd = { type, gender, es, en, mnemonic }
+    if (type === '' || type === 'EsD') {
+      add.number = number
+    }
 
     this.props.saveCardAdd(assertCardAdd(add))
 
@@ -40,8 +42,9 @@ export default class EditCard extends React.Component<void, Props, State> {
 
   onClickSaveUpdate() {
     const cardUpdate: CardUpdate = (({}: any): CardUpdate) // workaround
-    for (const field of
-        ['type', 'gender', 'es', 'en', 'mnemonic', 'suspended']) {
+    const fields = ['type', 'gender', 'es', 'en', 'mnemonic', 'suspended'
+      ].concat(this.state.type === 'EsD' ? ['number'] : [])
+    for (const field of fields) {
       const newValue = (this.state[field]: any)
       if (newValue !== undefined &&
           newValue !== this.props.initialState[field]) {
@@ -81,7 +84,7 @@ export default class EditCard extends React.Component<void, Props, State> {
   }
 
   render() {
-    const { type, gender, es, en, mnemonic, suspended } = this.state
+    const { type, gender, es, en, mnemonic, suspended, number } = this.state
 
     return <div>
       <button className='close' onClick={this.props.close}>X</button>
@@ -124,6 +127,16 @@ export default class EditCard extends React.Component<void, Props, State> {
         <input type='checkbox' checked={suspended}
           onChange={e => this.setState({suspended: e.target.checked})}/>
         <br/>
+      </div>}
+
+      {(type === '' || type === 'EsD') && <div>
+        <label>Number</label>
+        <select value={number} onChange={e => {
+          this.setState({number: assertCardNumber(e.target.value)}) }}>
+          {Object.keys(CARD_NUMBER_TO_STRING).map(number => {
+            return <option>{number}</option>
+          })}
+        </select>
       </div>}
 
       {this._renderSaveButton()}

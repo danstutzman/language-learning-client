@@ -2,7 +2,9 @@
 cd `dirname $0`
 
 rm -rf dist/*
-mkdir -p dist dist/js
+mkdir -p dist dist/js dist/css
+
+cp src/css/*.css dist/css
 
 echo > dist/js/vendor.js
 cat node_modules/react/dist/react.min.js >> dist/js/vendor.js
@@ -15,6 +17,7 @@ node_modules/.bin/browserify \
   -t babelify -t uglifyify
 
 rm -f dist/assets.json
+node_modules/hashmark/bin/hashmark dist/css/*.css -r true -l 5 -m dist/assets.json 'dist/css/{name}.{hash}{ext}'
 node_modules/hashmark/bin/hashmark dist/js/*.js -r true -l 5 -m dist/assets.json 'dist/js/{name}.{hash}{ext}'
 
 ruby -e "
@@ -25,6 +28,7 @@ assets.each do |key, value|
 end
 
 index = File.read('src/index.html')
+index.gsub! '/css/app.css', assets.fetch('dist/css/app.css')
 index.gsub! '/js/vendor.js', assets.fetch('dist/js/vendor.js')
 index.gsub! '/js/browserified.js', assets.fetch('dist/js/browserified.js')
 File.open('dist/index.html', 'w') do |f|

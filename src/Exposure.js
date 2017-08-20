@@ -1,10 +1,10 @@
 import { assertNonBlankStr, assertNum, assertObj } from './assertType'
 
 // Exposure types:
-//   FAST_BLINK: Time ran out on Fast Quiz screen
-//   FAST_NOD: Clicked 'I remember this' on Fast Quiz screen
-//   SLOW_NOD: Clicked 'I remember this' on Slow Quiz screen
-//   SLOW_SHAKE: Clicked 'Try again later' on Slow Quiz screen
+//   LISTEN_BLINK: Time ran out on Listen screen
+//   LISTEN_NOD: Clicked 'I remember this' on Listen screen
+//   SPEAK_NOD: Clicked 'I remember this' on Speak screen
+//   SPEAK_SHAKE: Clicked 'Try again later' on Speak screen
 export type Exposure = {
   type: string,
   es: string,

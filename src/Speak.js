@@ -19,7 +19,7 @@ type State = {
   showedPromptMillis: number
 }
 
-export default class SlowQuiz extends React.Component<void, Props, State> {
+export default class Speak extends React.Component<void, Props, State> {
   state: State
 
   constructor(props: Props) {
@@ -62,7 +62,7 @@ export default class SlowQuiz extends React.Component<void, Props, State> {
       saveCardUpdate(topCard.cardId, cardUpdate)
 
       addExposure({
-        type: 'SLOW_NOD',
+        type: 'SPEAK_NOD',
         es: topCard.es,
         promptedAt: this.state.showedPromptMillis,
         respondedAt
@@ -91,7 +91,7 @@ export default class SlowQuiz extends React.Component<void, Props, State> {
     saveCardUpdate(topCard.cardId, cardUpdate)
 
     this.props.addExposure({
-      type: 'SLOW_SHAKE',
+      type: 'SPEAK_SHAKE',
       es: this.props.topCard.es,
       promptedAt: this.state.showedPromptMillis,
       respondedAt

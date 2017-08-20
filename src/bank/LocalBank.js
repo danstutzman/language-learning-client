@@ -37,7 +37,7 @@ export default class LocalBank {
       if (card.stageNum === 0) return false
       return true
     }
-    const slowTimeFilter = (card) => {
+    const speakTimeFilter = (card) => {
       return new Date().getTime() - card.lastSeenAt >=
         STAGE_TIME_THRESHOLD[card.stageNum + 1]
     }
@@ -51,10 +51,10 @@ export default class LocalBank {
     const cardByCardId: {[cardId: number]: Card} = {}
     this.reduxStore = createStore(reducer, {
       cardByCardId,
-      fastCards: new CardList(
+      listenCards: new CardList(
         cardByCardId, contentFilter, noTimeFilter, compare),
-      slowCards: new CardList(
-        cardByCardId, contentFilter, slowTimeFilter, compare)
+      speakCards: new CardList(
+        cardByCardId, contentFilter, speakTimeFilter, compare)
     })
     const actions = this.syncedState.actions.concat(this.unsyncedState.actions)
     for (const action of actions) {

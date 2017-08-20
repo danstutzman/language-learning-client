@@ -2,13 +2,13 @@ import React from 'react'
 
 type Props = {
   cardStagesSummary: {[stageNumAndReady: string]: number},
-  startSlowQuiz:     () => void
+  startSpeak:        () => void
 }
 
 type State = {
 }
 
-export default class SlowQuizSummary
+export default class SpeakSummary
     extends React.Component<void, Props, State> {
   state: State
 
@@ -36,7 +36,7 @@ export default class SlowQuizSummary
                 {cardStagesSummary[`${stageNum}T`]}
               </td>})}
             <td>
-              <button className='big' onClick={this.props.startSlowQuiz}>
+              <button className='big' onClick={this.props.startSpeak}>
                 Start
               </button>
             </td>

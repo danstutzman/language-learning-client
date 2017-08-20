@@ -14,7 +14,7 @@ type State = {
   startedCounterMillis: number
 }
 
-export default class FastQuiz extends React.Component<void, Props, State> {
+export default class Listen extends React.Component<void, Props, State> {
   state: State
   eachSecondInterval: number
 
@@ -42,7 +42,7 @@ export default class FastQuiz extends React.Component<void, Props, State> {
         } else {
           window.clearInterval(this.eachSecondInterval)
           this.props.addExposure({
-            type: 'FAST_BLINK',
+            type: 'LISTEN_BLINK',
             es: this.props.topCard.es,
             promptedAt: this.state.startedCounterMillis,
             respondedAt: new Date().getTime()
@@ -76,7 +76,7 @@ export default class FastQuiz extends React.Component<void, Props, State> {
 
   _onClickIRemember() {
     this.props.addExposure({
-      type: 'FAST_NOD',
+      type: 'LISTEN_NOD',
       es: this.props.topCard.es,
       promptedAt: this.state.startedCounterMillis,
       respondedAt: new Date().getTime()

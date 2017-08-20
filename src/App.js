@@ -3,9 +3,9 @@ import type { AppState } from './AppState'
 import type { CardUpdate } from './CardUpdate'
 import React from 'react'
 import NounBrowser from './NounBrowser' // eslint-disable-line no-unused-vars
-import FastQuiz from './FastQuiz' // eslint-disable-line no-unused-vars
-import SlowQuiz from './SlowQuiz' // eslint-disable-line no-unused-vars
-import SlowQuizSummary from './SlowQuizSummary' // eslint-disable-line no-unused-vars
+import Listen from './Listen' // eslint-disable-line no-unused-vars
+import Speak from './Speak' // eslint-disable-line no-unused-vars
+import SpeakSummary from './SpeakSummary' // eslint-disable-line no-unused-vars
 import cx from 'classnames'
 
 type Props = {
@@ -18,9 +18,9 @@ type Props = {
 }
 
 type State = {
-  currentTab:      'NOUN_BROWSER' | 'FAST_QUIZ' | 'SLOW_QUIZ',
-  startedFastQuiz: boolean,
-  startedSlowQuiz: boolean
+  currentTab:      'NOUN_BROWSER' | 'LISTEN' | 'SPEAK',
+  startedListen: boolean,
+  startedSpeak: boolean
 }
 
 export default class App extends React.Component<void, Props, State> {
@@ -30,28 +30,28 @@ export default class App extends React.Component<void, Props, State> {
     super()
     this.state = {
       currentTab: 'NOUN_BROWSER',
-      startedFastQuiz: false,
-      startedSlowQuiz: false
+      startedListen: false,
+      startedSpeak: false
     }
   }
 
-  _setTab(newTab: 'NOUN_BROWSER' | 'FAST_QUIZ' | 'SLOW_QUIZ') {
+  _setTab(newTab: 'NOUN_BROWSER' | 'LISTEN' | 'SPEAK') {
     this.setState({
       currentTab: newTab,
-      startedFastQuiz: false,
-      startedSlowQuiz: false
+      startedListen: false,
+      startedSpeak: false
     })
   }
 
-  onClickStartFastQuiz() {
+  onClickStartListen() {
     this.setState({
-      startedFastQuiz: true
+      startedListen: true
     })
   }
 
-  onClickStartSlowQuiz() {
+  onClickStartSpeak() {
     this.setState({
-      startedSlowQuiz: true
+      startedSpeak: true
     })
   }
 
@@ -62,13 +62,13 @@ export default class App extends React.Component<void, Props, State> {
           onClick={()=>{ this._setTab('NOUN_BROWSER') }}>
         List
       </button>
-      <button className={cx({ current: currentTab === 'FAST_QUIZ' })}
-          onClick={()=>{ this._setTab('FAST_QUIZ') }}>
-        FastQ
+      <button className={cx({ current: currentTab === 'LISTEN' })}
+          onClick={()=>{ this._setTab('LISTEN') }}>
+        Listen
       </button>
-      <button className={cx({ current: currentTab === 'SLOW_QUIZ' })}
-          onClick={()=>{ this._setTab('SLOW_QUIZ') }}>
-        SlowQ
+      <button className={cx({ current: currentTab === 'SPEAK' })}
+          onClick={()=>{ this._setTab('SPEAK') }}>
+        Speak
       </button>
     </div>
   }
@@ -82,46 +82,46 @@ export default class App extends React.Component<void, Props, State> {
     }
   }
 
-  _renderFastQuizMaybe() {
+  _renderListenMaybe() {
     const { appState, addExposure, playEs } = this.props
-    if (this.state.currentTab === 'FAST_QUIZ') {
-      if (appState.fastCards.empty()) {
+    if (this.state.currentTab === 'LISTEN') {
+      if (appState.listenCards.empty()) {
         return <div>No cards</div>
-      } else if (this.state.startedFastQuiz) {
+      } else if (this.state.startedListen) {
         return <div>
-          <FastQuiz
-            topCard={appState.fastCards.getTopCard()}
+          <Listen
+            topCard={appState.listenCards.getTopCard()}
             addExposure={addExposure}
             playEs={playEs} />
-          ({appState.fastCards.getNumCards()} cards)
+          ({appState.listenCards.getNumCards()} cards)
         </div>
       } else {
         return <div>
           <button className='big'
-              onClick={this.onClickStartFastQuiz.bind(this)}>
-            Start Fast Quiz
+              onClick={this.onClickStartListen.bind(this)}>
+            Start Listen 
           </button>
-          ({appState.fastCards.getNumCards()} cards)
+          ({appState.listenCards.getNumCards()} cards)
         </div>
       }
     }
   }
 
-  _renderSlowQuizMaybe() {
+  _renderSpeakMaybe() {
     const { appState, addExposure, playEs, saveCardUpdate } = this.props
 
-    if (this.state.currentTab === 'SLOW_QUIZ') {
-      if (this.state.startedSlowQuiz && !appState.slowCards.empty()) {
-        return <SlowQuiz
-          topCard={appState.slowCards.getTopCard()}
-          numCardsLeft={appState.slowCards.getNumCards()}
+    if (this.state.currentTab === 'SPEAK') {
+      if (this.state.startedSpeak && !appState.speakCards.empty()) {
+        return <Speak
+          topCard={appState.speakCards.getTopCard()}
+          numCardsLeft={appState.speakCards.getNumCards()}
           saveCardUpdate={saveCardUpdate}
           addExposure={addExposure}
           playEs={playEs} />
       } else {
-        return <SlowQuizSummary
-          cardStagesSummary={appState.slowCards.getCardStagesSummary()}
-          startSlowQuiz={()=>{ this.setState({ startedSlowQuiz: true }) }} />
+        return <SpeakSummary
+          cardStagesSummary={appState.speakCards.getCardStagesSummary()}
+          startSpeak={()=>{ this.setState({ startedSpeak: true }) }} />
       }
     }
   }
@@ -130,8 +130,8 @@ export default class App extends React.Component<void, Props, State> {
     return <div>
       { this._renderTabs() }
       { this._renderNounBrowserMaybe() }
-      { this._renderFastQuizMaybe() }
-      { this._renderSlowQuizMaybe() }
+      { this._renderListenMaybe() }
+      { this._renderSpeakMaybe() }
     </div>
   }
 }

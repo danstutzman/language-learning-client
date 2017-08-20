@@ -15,16 +15,16 @@ function addCard(appState: AppState, action: Action) {
   }, (add.cardAdd: any)))
 
   appState.cardByCardId[action.actionId] = card
-  appState.fastCards.update()
-  appState.slowCards.update()
+  appState.listenCards.update()
+  appState.speakCards.update()
 }
 
 function updateCard(appState: AppState, action: Action) {
   const update = assertUpdateCardAction(action)
   const card = appState.cardByCardId[update.cardId]
   Object.assign(card, update.cardUpdate, { lastSeenAt: action.createdAtMillis })
-  appState.fastCards.update()
-  appState.slowCards.update()
+  appState.listenCards.update()
+  appState.speakCards.update()
 }
 
 export default function(appState: AppState, action: Action) {

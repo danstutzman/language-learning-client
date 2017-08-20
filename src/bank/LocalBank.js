@@ -14,6 +14,9 @@ import reducer                  from './reducer'
 import SyncedState              from './SyncedState'
 import UnsyncedState            from './UnsyncedState'
 import CardList                 from '../CardList'
+import { STAGE_TIME_THRESHOLD } from '../Card'
+
+const MINUTES = 60 * 1000
 
 export default class LocalBank {
   bankApi:       BankApi
@@ -38,7 +41,9 @@ export default class LocalBank {
     }
     const slowFilter = (card) => {
       if (card.suspended) return false
-      // TODO
+      if (card.stageNum === 0) return false
+      if (new Date().getTime() - card.lastSeenAt <
+          STAGE_TIME_THRESHOLD[card.stageNum + 1]) return false
       return true
     }
 

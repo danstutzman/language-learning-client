@@ -107,13 +107,15 @@ export default class App extends React.Component<void, Props, State> {
   }
 
   _renderSlowQuizMaybe() {
-    const { appState, addExposure, playEs } = this.props
+    const { appState, addExposure, playEs, saveCardUpdate } = this.props
+
     if (this.state.currentTab === 'SLOW_QUIZ') {
       if (appState.slowCards.empty()) {
         return <div>No cards</div>
       } else if (this.state.startedSlowQuiz) {
         return <SlowQuiz
           topCard={appState.slowCards.getTopCard()}
+          saveCardUpdate={saveCardUpdate}
           addExposure={addExposure}
           playEs={playEs} />
       } else {

@@ -1,7 +1,20 @@
 import { assertBool, assertNum, assertObj, assertStr } from './assertType'
 
-export const STAGE0_MISSING_FIELDS = 0
-export const STAGE1_COMPLETE_FIELDS = 1
+const MINUTES = 60 * 1000
+const HOURS = 60 * MINUTES
+const DAY = 24 * HOURS
+
+export const STAGE0_MISSING_FIELDS    = 0
+export const STAGE1_COMPLETE_FIELDS   = 1
+
+export const STAGE_TIME_THRESHOLD = [
+   0,           //  ->0 is not applicable
+   0,           // 0->1 isn't controlled by flashcard success
+  10 * MINUTES, // 1->2
+   1 * HOURS,   // 2->3
+   6 * HOURS,   // 3->4
+   1 * DAY      // 4->5
+]
 
 export type Card = {|
   cardId:         number,
@@ -11,7 +24,8 @@ export type Card = {|
   en:             string,
   mnemonic:       string,
   suspended:      boolean,
-  stageNum:       number
+  stageNum:       number,
+  lastSeenAt:     number // milliseconds since epoch, 0 for never
 |}
 
 export function assertCardType(x: any): 'EsN' {
@@ -59,6 +73,7 @@ export function newCard(): Card {
     en: '',
     mnemonic: '',
     suspended: false,
-    stageNum: STAGE0_MISSING_FIELDS
+    stageNum: STAGE0_MISSING_FIELDS,
+    lastSeenAt: 0
   }
 }

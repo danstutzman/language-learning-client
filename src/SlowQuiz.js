@@ -1,11 +1,14 @@
 import type { Exposure } from './Exposure'
 import type { Card } from './Card'
+import type { CardUpdate } from './CardUpdate'
 import React from 'react'
+import { STAGE1_COMPLETE_FIELDS, STAGE_TIME_THRESHOLD } from './Card'
 
 type Props = {
-  topCard:      Card,
-  addExposure:  (Exposure) => void,
-  playEs:       (string) => Promise<void>
+  topCard:        Card,
+  saveCardUpdate: (cardId: number, CardUpdate) => void,
+  addExposure:    (Exposure) => void,
+  playEs:         (string) => Promise<void>
 }
 
 type State = {
@@ -35,16 +38,35 @@ export default class SlowQuiz extends React.Component<void, Props, State> {
     })
   }
 
+  _calcCardUpdate(stageNum: number, millisSinceLastSeen: number,
+      success: boolean): CardUpdate {
+    if (success && millisSinceLastSeen >= STAGE_TIME_THRESHOLD[stageNum + 1]) {
+      return { stageNum: stageNum + 1 }
+    } else if (!success && stageNum > STAGE1_COMPLETE_FIELDS) {
+      return { stageNum: STAGE1_COMPLETE_FIELDS }
+    } else {
+      return (({}: any): CardUpdate) // workaround
+    }
+  }
+
   _onClickIRemember() {
+    const { addExposure, playEs, saveCardUpdate, topCard } = this.props
     const respondedAt = new Date().getTime()
+
     this.setState({ showMnemonic: true })
-    this.props.playEs(this.props.topCard.es).then(()=>{
-      this.props.addExposure({
+
+    playEs(topCard.es).then(()=>{
+      const cardUpdate = this._calcCardUpdate(
+        topCard.stageNum, respondedAt - topCard.lastSeenAt, true)
+      saveCardUpdate(topCard.cardId, cardUpdate)
+
+      addExposure({
         type: 'SLOW_NOD',
-        es: this.props.topCard.es,
+        es: topCard.es,
         promptedAt: this.state.showedPromptMillis,
         respondedAt
       })
+
       this.setState({ showMnemonic: false, showMnemonicHelp: false })
     })
   }
@@ -58,12 +80,20 @@ export default class SlowQuiz extends React.Component<void, Props, State> {
   }
 
   _onClickSave() {
+    const respondedAt = new Date().getTime()
+    const { topCard, saveCardUpdate } = this.props
+
     this.setState({ showMnemonic: false, showMnemonicHelp: false })
+
+    const cardUpdate = this._calcCardUpdate(
+      topCard.stageNum, respondedAt - topCard.lastSeenAt, true)
+    saveCardUpdate(topCard.cardId, cardUpdate)
+
     this.props.addExposure({
       type: 'SLOW_SHAKE',
       es: this.props.topCard.es,
       promptedAt: this.state.showedPromptMillis,
-      respondedAt: new Date().getTime()
+      respondedAt
     })
   }
 

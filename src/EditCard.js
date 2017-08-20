@@ -15,7 +15,7 @@ type Props = {
 
 type State = Card
 
-export default class EditNoun extends React.Component<void, Props, State> {
+export default class EditCard extends React.Component<void, Props, State> {
   state: State
 
   constructor(props: Props) {

@@ -2,7 +2,7 @@ import type { Card } from './Card'
 import type { CardAdd } from './CardAdd'
 import type { CardUpdate } from './CardUpdate'
 import React from 'react'
-import EditNoun from './EditNoun' // eslint-disable-line no-unused-vars
+import EditCard from './EditCard' // eslint-disable-line no-unused-vars
 import { assertCard, newCard } from './Card'
 
 type Props = {
@@ -73,7 +73,7 @@ export default class NounBrowser extends React.Component<void, Props, State> {
     if (editingCardId !== NOT_EDITING) {
       const initialState: Card = (editingCardId === ADD_NEW) ?
         newCard('EsN') : assertCard(this.props.cardByCardId[editingCardId])
-      return <EditNoun
+      return <EditCard
         cardId={editingCardId}
         initialState={initialState}
         saveCardAdd={this.props.saveCardAdd}

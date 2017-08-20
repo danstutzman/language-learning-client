@@ -1,12 +1,14 @@
 import type { CardType } from './Card'
 import { assertBool, assertNum, assertObj, assertStr } from './assertType'
-import { assertCardType, assertCardGender } from './Card'
+import { assertCardType } from './Card'
 import type {CardNumber} from "./CardNumber"
 import {assertCardNumber} from "./CardNumber"
+import type {CardGender} from "./CardGender"
+import {assertCardGender} from "./CardGender"
 
 export type CardUpdate = {|
   type?:      CardType,
-  gender?:    'M' | 'F' | '',
+  gender?:    CardGender,
   es?:        string,
   en?:        string,
   mnemonic?:  string,

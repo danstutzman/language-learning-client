@@ -1,5 +1,7 @@
 import { assertBool, assertNum, assertObj, assertStr } from './assertType'
 import type {CardNumber} from "./CardNumber"
+import {assertCardGender} from "./CardGender"
+import type {CardGender} from "./CardGender"
 
 const MINUTES = 60 * 1000
 const HOURS = 60 * MINUTES
@@ -28,7 +30,7 @@ export type CardType = $Keys<typeof CARD_TYPE_TO_STRING>
 export type Card = {|
   cardId:         number,
   type:           CardType,
-  gender:         'M' | 'F' | '', // masculine or feminine
+  gender:         CardGender,
   es:             string,
   en:             string,
   mnemonic:       string,
@@ -41,13 +43,6 @@ export type Card = {|
 export function assertCardType(x: any): CardType {
   if (CARD_TYPE_TO_STRING[x] === undefined) {
     throw new Error(`Expected CardType but got ${x}`)
-  }
-  return x
-}
-
-export function assertCardGender(x: any): 'M' | 'F' | '' {
-  if (!(x === 'M' || x === 'F' || x === '')) {
-    throw new Error(`Expected Card Gender but got ${x}`)
   }
   return x
 }

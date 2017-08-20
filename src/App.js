@@ -115,6 +115,7 @@ export default class App extends React.Component<void, Props, State> {
       } else if (this.state.startedSlowQuiz) {
         return <SlowQuiz
           topCard={appState.slowCards.getTopCard()}
+          numCardsLeft={appState.slowCards.getNumCards()}
           saveCardUpdate={saveCardUpdate}
           addExposure={addExposure}
           playEs={playEs} />

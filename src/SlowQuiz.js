@@ -6,6 +6,7 @@ import { STAGE1_COMPLETE_FIELDS, STAGE_TIME_THRESHOLD } from './Card'
 
 type Props = {
   topCard:        Card,
+  numCardsLeft:   number,
   saveCardUpdate: (cardId: number, CardUpdate) => void,
   addExposure:    (Exposure) => void,
   playEs:         (string) => Promise<void>
@@ -155,10 +156,11 @@ export default class SlowQuiz extends React.Component<void, Props, State> {
   render() {
     const topCard = this.props.topCard
     return <div>
-
       <p className='en'>{topCard.en}</p>
 
       {this._renderMnemonicOrIRemember()}
+
+      <p>{this.props.numCardsLeft} cards left</p>
 
     </div>
   }

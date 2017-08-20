@@ -3,7 +3,7 @@ import type { AppState } from './AppState'
 import type { CardAdd } from './CardAdd'
 import type { CardUpdate } from './CardUpdate'
 import React from 'react'
-import NounBrowser from './NounBrowser' // eslint-disable-line no-unused-vars
+import List from './List' // eslint-disable-line no-unused-vars
 import Listen from './Listen' // eslint-disable-line no-unused-vars
 import Speak from './Speak' // eslint-disable-line no-unused-vars
 import SpeakSummary from './SpeakSummary' // eslint-disable-line no-unused-vars
@@ -75,9 +75,9 @@ export default class App extends React.Component<void, Props, State> {
     </div>
   }
 
-  _renderNounBrowserMaybe() {
+  _renderListMaybe() {
     if (this.state.currentTab === 'NOUN_BROWSER') {
-      return <NounBrowser
+      return <List
         cardByCardId={this.props.appState.cardByCardId}
         saveCardAdd={this.props.saveCardAdd}
         saveCardUpdate={this.props.saveCardUpdate}
@@ -132,7 +132,7 @@ export default class App extends React.Component<void, Props, State> {
   render() {
     return <div>
       { this._renderTabs() }
-      { this._renderNounBrowserMaybe() }
+      { this._renderListMaybe() }
       { this._renderListenMaybe() }
       { this._renderSpeakMaybe() }
     </div>

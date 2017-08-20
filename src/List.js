@@ -36,7 +36,7 @@ const sortByToComparer = {
   '-STAGE': (c1, c2) => { return c2.stageNum - c1.stageNum }
 }
 
-export default class NounBrowser extends React.Component<void, Props, State> {
+export default class ListBrowser extends React.Component<void, Props, State> {
   state: State
 
   constructor() {
@@ -120,7 +120,7 @@ export default class NounBrowser extends React.Component<void, Props, State> {
       </table>
       <button className='big'
           onClick={()=>{ this.setState({ editingCardId: ADD_NEW }) }}>
-        Add Noun
+        Add New
       </button>
       <button className='big' onClick={this.props.sync}>Sync</button>
     </div>

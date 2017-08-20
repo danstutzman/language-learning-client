@@ -87,7 +87,8 @@ export default class EditCard extends React.Component<void, Props, State> {
   render() {
     const { type, gender, es, en, mnemonic, suspended, number } = this.state
 
-    return <div>
+    return <div className="popup">
+
       <button className='close' onClick={this.props.close}>X</button>
 
       <label>Type</label>

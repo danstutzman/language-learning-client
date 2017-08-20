@@ -15,6 +15,17 @@ button.big {
   height: 50px;
 }
 
+.popup {
+  position: fixed;
+  border: 1px black solid;
+  background-color: white;
+  left: 20px;
+  padding: 10px;
+}
+.popup .close{
+  float: right;
+}
+
 th {
   text-align: left;
 }

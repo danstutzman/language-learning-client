@@ -1,7 +1,9 @@
+import type { CardType } from './Card'
 import { assertBool, assertNum, assertObj, assertStr } from './assertType'
-import { assertCardGender } from './Card'
+import { assertCardType, assertCardGender } from './Card'
 
 export type CardUpdate = {|
+  type?:      CardType,
   gender?:    'M' | 'F' | '',
   es?:        string,
   en?:        string,
@@ -13,6 +15,7 @@ export type CardUpdate = {|
 export function assertCardUpdate(x: any): CardUpdate {
   assertObj(x)
 
+  if (x.cardType !== undefined)  { assertCardType(x.cardType) }
   if (x.gender !== undefined)    { assertCardGender(x.gender) }
   if (x.es !== undefined)        { assertStr(x.es) }
   if (x.en !== undefined)        { assertStr(x.en) }

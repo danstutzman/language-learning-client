@@ -2,8 +2,8 @@ import type { Card } from '../Card'
 import type { CardAdd } from '../CardAdd'
 import type { CardUpdate } from '../CardUpdate'
 import React from 'react'
-import { assertCardGender, STAGE0_MISSING_FIELDS, STAGE1_COMPLETE_FIELDS
-  } from '../Card'
+import { assertCardGender, assertCardType, CARD_TYPE_TO_STRING,
+  STAGE0_MISSING_FIELDS, STAGE1_COMPLETE_FIELDS } from '../Card'
 import { assertCardAdd } from '../CardAdd'
 
 type Props = {
@@ -28,10 +28,10 @@ export default class EditCard extends React.Component<void, Props, State> {
   }
 
   onClickSaveAdd() {
-    const { gender, es, en, mnemonic } = this.state
+    const { type, gender, es, en, mnemonic } = this.state
     const stageNum = (gender === '' || es === '' || en === '') ?
       STAGE0_MISSING_FIELDS : STAGE1_COMPLETE_FIELDS
-    const add = { type: 'EsN', gender, es, en, stageNum, mnemonic }
+    const add = { type, gender, es, en, stageNum, mnemonic }
 
     this.props.saveCardAdd(assertCardAdd(add))
 
@@ -40,7 +40,8 @@ export default class EditCard extends React.Component<void, Props, State> {
 
   onClickSaveUpdate() {
     const cardUpdate: CardUpdate = (({}: any): CardUpdate) // workaround
-    for (const field of ['gender', 'es', 'en', 'mnemonic', 'suspended']) {
+    for (const field of
+        ['type', 'gender', 'es', 'en', 'mnemonic', 'suspended']) {
       const newValue = (this.state[field]: any)
       if (newValue !== undefined &&
           newValue !== this.props.initialState[field]) {
@@ -80,10 +81,20 @@ export default class EditCard extends React.Component<void, Props, State> {
   }
 
   render() {
-    const { gender, es, en, mnemonic, suspended } = this.state
+    const { type, gender, es, en, mnemonic, suspended } = this.state
 
     return <div>
       <button className='close' onClick={this.props.close}>X</button>
+
+      <label>Type</label>
+      <select value={type} onChange={e => {
+        this.setState({ type: assertCardType(e.target.value) })
+      }}>
+        {Object.keys(CARD_TYPE_TO_STRING).map(cardType => {
+          return <option>{cardType}</option>
+        })}
+      </select>
+      <br/>
 
       <label>Gender</label>
       <select value={gender} onChange={e =>

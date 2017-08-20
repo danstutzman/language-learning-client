@@ -16,7 +16,8 @@ export const STAGE_TIME_THRESHOLD = [
    1 * DAY      // 4->5
 ]
 
-const CARD_TYPE_TO_STRING = {
+export const CARD_TYPE_TO_STRING = {
+  '': '',
   EsN: 'EsN', // noun
   EsD: 'EsD'  // determiner
 }
@@ -36,7 +37,7 @@ export type Card = {|
 |}
 
 export function assertCardType(x: any): CardType {
-  if (!CARD_TYPE_TO_STRING[x]) {
+  if (CARD_TYPE_TO_STRING[x] === undefined) {
     throw new Error(`Expected CardType but got ${x}`)
   }
   return x
@@ -64,16 +65,16 @@ export function assertCard(x: any): Card {
   return x
 }
 
-export function newCard(type: CardType): Card {
+export function newCard(): Card {
   return {
-    cardId: -1,
-    type: type,
-    gender: '',
-    es: '',
-    en: '',
-    mnemonic: '',
-    suspended: false,
-    stageNum: STAGE0_MISSING_FIELDS,
+    cardId:     -1,
+    type:       '',
+    gender:     '',
+    es:         '',
+    en:         '',
+    mnemonic:   '',
+    suspended:  false,
+    stageNum:   STAGE0_MISSING_FIELDS,
     lastSeenAt: 0
   }
 }

@@ -1,6 +1,6 @@
-import type { Action } from '../src/bank/Action'
-import type { BankApiRequest } from '../src/bank/api/BankApiRequest'
-import type { BankApiResponse } from '../src/bank/api/BankApiResponse'
+import type { Action } from '../src/js/bank/Action'
+import type { BankApiRequest } from '../src/js/bank/api/BankApiRequest'
+import type { BankApiResponse } from '../src/js/bank/api/BankApiResponse'
 
 class FakeBankApi {
   actions: Array<Action>

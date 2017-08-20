@@ -1,8 +1,8 @@
 import assert                       from 'assert'
-import LocalBank                    from '../src/bank/LocalBank'
+import LocalBank                    from '../src/js/bank/LocalBank'
 import FakeBankApi                  from './FakeBankApi'
 import FakeLocalStorage             from './FakeLocalStorage'
-import { SYNCED_KEY, UNSYNCED_KEY } from '../src/LocalStorage'
+import { SYNCED_KEY, UNSYNCED_KEY } from '../src/js/LocalStorage'
 import { setup, suite, test}        from 'mocha'
 
 suite('LocalBank persistence to LocalStorage', ()=>{

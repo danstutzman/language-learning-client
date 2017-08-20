@@ -1,4 +1,4 @@
-import { SYNCED_KEY, UNSYNCED_KEY } from '../src/LocalStorage'
+import { SYNCED_KEY, UNSYNCED_KEY } from '../src/js/LocalStorage'
 
 export default class FakeLocalStorage {
   map: Map<string, string>

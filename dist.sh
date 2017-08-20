@@ -10,7 +10,7 @@ cat node_modules/react-dom/dist/react-dom.min.js >> dist/js/vendor.js
 
 node_modules/.bin/browserify \
   -o dist/js/browserified.js --ignore node-localstorage \
-  --ignore xmlhttprequest src/index.js \
+  --ignore xmlhttprequest src/js/index.js \
   --exclude react --exclude react-dom \
   -t babelify -t uglifyify
 

@@ -14,7 +14,7 @@ const BROWSERIFY_ARGS = `-o build/js/browserified.js \
   --ignore node-localstorage --ignore xmlhttprequest \
   --exclude react --exclude react-dom \
   --debug \
-  src/index.js`
+  src/js/index.js`
 
 if (process.version !== REQUIRED_NODE_VERSION) {
   throw new Error(`Currently running ${process.version}.  Please first run:
@@ -38,14 +38,14 @@ if (process.argv.length > 3) {
 
 const spawned = spawn('/bin/bash', ['-c', `echo Running flow &&
   node_modules/.bin/flow &&
-  JS_FILES="$(find src -name '*.js') $(find test -name '*.js')" &&
+  JS_FILES="$(find src/js -name '*.js') $(find test -name '*.js')" &&
   mkdir -p build/js &&
   cp -r src/css build &&
   echo > build/js/vendor.js &&
   cat node_modules/react/dist/react.min.js >> build/js/vendor.js &&
   cat node_modules/react-dom/dist/react-dom.min.js >> build/js/vendor.js &&
   echo Running eslint &&
-  node_modules/.bin/eslint $(find src -name '*.js') &&
+  node_modules/.bin/eslint $(find src/js -name '*.js') &&
   echo Running browserify &&
   node_modules/.bin/browserify ${BROWSERIFY_ARGS} &&
   cat src/index.html | sed "s/<html manifest='cache.manifest'/<html/" \

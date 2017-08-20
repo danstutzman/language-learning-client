@@ -7,7 +7,7 @@ import App                 from './components/App'
 import LocalBank           from './bank/LocalBank'
 import React               from 'react'
 import ReactDOM            from 'react-dom'
-import { SYNCED_KEY, UNSYNCED_KEY } from '../src/LocalStorage'
+import { SYNCED_KEY, UNSYNCED_KEY } from './LocalStorage'
 
 const SERVER_URL_ROOT = 'http://localhost:3000'
 

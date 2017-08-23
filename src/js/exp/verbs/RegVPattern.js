@@ -1,0 +1,21 @@
+import type {InfCategory} from './InfCategory'
+import type {Tense} from './Tense'
+import type {Person} from './Person'
+import type {Number} from './Number'
+
+export default class RegPattern {
+  infCategory: InfCategory
+  tense:       Tense
+  person:      Person
+  number:      Number
+  suffix:      string
+
+  constructor(infCategory: InfCategory, tense: Tense, person: Person,
+              number: Number, suffix: string) {
+    this.infCategory = infCategory
+    this.tense = tense
+    this.person = person
+    this.number = number
+    this.suffix = suffix
+  }
+}

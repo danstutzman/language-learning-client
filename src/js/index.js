@@ -1,3 +1,10 @@
+import {main} from './exp/main'
+
+document.addEventListener('DOMContentLoaded', ()=> {
+  (document.getElementById('mount'):any).innerHTML = main()
+})
+
+/*
 import type { Exposure }   from './Exposure'
 import type { CardUpdate } from './CardUpdate'
 import type { CardAdd }    from './CardAdd'
@@ -137,3 +144,4 @@ function render() {
 //document.addEventListener('DOMContentLoaded', ()=>{
   render()
 //})
+*/

@@ -124,6 +124,7 @@ export default class App extends React.Component<void, Props, State> {
       } else {
         return <SpeakSummary
           cardStagesSummary={appState.speakCards.getCardStagesSummary()}
+          esDEsNPairs={appState.speakCards.getEsDEsNPairs()}
           startSpeak={()=>{ this.setState({ startedSpeak: true }) }} />
       }
     }

@@ -1,7 +1,9 @@
 import React from 'react'
+import type {Card} from '../Card'
 
 type Props = {
   cardStagesSummary: {[stageNumAndReady: string]: number},
+  esDEsNPairs:       Array<[Card, Card]>,
   startSpeak:        () => void
 }
 
@@ -16,6 +18,12 @@ export default class SpeakSummary
     const { cardStagesSummary } = this.props
 
     return <div>
+      <pre>
+        {this.props.esDEsNPairs.map(pair => {
+          const [det, noun] = pair
+          return <div>{det.es} {noun.es}</div>
+        })}
+      </pre>
 
       <table>
         <thead>

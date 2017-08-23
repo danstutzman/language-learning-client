@@ -65,6 +65,7 @@ export default class UniqVList {
     this.byInfTensePersonNumber = {}
     for (const v of this.list) {
       const key =`${v.infEs}-${v.tense}${v.person}${v.number}`
+      if (this.byInfTensePersonNumber[key]) throw new Error(`Collision with ${key}`)
       this.byInfTensePersonNumber[key] = v
     }
   }

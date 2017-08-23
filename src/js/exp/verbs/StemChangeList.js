@@ -36,6 +36,7 @@ export default class StemChangeList {
     this.byInfinitiveTense = {}
     for (const stemChange of this.list) {
       const key = `${stemChange.tense}-${stemChange.infEs}`
+      if (this.byInfinitiveTense[key]) throw new Error(`Collision with ${key}`)
       this.byInfinitiveTense[key] = stemChange
     }
   }

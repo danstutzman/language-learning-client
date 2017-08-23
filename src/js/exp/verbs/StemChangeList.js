@@ -1,36 +1,38 @@
 import {PRES, PRET} from './Tense'
 import type {Tense} from './Tense'
 import StemChange from './StemChange'
+import ExpIdSeq from '../ExpIdSeq'
 
 export default class StemChangeList {
   list: Array<StemChange>
   byInfinitiveTense: {[string]: StemChange}
 
-  constructor() {
+  constructor(expIdSeq: ExpIdSeq) {
+    const id = () => { return expIdSeq.getNextId() }
     this.list = [
-      new StemChange(PRES, "poder",     "pued-"),
-      new StemChange(PRES, "tener",     "tien-"),
-      new StemChange(PRES, "querer",    "quier-"),
-      new StemChange(PRES, "seguir",    "sig-"),
-      new StemChange(PRES, "encontrar", "encuentr-"),
-      new StemChange(PRES, "venir",     "vien-"),
-      new StemChange(PRES, "pensar",    "piens-"),
-      new StemChange(PRES, "volver",    "vuelv-"),
-      new StemChange(PRES, "sentir",    "sient-"),
-      new StemChange(PRES, "contar",    "cuent-"),
-      new StemChange(PRES, "empezar",   "empiez-"),
-      new StemChange(PRES, "decir",     "dic-"),
-      new StemChange(PRES, "recordar",  "recuerd-"),
-      new StemChange(PRES, "pedir",     "pid-"),
-      new StemChange(PRET, "andar",     "anduv-"),
-      new StemChange(PRET, "saber",     "sup-"),
-      new StemChange(PRET, "querer",    "quis-"),
-      new StemChange(PRET, "poner",     "pus-"),
-      new StemChange(PRET, "venir",     "vin-"),
-      new StemChange(PRET, "decir",     "dij-"),
-      new StemChange(PRET, "tener",     "tuv-"),
-      new StemChange(PRET, "hacer",     "hic-"),
-      new StemChange(PRET, "poder",     "pud-")
+      new StemChange(id(), PRES, "poder",     "pued-"),
+      new StemChange(id(), PRES, "tener",     "tien-"),
+      new StemChange(id(), PRES, "querer",    "quier-"),
+      new StemChange(id(), PRES, "seguir",    "sig-"),
+      new StemChange(id(), PRES, "encontrar", "encuentr-"),
+      new StemChange(id(), PRES, "venir",     "vien-"),
+      new StemChange(id(), PRES, "pensar",    "piens-"),
+      new StemChange(id(), PRES, "volver",    "vuelv-"),
+      new StemChange(id(), PRES, "sentir",    "sient-"),
+      new StemChange(id(), PRES, "contar",    "cuent-"),
+      new StemChange(id(), PRES, "empezar",   "empiez-"),
+      new StemChange(id(), PRES, "decir",     "dic-"),
+      new StemChange(id(), PRES, "recordar",  "recuerd-"),
+      new StemChange(id(), PRES, "pedir",     "pid-"),
+      new StemChange(id(), PRET, "andar",     "anduv-"),
+      new StemChange(id(), PRET, "saber",     "sup-"),
+      new StemChange(id(), PRET, "querer",    "quis-"),
+      new StemChange(id(), PRET, "poner",     "pus-"),
+      new StemChange(id(), PRET, "venir",     "vin-"),
+      new StemChange(id(), PRET, "decir",     "dij-"),
+      new StemChange(id(), PRET, "tener",     "tuv-"),
+      new StemChange(id(), PRET, "hacer",     "hic-"),
+      new StemChange(id(), PRET, "poder",     "pud-")
     ]
 
     this.byInfinitiveTense = {}

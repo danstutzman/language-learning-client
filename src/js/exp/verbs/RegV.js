@@ -1,13 +1,16 @@
 import RegVPattern from './RegVPattern'
 
 export default class RegV {
+  expId:   number
   infEs:   string
   pattern: RegVPattern
 
   constructor(args:{|
+    expId:   number,
     infEs:   string,
     pattern: RegVPattern
   |}) {
+    this.expId   = args.expId
     this.infEs   = args.infEs
     this.pattern = args.pattern
   }

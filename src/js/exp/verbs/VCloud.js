@@ -9,16 +9,19 @@ import {P} from './Number'
 import StemChangeV from './StemChangeV'
 import type {V} from './V'
 import UniqVList from './UniqVList'
+import ExpIdSeq from '../ExpIdSeq'
 
 export default class VCloud {
+  expIdSeq: ExpIdSeq
   regVPatternList: RegVPatternList
   stemChangeList: StemChangeList
   uniqVList: UniqVList
 
-  constructor() {
-    this.regVPatternList = new RegVPatternList()
-    this.stemChangeList = new StemChangeList()
-    this.uniqVList = new UniqVList()
+  constructor(expIdSeq: ExpIdSeq) {
+    this.expIdSeq        = expIdSeq
+    this.regVPatternList = new RegVPatternList(expIdSeq)
+    this.stemChangeList  = new StemChangeList(expIdSeq)
+    this.uniqVList       = new UniqVList(expIdSeq)
   }
 
   conjugate(infEs:string, tense:Tense, person:Person, number:Number): V {
@@ -33,7 +36,8 @@ export default class VCloud {
       const pattern = this.regVPatternList.find(
         infEs, tense, person, number, tense === PRET)
       if (pattern) {
-        return new StemChangeV({ infEs, stemChange, pattern })
+        const expId = this.expIdSeq.getNextId()
+        return new StemChangeV({ expId, infEs, stemChange, pattern })
       } else {
         throw new Error(`Can't find RegVPattern for stem-changing
           ${infEs}.${tense}.${person}.${number}`)
@@ -42,7 +46,8 @@ export default class VCloud {
 
     const pattern = this.regVPatternList.find(infEs, tense, person, number, false)
     if (pattern) {
-      return new RegV({infEs, pattern})
+      const expId = this.expIdSeq.getNextId()
+      return new RegV({ expId, infEs, pattern })
     } else {
       throw new Error(`Can't find UniqV or RegV for
         ${infEs}.${tense}.${person}.${number}`)

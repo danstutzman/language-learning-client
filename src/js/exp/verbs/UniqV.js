@@ -3,6 +3,7 @@ import type {Person} from './Person'
 import type {Number} from './Number'
 
 export default class UniqV {
+  expId:  number
   infEs:  string
   tense:  Tense
   person: Person
@@ -10,12 +11,14 @@ export default class UniqV {
   es:     string
 
   constructor(
+    expId:  number,
     infEs:  string,
     tense:  Tense,
     person: Person,
     number: Number,
     es:     string
   ) {
+    this.expId  = expId
     this.infEs  = infEs
     this.tense  = tense
     this.person = person

@@ -4,14 +4,16 @@ import type {Person} from './Person'
 import type {Number} from './Number'
 
 export default class RegPattern {
+  expId:       number
   infCategory: InfCategory
   tense:       Tense
   person:      Person
   number:      Number
   suffix:      string
 
-  constructor(infCategory: InfCategory, tense: Tense, person: Person,
-              number: Number, suffix: string) {
+  constructor(expId: number, infCategory: InfCategory, tense: Tense,
+              person: Person, number: Number, suffix: string) {
+    this.expId = expId
     this.infCategory = infCategory
     this.tense = tense
     this.person = person

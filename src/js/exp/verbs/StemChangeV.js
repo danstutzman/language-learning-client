@@ -19,6 +19,12 @@ export default class StemChangeV {
     this.pattern    = args.pattern
   }
 
+  toEs(): string {
+    const stem = this.stemChange.stem
+    return stem.substring(0, stem.length - 1) +
+      this.pattern.suffix.substring(1)
+  }
+
   toMorphemes(): Array<string> {
     return [this.stemChange.stem, this.pattern.suffix]
   }

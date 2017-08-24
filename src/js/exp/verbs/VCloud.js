@@ -10,21 +10,27 @@ import StemChangeV from './StemChangeV'
 import type {V} from './V'
 import UniqVList from './UniqVList'
 import ExpIdSeq from '../ExpIdSeq'
+import {isInfCategory} from './InfCategory'
+import InfList from './InfList'
 
 export default class VCloud {
   expIdSeq: ExpIdSeq
   regVPatternList: RegVPatternList
   stemChangeList: StemChangeList
   uniqVList: UniqVList
+  infList: InfList
+  memoryByV: { [string]: V } // so as not to repeat expIds
 
   constructor(expIdSeq: ExpIdSeq) {
-    this.expIdSeq        = expIdSeq
+    this.expIdSeq = expIdSeq
     this.regVPatternList = new RegVPatternList(expIdSeq)
-    this.stemChangeList  = new StemChangeList(expIdSeq)
-    this.uniqVList       = new UniqVList(expIdSeq)
+    this.stemChangeList = new StemChangeList(expIdSeq)
+    this.uniqVList = new UniqVList(expIdSeq)
+    this.infList = new InfList(expIdSeq)
+    this.memoryByV = {}
   }
 
-  conjugate(infEs:string, tense:Tense, person:Person, number:Number): V {
+  conjugate(infEs: string, tense: Tense, person: Person, number: Number): V {
     const uniqV = this.uniqVList.find(
       infEs, tense, person, number)
     if (uniqV) {
@@ -37,7 +43,7 @@ export default class VCloud {
         infEs, tense, person, number, tense === PRET)
       if (pattern) {
         const expId = this.expIdSeq.getNextId()
-        return new StemChangeV({ expId, infEs, stemChange, pattern })
+        return this._remembered(null, new StemChangeV({expId, infEs, stemChange, pattern}))
       } else {
         throw new Error(`Can't find RegVPattern for stem-changing
           ${infEs}.${tense}.${person}.${number}`)
@@ -47,10 +53,88 @@ export default class VCloud {
     const pattern = this.regVPatternList.find(infEs, tense, person, number, false)
     if (pattern) {
       const expId = this.expIdSeq.getNextId()
-      return new RegV({ expId, infEs, pattern })
+      return this._remembered(null, new RegV({expId, infEs, pattern}))
     } else {
       throw new Error(`Can't find UniqV or RegV for
         ${infEs}.${tense}.${person}.${number}`)
+    }
+  }
+
+  findByEs(mysteryEs: string): V {
+    const rememberedV = this.memoryByV[mysteryEs]
+    if (rememberedV) return rememberedV
+
+    const results: Array<V> = []
+
+    // Look for UniqV
+    const uniqV = this.uniqVList.findByEs(mysteryEs)
+    if (uniqV) results.push(uniqV)
+
+    // Look for Inf
+    const inf = this.infList.byEs[mysteryEs]
+    if (inf) results.push(inf)
+
+    // Look for RegV
+    const possibleInfs = []
+    for (const inf of this.infList.list) {
+      const base = inf.es.substring(inf.es.length - 2)
+      if (mysteryEs.startsWith(base)) {
+        possibleInfs.push(inf)
+      }
+    }
+    const possiblePatterns = []
+    for (const pattern of this.regVPatternList.list) {
+      const ending = pattern.suffix.substring(1)
+      if (mysteryEs.endsWith(ending)) {
+        possiblePatterns.push(pattern)
+      }
+    }
+    for (const inf of possibleInfs) {
+      for (const pattern of possiblePatterns) {
+        if (isInfCategory(inf.es, pattern.infCategory, false)) {
+          const expId = this.expIdSeq.getNextId()
+          results.push(new RegV({expId, infEs: inf.es, pattern}))
+        }
+      }
+    }
+
+    // Look for StemChangeV
+    for (const stemChange of this.stemChangeList.list) {
+      const base = stemChange.stem.substring(0, stemChange.stem.length - 1)
+      if (mysteryEs.startsWith(base)) {
+        for (const pattern of possiblePatterns) {
+          if (pattern.tense === stemChange.tense && isInfCategory(
+              stemChange.infEs, pattern.infCategory, pattern.tense === PRET)) {
+            const expId = this.expIdSeq.getNextId()
+            results.push(new StemChangeV(
+              {expId, infEs: stemChange.infEs, stemChange, pattern}))
+          }
+        }
+      }
+    }
+
+    if (results.length === 0) {
+      throw new Error(`Can't find mystery verb ${mysteryEs}`)
+    } else if (results.length > 1) {
+      throw new Error(`Found ${JSON.stringify(results)} for ${mysteryEs}`)
+    } else {
+      return this._remembered(mysteryEs, results[0])
+    }
+  }
+
+  _remembered(expectedEs: string | null, newV: V): V {
+    const es = newV.toEs()
+    if (expectedEs && es !== expectedEs) {
+      throw new Error(`Expected ${expectedEs} but got ${es
+        } from ${JSON.stringify(newV)}`)
+    }
+
+    const oldV = this.memoryByV[es]
+    if (oldV) {
+      return oldV
+    } else {
+      this.memoryByV[es] = newV
+      return newV
     }
   }
 }

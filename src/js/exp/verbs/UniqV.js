@@ -26,6 +26,10 @@ export default class UniqV {
     this.es     = es
   }
 
+  toEs(): string {
+    return this.es
+  }
+
   toMorphemes(): Array<string> {
     return [this.es]
   }

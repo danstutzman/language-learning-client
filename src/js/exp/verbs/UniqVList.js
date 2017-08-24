@@ -9,6 +9,7 @@ import ExpIdSeq from '../ExpIdSeq'
 export default class UniqVList {
   list: Array<UniqV>
   byInfTensePersonNumber: {[string]: UniqV}
+  byEs: {[string]: UniqV}
 
   constructor(expIdSeq: ExpIdSeq) {
     const id = () => { return expIdSeq.getNextId() }
@@ -36,11 +37,11 @@ export default class UniqVList {
       new UniqV(id(), "ir",      PRES, 3, S, "va"),
       new UniqV(id(), "ir",      PRES, 1, P, "vamos"),
       new UniqV(id(), "ir",      PRES, 3, P, "van"),
-      new UniqV(id(), "ir",      PRET, 1, S, "fui"),
-      new UniqV(id(), "ir",      PRET, 2, S, "fuiste"),
-      new UniqV(id(), "ir",      PRET, 3, S, "fue"),
-      new UniqV(id(), "ir",      PRET, 1, P, "fuimos"),
-      new UniqV(id(), "ir",      PRET, 3, P, "fueron"),
+      // new UniqV(id(), "ir",      PRET, 1, S, "fui"),
+      // new UniqV(id(), "ir",      PRET, 2, S, "fuiste"),
+      // new UniqV(id(), "ir",      PRET, 3, S, "fue"),
+      // new UniqV(id(), "ir",      PRET, 1, P, "fuimos"),
+      // new UniqV(id(), "ir",      PRET, 3, P, "fueron"),
       new UniqV(id(), "ver",     PRES, 1, S, "veo"),
       new UniqV(id(), "ver",     PRET, 1, S, "vi"),
       new UniqV(id(), "ver",     PRET, 3, S, "vio"),
@@ -70,10 +71,21 @@ export default class UniqVList {
       if (this.byInfTensePersonNumber[key]) throw new Error(`Collision with ${key}`)
       this.byInfTensePersonNumber[key] = v
     }
-  }
+
+    this.byEs = {}
+    for (const v of this.list) {
+      const key = v.es
+      if (this.byEs[key]) throw new Error(`Collision with ${key}`)
+      this.byEs[key] = v
+    }
+   }
 
   find(infEs:string, tense:Tense, person:Person, number:Number): UniqV | null {
     const key =`${infEs}-${tense}${person}${number}`
     return this.byInfTensePersonNumber[key]
+  }
+
+  findByEs(es:string): UniqV | null {
+    return this.byEs[es] || null
   }
 }

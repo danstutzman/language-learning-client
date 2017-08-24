@@ -9,7 +9,7 @@ export type InfCategory = 'AR' | 'ERIR' | 'ER' | 'IR' | 'STEMPRET'
 export function isInfCategory(infEs:string, infCategory:InfCategory,
                        isStemChangePret:boolean): boolean {
   if (isStemChangePret) {
-    return infCategory === 'stempret'
+    return infCategory === 'STEMPRET'
   } else {
     switch (infCategory) {
       case AR: return infEs.endsWith('ar')

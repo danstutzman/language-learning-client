@@ -1,10 +1,11 @@
 import type {Tense} from './Tense'
 import type {Person} from './Person'
 import type {Number} from './Number'
+import Inf from './Inf'
+import Exp from '../Exp'
 
-export default class UniqV {
-  expId:  number
-  infEs:  string
+export default class UniqV extends Exp {
+  inf:    Inf
   tense:  Tense
   person: Person
   number: Number
@@ -12,14 +13,14 @@ export default class UniqV {
 
   constructor(
     expId:  number,
-    infEs:  string,
+    inf:    Inf,
     tense:  Tense,
     person: Person,
     number: Number,
     es:     string
   ) {
-    this.expId  = expId
-    this.infEs  = infEs
+    super(expId)
+    this.inf    = inf
     this.tense  = tense
     this.person = person
     this.number = number
@@ -32,5 +33,9 @@ export default class UniqV {
 
   toMorphemes(): Array<string> {
     return [this.es]
+  }
+
+  subExps(): Array<Exp> {
+    return [this].concat(this.inf.subExps())
   }
 }

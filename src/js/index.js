@@ -1,7 +1,8 @@
 import {main} from './exp/main'
 
 document.addEventListener('DOMContentLoaded', ()=> {
-  (document.getElementById('mount'):any).innerHTML = main()
+  (document.getElementById('mount'):any).innerHTML =
+    '<pre>' + main() + '</pre>'
 })
 
 /*

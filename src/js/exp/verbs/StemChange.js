@@ -1,15 +1,24 @@
 import type {Tense} from './Tense'
+import Exp from '../Exp'
+import Inf from './Inf'
 
-export default class StemChange {
-  expId: number
+export default class StemChange extends Exp {
   tense: Tense
-  infEs: string
+  inf:   Inf
   stem:  string
 
-  constructor(expId:number, tense:Tense, infEs:string, stem:string) {
-    this.expId = expId
+  constructor(expId:number, tense:Tense, inf:Inf, stem:string) {
+    super(expId)
     this.tense = tense
-    this.infEs = infEs
+    this.inf   = inf
     this.stem  = stem
+  }
+
+  subExps(): Array<Exp> {
+    return [this].concat(this.inf.subExps())
+  }
+
+  toEs(): string {
+    return this.stem
   }
 }

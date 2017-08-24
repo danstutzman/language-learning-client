@@ -12,51 +12,51 @@ import UniqVList from './UniqVList'
 import ExpIdSeq from '../ExpIdSeq'
 import {isInfCategory} from './InfCategory'
 import InfList from './InfList'
+import Inf from './Inf'
 
 export default class VCloud {
   expIdSeq: ExpIdSeq
+  infList: InfList
   regVPatternList: RegVPatternList
   stemChangeList: StemChangeList
   uniqVList: UniqVList
-  infList: InfList
   memoryByV: { [string]: V } // so as not to repeat expIds
 
   constructor(expIdSeq: ExpIdSeq) {
     this.expIdSeq = expIdSeq
-    this.regVPatternList = new RegVPatternList(expIdSeq)
-    this.stemChangeList = new StemChangeList(expIdSeq)
-    this.uniqVList = new UniqVList(expIdSeq)
     this.infList = new InfList(expIdSeq)
+    this.regVPatternList = new RegVPatternList(expIdSeq)
+    this.stemChangeList = new StemChangeList(expIdSeq, this.infList)
+    this.uniqVList = new UniqVList(expIdSeq, this.infList)
     this.memoryByV = {}
   }
 
-  conjugate(infEs: string, tense: Tense, person: Person, number: Number): V {
-    const uniqV = this.uniqVList.find(
-      infEs, tense, person, number)
-    if (uniqV) {
-      return uniqV
-    }
+  conjugate(inf:Inf, tense:Tense, person:Person, number:Number): V {
+    const uniqV = this.uniqVList.find(inf.es, tense, person, number)
+    if (uniqV) return uniqV
 
-    const stemChange = this.stemChangeList.find(infEs, tense)
+    const stemChange = this.stemChangeList.find(inf.es, tense)
     if (stemChange && !(tense === PRES && person === 1 && number === P)) {
       const pattern = this.regVPatternList.find(
-        infEs, tense, person, number, tense === PRET)
+        inf.es, tense, person, number, tense === PRET)
       if (pattern) {
         const expId = this.expIdSeq.getNextId()
-        return this._remembered(null, new StemChangeV({expId, infEs, stemChange, pattern}))
+        return this._remembered(null,
+          new StemChangeV({expId, stemChange, pattern}))
       } else {
         throw new Error(`Can't find RegVPattern for stem-changing
-          ${infEs}.${tense}.${person}.${number}`)
+          ${inf.es}.${tense}.${person}.${number}`)
       }
     }
 
-    const pattern = this.regVPatternList.find(infEs, tense, person, number, false)
+    const pattern =
+      this.regVPatternList.find(inf.es, tense, person, number, false)
     if (pattern) {
       const expId = this.expIdSeq.getNextId()
-      return this._remembered(null, new RegV({expId, infEs, pattern}))
+      return this._remembered(null, new RegV({expId, inf, pattern}))
     } else {
       throw new Error(`Can't find UniqV or RegV for
-        ${infEs}.${tense}.${person}.${number}`)
+        ${inf.es}.${tense}.${person}.${number}`)
     }
   }
 
@@ -93,7 +93,7 @@ export default class VCloud {
       for (const pattern of possiblePatterns) {
         if (isInfCategory(inf.es, pattern.infCategory, false)) {
           const expId = this.expIdSeq.getNextId()
-          results.push(new RegV({expId, infEs: inf.es, pattern}))
+          results.push(new RegV({expId, inf, pattern}))
         }
       }
     }
@@ -104,10 +104,9 @@ export default class VCloud {
       if (mysteryEs.startsWith(base)) {
         for (const pattern of possiblePatterns) {
           if (pattern.tense === stemChange.tense && isInfCategory(
-              stemChange.infEs, pattern.infCategory, pattern.tense === PRET)) {
+              stemChange.inf.es, pattern.infCategory, pattern.tense === PRET)) {
             const expId = this.expIdSeq.getNextId()
-            results.push(new StemChangeV(
-              {expId, infEs: stemChange.infEs, stemChange, pattern}))
+            results.push(new StemChangeV({expId, stemChange, pattern}))
           }
         }
       }

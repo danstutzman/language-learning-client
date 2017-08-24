@@ -1,20 +1,17 @@
 import StemChange from './StemChange'
 import RegVPattern from './RegVPattern'
+import Exp from '../Exp'
 
-export default class StemChangeV {
-  expId:      number
-  infEs:      string
+export default class StemChangeV extends Exp {
   stemChange: StemChange
   pattern:    RegVPattern
 
   constructor(args: {|
     expId:      number,
-    infEs:      string,
     stemChange: StemChange,
     pattern:    RegVPattern
   |}) {
-    this.expId      = args.expId
-    this.infEs      = args.infEs
+    super(args.expId)
     this.stemChange = args.stemChange
     this.pattern    = args.pattern
   }
@@ -27,5 +24,11 @@ export default class StemChangeV {
 
   toMorphemes(): Array<string> {
     return [this.stemChange.stem, this.pattern.suffix]
+  }
+
+  subExps(): Array<Exp> {
+    return [this]
+      .concat(this.stemChange.subExps())
+      .concat(this.pattern.subExps())
   }
 }

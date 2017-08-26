@@ -4,41 +4,53 @@ import NPCloud from './nouns/NPCloud'
 import VC from './clauses/VC'
 import PrepP from './nouns/PrepP'
 import {assertPrep} from './nouns/Prep'
+import Interjection from './clauses/Interjection'
+import NC from './clauses/NC'
+import {assertPro} from './nouns/Pro'
+import Exp from './Exp'
+import Pro from './nouns/Pro'
+import type {V} from './verbs/V'
+import NP from './nouns/NP'
 
-export function main() {
-  const expIdSeq = new ExpIdSeq()
-  const vCloud = new VCloud(expIdSeq)
-  // const corpus = `estoy está estás tiene tener tengo tienes quieres quiero
-  //   pude`
-  // const verbs = corpus.trim().split(/\s+/).map(es => {
-  //   return vCloud.findByEs(es)
-  // })
+function someNps(npCloud:NPCloud): Array<NP> { // eslint-disable-line no-unused-vars
+  const corpus = ['un hombre', 'una mujer']
+  return corpus.map(es => {
+    return npCloud.findByEs(es)
+  })
+}
 
-  const npCloud = new NPCloud(expIdSeq)
-  // const corpus = ['un hombre', 'una mujer']
-  // const nps = corpus.map(es => {
-  //   return npCloud.findByEs(es)
-  // })
+function someVs(vCloud:VCloud): Array<V> { // eslint-disable-line no-unused-vars
+  const corpus = `estoy está estás tiene tener tengo tienes quieres quiero
+    pude`
+  return corpus.trim().split(/\s+/).map(es => {
+    return vCloud.findByEs(es)
+  })
+}
 
-  // const exps = [new VC({
-  //   expId: expIdSeq.getNextId(),
-  //   agent: npCloud.findByEs('yo'),
-  //   doPro: ((npCloud.findByEs('lo'):any):Pro),
-  //   v:     vCloud.findByEs('comprendo')
-  // })]
+function someVC(expIdSeq:ExpIdSeq, npCloud:NPCloud, vCloud:VCloud): VC { // eslint-disable-line no-unused-vars
+  return new VC({
+    expId: expIdSeq.getNextId(),
+    agent: npCloud.findByEs('yo'),
+    doPro: ((npCloud.findByEs('lo'):any):Pro),
+    v:     vCloud.findByEs('comprendo')
+  })
+}
 
-  // const exps = [new NC({
-  //   expId: expIdSeq.getNextId(),
-  //   pro:   assertPro(npCloud.proList.find('dónde')),
-  //   vc:    new VC({
-  //     expId:     expIdSeq.getNextId(),
-  //     agent:     npCloud.findByEs('Juan'),
-  //     v:         vCloud.findByEs('está'),
-  //     verbFirst: true
-  //   })
-  // })]
+function someNC(expIdSeq:ExpIdSeq, npCloud:NPCloud, vCloud:VCloud): NC { // eslint-disable-line no-unused-vars
+  return new NC({
+    expId: expIdSeq.getNextId(),
+    pro:   assertPro(npCloud.proList.find('dónde')),
+    vc:    new VC({
+      expId:     expIdSeq.getNextId(),
+      agent:     npCloud.findByEs('Juan'),
+      v:         vCloud.findByEs('está'),
+      verbFirst: true
+    })
+  })
+}
 
-  const exps = [new VC({
+function someVCWithDe(expIdSeq:ExpIdSeq, npCloud:NPCloud, vCloud:VCloud): VC { // eslint-disable-line no-unused-vars
+  return new VC({
     expId: expIdSeq.getNextId(),
     agent: npCloud.findByEs('Juan'),
     v:     vCloud.findByEs('es'),
@@ -47,7 +59,19 @@ export function main() {
       prep:  assertPrep(npCloud.prepList.findByEs('de')),
       np:    npCloud.findByEs('México')
     })
-  })]
+  })
+}
+export function main() {
+  const expIdSeq = new ExpIdSeq()
+  const vCloud = new VCloud(expIdSeq) // eslint-disable-line no-unused-vars
+  const npCloud = new NPCloud(expIdSeq) // eslint-disable-line no-unused-vars
+  let exps: Array<Exp> = []
+
+  exps = exps.concat(
+    new Interjection(expIdSeq.getNextId(),
+      'Buenos días.',
+      'Good morning.',
+      ['bueno', '-s', 'día', '-s']))
 
   let fragments: Array<string> = []
   for (const exp of exps) {

@@ -4,6 +4,8 @@ import CommonNList from './CommonNList'
 import Det from './Det'
 import CommonN from './CommonN'
 import ExpIdSeq from '../ExpIdSeq'
+import ProperN from './ProperN'
+import type {N} from './N'
 
 export default class NPCloud {
   expIdSeq:    ExpIdSeq
@@ -24,12 +26,19 @@ export default class NPCloud {
       esWords = esWords.slice(1)
     }
 
-    const nouns: Array<CommonN> = esWords.map(esWord => {
-      const n = this.commonNList.find(esWord)
+    const nouns: Array<N> = esWords.map(esWord => {
+      const n = this._isTitleCase(esWord) ?
+        new ProperN(this.expIdSeq.getNextId(), esWord, esWord) :
+        this.commonNList.find(esWord)
       if (!n) throw new Error(`Can't find ${esWord}`)
       return n
     })
 
     return new NP(this.expIdSeq.getNextId(), det, nouns)
+  }
+
+  _isTitleCase(word: string) {
+    const char = word.charAt(0)
+    return char === char.toUpperCase()
   }
 }

@@ -3,6 +3,7 @@ import NP from '../nouns/NP'
 import type {V} from '../verbs/V'
 import Pro from '../nouns/Pro'
 import PrepP from '../nouns/PrepP'
+import Adj from '../nouns/Adj'
 
 // VC stands for verb clause, e.g. 'I go'
 export default class VC extends Exp {
@@ -11,7 +12,7 @@ export default class VC extends Exp {
   doPro:     Pro | null
   v:         V
   io:        NP | null // indirect object
-  do:        NP | PrepP | null // direct object
+  do:        NP | PrepP | Adj | null // direct object
   negative:  boolean
   verbFirst: boolean
 
@@ -22,7 +23,7 @@ export default class VC extends Exp {
     doPro?:     Pro,
     v:          V,
     io?:        NP,
-    do?:        NP | PrepP,
+    do?:        NP | PrepP | Adj,
     negative?:  boolean,
     verbFirst?: boolean
   |}) {

@@ -68,11 +68,11 @@ export default class VCloud {
 
     // Look for UniqV
     const uniqV = this.uniqVList.findByEs(mysteryEs)
-    if (uniqV) results.push(uniqV)
+    if (uniqV) return uniqV
 
     // Look for Inf
     const inf = this.infList.byEs[mysteryEs]
-    if (inf) results.push(inf)
+    if (inf) return inf
 
     // Look for RegV
     const possibleInfs = []

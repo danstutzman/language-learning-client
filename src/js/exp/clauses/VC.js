@@ -11,27 +11,29 @@ export default class VC extends Exp {
   v:         V
   io:        NP | null // indirect object
   do:        NP | null // direct object
-  negative:  bool
-  verbFirst: bool
+  negative:  boolean
+  verbFirst: boolean
 
   constructor(args:{|
-    expId:     number,
-    agent:     NP,
-    ioPro?:    Pro,
-    doPro?:    Pro,
-    v:         V,
-    io?:       NP,
-    do?:       NP,
-    negative?: bool,
+    expId:      number,
+    agent:      NP,
+    ioPro?:     Pro,
+    doPro?:     Pro,
+    v:          V,
+    io?:        NP,
+    do?:        NP,
+    negative?:  boolean,
+    verbFirst?: boolean
   |}) {
     super(args.expId)
-    this.agent    = args.agent
-    this.ioPro    = args.ioPro || null
-    this.doPro    = args.doPro || null
-    this.v        = args.v
-    this.io       = args.io || null
-    this.do       = args.do || null
-    this.negative = args.negative || false
+    this.agent     = args.agent
+    this.ioPro     = args.ioPro || null
+    this.doPro     = args.doPro || null
+    this.v         = args.v
+    this.io        = args.io || null
+    this.do        = args.do || null
+    this.negative  = args.negative || false
+    this.verbFirst = args.verbFirst || false
   }
 
   toEs(): string {

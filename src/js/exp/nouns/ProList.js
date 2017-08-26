@@ -11,6 +11,8 @@ export default class ProList {
       new Pro(id(), 'I', 'yo'),
       new Pro(id(), 'him', 'lo'),
       new Pro(id(), 'her', 'la'),
+      new Pro(id(), 'where', 'dónde'), // question word
+      new Pro(id(), 'where', 'donde'), // relative pronoun
     ]
 
     this.byEs = {}

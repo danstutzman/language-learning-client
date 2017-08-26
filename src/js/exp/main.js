@@ -3,6 +3,7 @@ import ExpIdSeq from './ExpIdSeq'
 import NPCloud from './nouns/NPCloud'
 import VC from './clauses/VC'
 import Pro from './nouns/Pro'
+import NC from './clauses/NC'
 
 export function main() {
   const expIdSeq = new ExpIdSeq()
@@ -19,11 +20,22 @@ export function main() {
   //   return npCloud.findByEs(es)
   // })
 
-  const exps = [new VC({
+  // const exps = [new VC({
+  //   expId: expIdSeq.getNextId(),
+  //   agent: npCloud.findByEs('yo'),
+  //   doPro: ((npCloud.findByEs('lo'):any):Pro),
+  //   v:     vCloud.findByEs('comprendo')
+  // })]
+
+  const exps = [new NC({
     expId: expIdSeq.getNextId(),
-    agent: npCloud.findByEs('yo'),
-    doPro: ((npCloud.findByEs('lo'):any):Pro),
-    v:     vCloud.findByEs('comprendo')
+    pro:   ((npCloud.proList.find('dónde'):any):Pro),
+    vc:    new VC({
+      expId:     expIdSeq.getNextId(),
+      agent:     npCloud.findByEs('Juan'),
+      v:         vCloud.findByEs('está'),
+      verbFirst: true
+    })
   })]
 
   let fragments: Array<string> = []

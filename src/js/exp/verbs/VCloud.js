@@ -77,7 +77,7 @@ export default class VCloud {
     // Look for RegV
     const possibleInfs = []
     for (const inf of this.infList.list) {
-      const base = inf.es.substring(inf.es.length - 2)
+      const base = inf.es.substring(0, inf.es.length - 2)
       if (mysteryEs.startsWith(base)) {
         possibleInfs.push(inf)
       }
@@ -93,7 +93,10 @@ export default class VCloud {
       for (const pattern of possiblePatterns) {
         if (isInfCategory(inf.es, pattern.infCategory, false)) {
           const expId = this.expIdSeq.getNextId()
-          results.push(new RegV({expId, inf, pattern}))
+          const newV = new RegV({expId, inf, pattern})
+          if (newV.toEs() === mysteryEs) {
+            results.push(newV)
+          }
         }
       }
     }

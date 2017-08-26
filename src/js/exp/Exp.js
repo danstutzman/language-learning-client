@@ -1,7 +1,9 @@
 export default class Exp {
+  type: string
   expId: number
 
-  constructor(expId: number) {
+  constructor(type:string, expId:number) {
+    this.type  = type
     this.expId = expId
   }
 

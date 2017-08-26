@@ -3,12 +3,11 @@ import type {N} from './N'
 import Det from './Det'
 
 export default class NP extends Exp {
-  expId: number
   det:   Det | null
   nouns: Array<N>
 
   constructor(expId:number, det:Det|null, nouns:Array<N>) {
-    super(expId)
+    super('NP', expId)
     this.det   = det
     this.nouns = nouns
   }

@@ -13,12 +13,12 @@ export default class RegPattern extends Exp {
 
   constructor(expId: number, infCategory: InfCategory, tense: Tense,
               person: Person, number: Number, suffix: string) {
-    super(expId)
+    super('RegPattern', expId)
     this.infCategory = infCategory
-    this.tense = tense
-    this.person = person
-    this.number = number
-    this.suffix = suffix
+    this.tense       = tense
+    this.person      = person
+    this.number      = number
+    this.suffix      = suffix
   }
 
   subExps(): Array<Exp> {

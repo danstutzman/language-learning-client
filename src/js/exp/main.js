@@ -2,7 +2,7 @@ import VCloud from './verbs/VCloud'
 import ExpIdSeq from './ExpIdSeq'
 import NPCloud from './nouns/NPCloud'
 import VC from './clauses/VC'
-import Pro from './nouns/Pro'
+import {assertPro} from './nouns/Pro'
 import NC from './clauses/NC'
 
 export function main() {
@@ -29,7 +29,7 @@ export function main() {
 
   const exps = [new NC({
     expId: expIdSeq.getNextId(),
-    pro:   ((npCloud.proList.find('dónde'):any):Pro),
+    pro:   assertPro(npCloud.proList.find('dónde')),
     vc:    new VC({
       expId:     expIdSeq.getNextId(),
       agent:     npCloud.findByEs('Juan'),

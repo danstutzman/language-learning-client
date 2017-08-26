@@ -11,7 +11,7 @@ export default class StemChangeV extends Exp {
     stemChange: StemChange,
     pattern:    RegVPattern
   |}) {
-    super(args.expId)
+    super('StemChangeV', args.expId)
     this.stemChange = args.stemChange
     this.pattern    = args.pattern
   }

@@ -25,7 +25,7 @@ export default class VC extends Exp {
     negative?:  boolean,
     verbFirst?: boolean
   |}) {
-    super(args.expId)
+    super('VC', args.expId)
     this.agent     = args.agent
     this.ioPro     = args.ioPro || null
     this.doPro     = args.doPro || null

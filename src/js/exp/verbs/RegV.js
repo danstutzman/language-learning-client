@@ -3,7 +3,6 @@ import Inf from './Inf'
 import Exp from '../Exp'
 
 export default class RegV extends Exp {
-  expId:   number
   inf:     Inf
   pattern: RegVPattern
 
@@ -12,7 +11,7 @@ export default class RegV extends Exp {
     inf:     Inf,
     pattern: RegVPattern
   |}) {
-    super(args.expId)
+    super('RegV', args.expId)
     this.inf     = args.inf
     this.pattern = args.pattern
   }

@@ -1,12 +1,11 @@
 import Exp from '../Exp'
 
 export default class Inf extends Exp {
-  expId: number
   en:    string
   es:    string
 
   constructor(expId:number, en:string, es:string) {
-    super(expId)
+    super('Inf', expId)
     this.en    = en
     this.es    = es
   }

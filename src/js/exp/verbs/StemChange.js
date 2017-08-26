@@ -8,7 +8,7 @@ export default class StemChange extends Exp {
   stem:  string
 
   constructor(expId:number, tense:Tense, inf:Inf, stem:string) {
-    super(expId)
+    super('StemChange', expId)
     this.tense = tense
     this.inf   = inf
     this.stem  = stem

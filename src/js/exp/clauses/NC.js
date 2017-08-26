@@ -12,9 +12,9 @@ export default class NC extends Exp {
     pro:   Pro,
     vc:    VC,
   |}) {
-    super(args.expId)
-    this.pro = args.pro
-    this.vc  = args.vc
+    super('NC', args.expId)
+    this.pro  = args.pro
+    this.vc   = args.vc
   }
 
   toEs(): string {

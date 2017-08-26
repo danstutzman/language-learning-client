@@ -19,7 +19,7 @@ export default class UniqV extends Exp {
     number: Number,
     es:     string
   ) {
-    super(expId)
+    super('UniqV', expId)
     this.inf    = inf
     this.tense  = tense
     this.person = person

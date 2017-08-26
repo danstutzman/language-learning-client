@@ -2,13 +2,12 @@ import Exp from '../Exp'
 import type {Gender} from './Gender'
 
 export default class CommonN extends Exp {
-  expId:  number
   en:     string
   es:     string
   gender: Gender
 
   constructor(expId:number, en:string, es:string, gender:Gender) {
-    super(expId)
+    super('CommonN', expId)
     this.en     = en
     this.es     = es
     this.gender = gender

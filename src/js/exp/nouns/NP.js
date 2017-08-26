@@ -28,11 +28,15 @@ export default class NP extends Exp {
   }
 
   subExps(): Array<Exp> {
-    let exps = [this]
-    exps = exps.concat(this.det === null ? [] : this.det.subExps())
-    for (const n of this.nouns) {
-      exps = exps.concat(n.subExps())
+    if (this.det === null && this.nouns.length === 1){
+      return this.nouns[0].subExps()
+    } else {
+      let exps = [this]
+      exps = exps.concat(this.det === null ? [] : this.det.subExps())
+      for (const n of this.nouns) {
+        exps = exps.concat(n.subExps())
+      }
+      return exps
     }
-    return exps
   }
 }

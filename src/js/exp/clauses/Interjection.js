@@ -1,15 +1,15 @@
 import Exp from '../Exp'
 
 export default class Interjection extends Exp {
-  es:        string
-  en:        string
-  morphemes: Array<string>
+  es:          string
+  en:          string
+  composition: Exp
 
-  constructor(expId:number, es:string, en:string, morphemes:Array<string>) {
+  constructor(expId:number, es:string, en:string, composition:Exp) {
     super('Interjection', expId)
-    this.es        = es
-    this.en        = en
-    this.morphemes = morphemes
+    this.es          = es
+    this.en          = en
+    this.composition = composition
   }
 
   toEs(): string {
@@ -21,6 +21,6 @@ export default class Interjection extends Exp {
   }
 
   subExps(): Array<Exp> {
-    return [this]
+    return this.composition.subExps()
   }
 }

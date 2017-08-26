@@ -13,6 +13,7 @@ import type {V} from './verbs/V'
 import NP from './nouns/NP'
 import Adj from './nouns/Adj'
 import {M} from './nouns/Gender'
+import CommonN from './nouns/CommonN'
 
 function someNps(npCloud:NPCloud): Array<NP> { // eslint-disable-line no-unused-vars
   const corpus = ['un hombre', 'una mujer']
@@ -78,7 +79,12 @@ function someInterjection(expIdSeq:ExpIdSeq): Interjection { // eslint-disable-l
   return new Interjection(expIdSeq.getNextId(),
     'Buenos días.',
     'Good morning.',
-    ['bueno', '-s', 'día', '-s'])
+    new NP({
+      expId: expIdSeq.getNextId(),
+      det: null,
+      adjs: [new Adj(expIdSeq.getNextId(), 'buenos', 'good', M)],
+      parts: [new CommonN(expIdSeq.getNextId(), 'days', 'días', M)]
+    }))
 }
 
 export function main() {
@@ -87,7 +93,7 @@ export function main() {
   const npCloud = new NPCloud(expIdSeq) // eslint-disable-line no-unused-vars
   let exps: Array<Exp> = []
 
-  exps.push(someVCWithAdj(expIdSeq, npCloud, vCloud))
+  exps.push(someInterjection(expIdSeq))
 
   let fragments: Array<string> = []
   for (const exp of exps) {

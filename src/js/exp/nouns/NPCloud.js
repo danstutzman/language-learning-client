@@ -48,6 +48,7 @@ export default class NPCloud {
     return new NP({
       expId: this.expIdSeq.getNextId(),
       det,
+      adjs: [],
       parts: nouns
     })
   }

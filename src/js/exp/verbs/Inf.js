@@ -15,6 +15,10 @@ export default class Inf extends Exp {
     return this.es
   }
 
+  toMorphemes(): Array<string> {
+    return [this.es]
+  }
+
   subExps(): Array<Exp> {
     return [this]
   }

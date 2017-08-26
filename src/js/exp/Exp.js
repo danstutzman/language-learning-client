@@ -8,6 +8,10 @@ export default class Exp {
   }
 
   toEs(): string {
-    throw new Error(`toEs not implemented on ${JSON.stringify(this)}`)
+    throw new Error(`toEs() not implemented on ${this.type}`)
+  }
+
+  subExps(): Array<Exp> {
+    throw new Error(`subExps() not implemented on ${this.type}`)
   }
 }

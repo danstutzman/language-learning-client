@@ -1,39 +1,42 @@
 import Exp from '../Exp'
-import type {N} from './N'
 import Det from './Det'
 
 export default class NP extends Exp {
   det:   Det | null
-  nouns: Array<N>
+  parts: Array<any> // should be just N, NP, or PrepP
 
-  constructor(expId:number, det:Det|null, nouns:Array<N>) {
-    super('NP', expId)
-    this.det   = det
-    this.nouns = nouns
+  constructor(args:{|
+    expId: number,
+    det:   Det | null,
+    parts: Array<any>,
+  |}) {
+    super('NP', args.expId)
+    this.det   = args.det
+    this.parts = args.parts
   }
 
   toEs(): string {
     return (this.det === null ? [] : [this.det.toEs()])
-      .concat(this.nouns.map(n => n.toEs()))
+      .concat(this.parts.map(n => n.toEs()))
       .join(' ')
   }
 
   toMorphemes(): Array<string> {
     let morphemes = this.det === null ? [] : this.det.toMorphemes()
-    for (const n of this.nouns) {
-      morphemes = morphemes.concat(n.toMorphemes())
+    for (const part of this.parts) {
+      morphemes = morphemes.concat(part.toMorphemes())
     }
     return morphemes
   }
 
   subExps(): Array<Exp> {
-    if (this.det === null && this.nouns.length === 1){
-      return this.nouns[0].subExps()
+    if (this.det === null && this.parts.length === 1){
+      return this.parts[0].subExps()
     } else {
       let exps = [this]
       exps = exps.concat(this.det === null ? [] : this.det.subExps())
-      for (const n of this.nouns) {
-        exps = exps.concat(n.subExps())
+      for (const part of this.parts) {
+        exps = exps.concat(part.subExps())
       }
       return exps
     }

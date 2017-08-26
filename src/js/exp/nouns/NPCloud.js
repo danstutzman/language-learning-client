@@ -6,17 +6,20 @@ import ExpIdSeq from '../ExpIdSeq'
 import ProperN from './ProperN'
 import type {N} from './N'
 import ProList from './ProList'
+import PrepList from './PrepList'
 
 export default class NPCloud {
   expIdSeq:    ExpIdSeq
   detList:     DetList
   proList:     ProList
+  prepList:    PrepList
   commonNList: CommonNList
 
   constructor(expIdSeq: ExpIdSeq) {
     this.expIdSeq = expIdSeq
-    this.detList = new DetList(expIdSeq)
-    this.proList = new ProList(expIdSeq)
+    this.detList  = new DetList(expIdSeq)
+    this.proList  = new ProList(expIdSeq)
+    this.prepList = new PrepList(expIdSeq)
     this.commonNList = new CommonNList(expIdSeq)
   }
 
@@ -42,7 +45,11 @@ export default class NPCloud {
       throw new Error(`Can't find ${esWord}`)
     })
 
-    return new NP(this.expIdSeq.getNextId(), det, nouns)
+    return new NP({
+      expId: this.expIdSeq.getNextId(),
+      det,
+      parts: nouns
+    })
   }
 
   _isTitleCase(word: string) {

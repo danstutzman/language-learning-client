@@ -11,6 +11,7 @@ export default class CommonNList {
     this.list = [
       new CommonN(id(), 'man', 'hombre', M),
       new CommonN(id(), 'woman', 'mujer', F),
+      new CommonN(id(), 'Spanish', 'español', M),
     ]
 
     this.byEs = {}

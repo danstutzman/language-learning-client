@@ -6,7 +6,7 @@
 
 `cd build`
 
-`../node_modules/.bin/http-server -c-1`
+`../node_modules/.bin/http-server`
 
 Go to http://localhost:8080
 

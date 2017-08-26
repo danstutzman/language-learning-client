@@ -2,6 +2,7 @@ import VCloud from './verbs/VCloud'
 import ExpIdSeq from './ExpIdSeq'
 import NPCloud from './nouns/NPCloud'
 import VC from './clauses/VC'
+import Pro from './nouns/Pro'
 
 export function main() {
   const expIdSeq = new ExpIdSeq()
@@ -20,9 +21,9 @@ export function main() {
 
   const exps = [new VC({
     expId: expIdSeq.getNextId(),
-    agent: npCloud.findByEs('Juan'),
-    v:     vCloud.findByEs('comprendo'),
-    do:    npCloud.findByEs('español')
+    agent: npCloud.findByEs('yo'),
+    doPro: ((npCloud.findByEs('lo'):any):Pro),
+    v:     vCloud.findByEs('comprendo')
   })]
 
   let fragments: Array<string> = []

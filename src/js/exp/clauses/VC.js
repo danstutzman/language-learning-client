@@ -1,12 +1,13 @@
 import Exp from '../Exp'
 import NP from '../nouns/NP'
 import type {V} from '../verbs/V'
+import Pro from '../nouns/Pro'
 
 // VC stands for verb clause, e.g. 'I go'
 export default class VC extends Exp {
   agent:     NP | null
-  // ioPro: Pronoun | null
-  // doPro: Pronoun|void
+  ioPro:     Pro | null
+  doPro:     Pro | null
   v:         V
   io:        NP | null // indirect object
   do:        NP | null // direct object
@@ -16,17 +17,17 @@ export default class VC extends Exp {
   constructor(args:{|
     expId:     number,
     agent:     NP,
-    // ioPro: EsPronoun|void,
-    // doPro:   EsPronoun|void,
+    ioPro?:    Pro,
+    doPro?:    Pro,
     v:         V,
-    io?:       NP | null,
-    do?:       NP | null,
+    io?:       NP,
+    do?:       NP,
     negative?: bool,
   |}) {
     super(args.expId)
-    this.agent           = args.agent
-    // this.indirectPronoun = args.indirectPronoun
-    // this.directPronoun   = args.directPronoun
+    this.agent    = args.agent
+    this.ioPro    = args.ioPro || null
+    this.doPro    = args.doPro || null
     this.v        = args.v
     this.io       = args.io || null
     this.do       = args.do || null
@@ -37,6 +38,8 @@ export default class VC extends Exp {
     return []
       .concat(!this.verbFirst && this.agent ? [this.agent.toEs()] : [])
       .concat(this.negative ? ['no'] : [])
+      .concat(this.ioPro ? [this.ioPro.toEs()] : [])
+      .concat(this.doPro ? [this.doPro.toEs()] : [])
       .concat([this.v.toEs()])
       .concat(this.verbFirst && this.agent ? [this.agent.toEs()] : [])
       .concat(this.io ? [this.io.toEs()] : [])
@@ -48,6 +51,8 @@ export default class VC extends Exp {
     return []
       .concat(!this.verbFirst && this.agent ? this.agent.toMorphemes() : [])
       .concat(this.negative ? ['no'] : [])
+      .concat(this.ioPro ? this.ioPro.toMorphemes() : [])
+      .concat(this.doPro ? this.doPro.toMorphemes() : [])
       .concat(this.v.toMorphemes())
       .concat(this.verbFirst && this.agent ? this.agent.toMorphemes() : [])
       .concat(this.io ? this.io.toMorphemes() : [])
@@ -57,6 +62,8 @@ export default class VC extends Exp {
   subExps() : Array<Exp> {
     return [this]
       .concat(!this.verbFirst && this.agent ? this.agent.subExps() : [])
+      .concat(this.ioPro ? this.ioPro.subExps() : [])
+      .concat(this.doPro ? this.doPro.subExps() : [])
       .concat(this.v.subExps())
       .concat(this.verbFirst && this.agent ? this.agent.subExps() : [])
       .concat(this.io ? this.io.subExps() : [])

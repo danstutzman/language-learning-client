@@ -1,0 +1,68 @@
+TAG:
+- señora
+- señor
+- señorita
+
+INTERJECTIONS:
+- Perdón.
+- Buenos días.
+- Buenas tardes.
+- Buenas noches.
+- Gracias.
+- Adiós.
+- Encantado.
+- Encantada.
+- Mucho gusto.
+- No sé.
+- Por favor.
+- Muchas gracias.
+- Cómo?
+- Muy bien.
+
+PLACE:
+- Norteamérica
+- Bolivia
+- Los Angeles
+- México
+- Chicago
+
+SURNAME:
+- García
+- Jones
+
+LANDMARK:
+- el hotel Bolívar
+- el hotel
+- el restaurante
+- el restaurante Colón
+
+NATIONALITY:
+- norteamericano
+- norteamericana
+
+LANGUAGE:
+- inglés
+- español
+
+# either question or answer could be omitted
+# tense can change, person can change
+QA_OF_2ND_PERSON:
+- Eres NATIONALITY?  Sí, soy NATIONALITY.
+- Eres NATIONALITY?  No, no soy NATIONALITY.
+- Hablas inglés?  Sí, hablo inglés un poco.
+- Entiendes LANGUAGE?  No, no entiendo LANGUAGE.
+- Entiendes LANGUAGE?  Sí, entiendo muy bien.
+- Hablas LANGUAGE?  No hablo muy bien.
+- Hablas LANGUAGE?  Sí, hablo español un poco.
+- Cómo estás?  Estoy bien.
+- De donde eres?  Soy de PLACE.
+- Cómo te llamas?  Soy la señora SURNAME.
+- Cómo te llamas?  Soy el señor SURNAME.
+- Dónde estás?  Estoy a LANDMARK.
+- Dónde está LANDMARK?  Está aquí.
+- Dónde está LANDMARK?  Está allí.
+- ¿Está LANDMARK aquí?  Allí está.
+- Sabes dónde está LANDMARK?  Sí, sé donde está.
+
+JUDGEMENT:
+- Hablas LANGUAGE muy bien.

@@ -45,7 +45,7 @@ const spawned = spawn('/bin/bash', ['-c', `echo Running flow &&
   cat node_modules/react/dist/react.min.js >> build/js/vendor.js &&
   cat node_modules/react-dom/dist/react-dom.min.js >> build/js/vendor.js &&
   echo Running eslint &&
-  node_modules/.bin/eslint $(find src/js -name '*.js') &&
+  node_modules/.bin/eslint $(find src -name '*.js') &&
   echo Running browserify &&
   node_modules/.bin/browserify ${BROWSERIFY_ARGS} &&
   cat src/index.html | sed "s/<html manifest='cache.manifest'/<html/" \

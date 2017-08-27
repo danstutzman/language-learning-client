@@ -1,0 +1,4 @@
+#!/bin/bash -ex
+./node_modules/babel-cli/bin/babel-node.js \
+  --presets node6 \
+  src/node/yaml_to_json.js

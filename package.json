@@ -10,9 +10,11 @@
   "license": "ISC",
   "devDependencies": {
     "assert": "^1.4.1",
+    "babel-cli": "^6.26.0",
     "babel-core": "^6.25.0",
     "babel-eslint": "^7.2.3",
     "babel-preset-latest": "^6.24.1",
+    "babel-preset-node6": "^11.0.0",
     "babel-preset-react": "^6.24.1",
     "babelify": "^7.3.0",
     "browserify": "^14.4.0",
@@ -31,6 +33,7 @@
   },
   "dependencies": {
     "classnames": "^2.2.5",
+    "js-yaml": "^3.9.1",
     "react": "^15.6.1",
     "react-dom": "^15.6.1",
     "redux": "^3.7.2",

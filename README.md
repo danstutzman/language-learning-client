@@ -16,6 +16,12 @@ Go to http://localhost:8080
 
 `node_modules/.bin/mocha test --compilers js:babel-core/register`
 
+## How to run server-side code
+
+`nvm use v6.11.1`
+
+`./run`
+
 ## How to test from a mobile device
 
 Start backend (seperate repo) on port 3000

@@ -1,5 +1,6 @@
 import ExpIdSeq from '../ExpIdSeq'
 import Pro from './Pro'
+import {DIRECT_OBJECT_PRONOUN, OTHER_PRONOUN, QUESTION_WORD, RELATIVE_PRONOUN} from './ProType'
 
 export default class ProList {
   list: Array<Pro>
@@ -8,11 +9,14 @@ export default class ProList {
   constructor(expIdSeq: ExpIdSeq) {
     const id = () => { return expIdSeq.getNextId() }
     this.list = [
-      new Pro(id(), 'I', 'yo'),
-      new Pro(id(), 'him', 'lo'),
-      new Pro(id(), 'her', 'la'),
-      new Pro(id(), 'where', 'dónde'), // question word
-      new Pro(id(), 'where', 'donde'), // relative pronoun
+      new Pro(id(), 'I',     'yo',    OTHER_PRONOUN),
+      new Pro(id(), 'him',   'lo',    DIRECT_OBJECT_PRONOUN),
+      new Pro(id(), 'her',   'la',    DIRECT_OBJECT_PRONOUN),
+      new Pro(id(), 'you',   'te',    DIRECT_OBJECT_PRONOUN),
+      new Pro(id(), 'where', 'dónde', QUESTION_WORD),
+      new Pro(id(), 'where', 'donde', RELATIVE_PRONOUN),
+      new Pro(id(), 'how',   'cómo',  QUESTION_WORD),
+      new Pro(id(), 'how',   'como',  RELATIVE_PRONOUN)
     ]
 
     this.byEs = {}

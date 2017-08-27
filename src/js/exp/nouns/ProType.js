@@ -1,0 +1,10 @@
+export const DIRECT_OBJECT_PRONOUN = 'DIRECT_OBJECT_PRONOUN'
+export const QUESTION_WORD         = 'QUESTION_WORD'
+export const RELATIVE_PRONOUN      = 'RELATIVE_PRONOUN'
+export const OTHER_PRONOUN         = 'OTHER_PRONOUN'
+
+export type ProType =
+  'DIRECT_OBJECT_PRONOUN' |
+  'QUESTION_WORD' |
+  'RELATIVE_PRONOUN' |
+  'OTHER_PRONOUN'

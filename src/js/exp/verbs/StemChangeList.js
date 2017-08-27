@@ -29,6 +29,7 @@ export default class StemChangeList {
       make(PRES, "decir",     "dic-"),
       make(PRES, "recordar",  "recuerd-"),
       make(PRES, "pedir",     "pid-"),
+      make(PRES, "entender",  "entiend-"),
       make(PRET, "andar",     "anduv-"),
       make(PRET, "saber",     "sup-"),
       make(PRET, "querer",    "quis-"),

@@ -40,6 +40,8 @@ export default class InfList {
       new Inf(id(), 'know', 'conocer'),
       new Inf(id(), 'send', 'enviar'),
       new Inf(id(), 'understand', 'comprender'),
+      new Inf(id(), 'speak', 'hablar'),
+      new Inf(id(), 'understand', 'entender'),
     ]
 
     this.byEs = {}

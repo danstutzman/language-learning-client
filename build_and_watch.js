@@ -86,6 +86,39 @@ function buildError(message) {
   }
 }
 
+function rerunFlow() {
+  const spawned = spawn('node_modules/.bin/flow')
+  spawned.stdout.on('data', (data) => {
+    console.log(data.toString().trim())
+  })
+  spawned.stderr.on('data', (data) => {
+    console.log(data.toString().trim())
+  })
+  spawned.on('close', (code) => {
+    if (code !== 0) {
+      return buildError(
+        `Got non-zero code ${code} from spawn node_modules/.bin/flow`)
+    }
+  })
+}
+
+function rerunEslint(paths) {
+  const spawned3 = spawn('node_modules/.bin/eslint', paths)
+  spawned3.stdout.on('data', (data) => {
+    console.log(data.toString().trim())
+  })
+  spawned3.stderr.on('data', (data) => {
+    console.log(data.toString().trim())
+  })
+  spawned3.on('close', (code) => {
+    if (code === 0) {
+      exec('afplay /System/Library/Sounds/Pop.aiff') // success sound
+    } else {
+      return buildError(`Error from eslint`)
+    }
+  })
+}
+
 // Every time a file is edited, build that file
 chokidar.watch(['src', 'test'], CHOKIDAR_OPTIONS).on('all', (event, path) => {
   console.log(chalk.gray(`Detected ${event} of ${path}`))
@@ -97,34 +130,8 @@ chokidar.watch(['src', 'test'], CHOKIDAR_OPTIONS).on('all', (event, path) => {
     } else if (path.endsWith('.css')) {
       exec(`cp ${path} build/css`)
     } else if (path.endsWith('.js')) {
-      const spawned = spawn('node_modules/.bin/flow')
-      spawned.stdout.on('data', (data) => {
-        console.log(data.toString().trim())
-      })
-      spawned.stderr.on('data', (data) => {
-        console.log(data.toString().trim())
-      })
-      spawned.on('close', (code) => {
-        if (code !== 0) {
-          return buildError(
-            `Got non-zero code ${code} from spawn node_modules/.bin/flow`)
-        }
-
-        const spawned3 = spawn('node_modules/.bin/eslint', [path])
-        spawned3.stdout.on('data', (data) => {
-          console.log(data.toString().trim())
-        })
-        spawned3.stderr.on('data', (data) => {
-          console.log(data.toString().trim())
-        })
-        spawned3.on('close', (code) => {
-          if (code === 0) {
-            exec('afplay /System/Library/Sounds/Pop.aiff') // success sound
-          } else {
-            return buildError(`Error from eslint`)
-          }
-        })
-      })
+      rerunFlow();
+      rerunEslint([path]);
     }
   }
 })

@@ -60,19 +60,19 @@ export default class VCloud {
     }
   }
 
-  findByEs(mysteryEs: string): V {
+  findByEs(mysteryEs: string): Array<V> {
     const rememberedV = this.memoryByV[mysteryEs]
-    if (rememberedV) return rememberedV
+    if (rememberedV) return [rememberedV]
 
     const results: Array<V> = []
 
     // Look for UniqV
     const uniqV = this.uniqVList.findByEs(mysteryEs)
-    if (uniqV) return uniqV
+    if (uniqV) return [uniqV]
 
     // Look for Inf
     const inf = this.infList.byEs[mysteryEs]
-    if (inf) return inf
+    if (inf) return [inf]
 
     // Look for RegV
     const possibleInfs = []
@@ -115,6 +115,11 @@ export default class VCloud {
       }
     }
 
+    return results
+  }
+
+  find1ByEs(mysteryEs: string): V {
+    const results = this.findByEs(mysteryEs)
     if (results.length === 0) {
       throw new Error(`Can't find mystery verb ${mysteryEs}`)
     } else if (results.length > 1) {

@@ -26,7 +26,7 @@ function someVs(vCloud:VCloud): Array<V> { // eslint-disable-line no-unused-vars
   const corpus = `estoy está estás tiene tener tengo tienes quieres quiero
     pude`
   return corpus.trim().split(/\s+/).map(es => {
-    return vCloud.findByEs(es)
+    return vCloud.find1ByEs(es)
   })
 }
 
@@ -35,7 +35,7 @@ function someVC(expIdSeq:ExpIdSeq, npCloud:NPCloud, vCloud:VCloud): VC { // esli
     expId: expIdSeq.getNextId(),
     agent: npCloud.findByEs('yo'),
     doPro: ((npCloud.findByEs('lo'):any):Pro),
-    v:     vCloud.findByEs('comprendo')
+    v:     vCloud.find1ByEs('comprendo')
   })
 }
 
@@ -46,7 +46,7 @@ function someNC(expIdSeq:ExpIdSeq, npCloud:NPCloud, vCloud:VCloud): NC { // esli
     vc:    new VC({
       expId:     expIdSeq.getNextId(),
       agent:     npCloud.findByEs('Juan'),
-      v:         vCloud.findByEs('está'),
+      v:         vCloud.find1ByEs('está'),
       verbFirst: true
     })
   })
@@ -56,7 +56,7 @@ function someVCWithDe(expIdSeq:ExpIdSeq, npCloud:NPCloud, vCloud:VCloud): VC { /
   return new VC({
     expId: expIdSeq.getNextId(),
     agent: npCloud.findByEs('Juan'),
-    v:     vCloud.findByEs('es'),
+    v:     vCloud.find1ByEs('es'),
     do:    new PrepP({
       expId: expIdSeq.getNextId(),
       prep:  assertPrep(npCloud.prepList.findByEs('de')),
@@ -69,7 +69,7 @@ function someVCWithAdj(expIdSeq:ExpIdSeq, npCloud:NPCloud, vCloud:VCloud): VC { 
   return new VC({
     expId: expIdSeq.getNextId(),
     agent: npCloud.findByEs('Juan'),
-    v:     vCloud.findByEs('es'),
+    v:     vCloud.find1ByEs('es'),
     do:    new Adj(expIdSeq.getNextId(),
              'norteamericano', 'North American', M)
   })

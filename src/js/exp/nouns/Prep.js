@@ -7,7 +7,7 @@ export default class Prep extends Exp {
   constructor(expId:number, en:string, es:string) {
     super('Prep', expId)
     this.en   = en
-    this.es   = es
+    this.es   = es.normalize('NFC')
   }
 
   toEs(): string {

@@ -11,7 +11,7 @@ export default class StemChange extends Exp {
     super('StemChange', expId)
     this.tense = tense
     this.inf   = inf
-    this.stem  = stem
+    this.stem  = stem.normalize('NFC')
   }
 
   subExps(): Array<Exp> {

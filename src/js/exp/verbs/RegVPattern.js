@@ -18,7 +18,7 @@ export default class RegPattern extends Exp {
     this.tense       = tense
     this.person      = person
     this.number      = number
-    this.suffix      = suffix
+    this.suffix      = suffix.normalize('NFC')
   }
 
   subExps(): Array<Exp> {

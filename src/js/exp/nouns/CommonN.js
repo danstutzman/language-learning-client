@@ -9,7 +9,7 @@ export default class CommonN extends Exp {
   constructor(expId:number, en:string, es:string, gender:Gender) {
     super('CommonN', expId)
     this.en     = en
-    this.es     = es
+    this.es     = es.normalize('NFC')
     this.gender = gender
   }
 

@@ -24,7 +24,7 @@ export default class UniqV extends Exp {
     this.tense  = tense
     this.person = person
     this.number = number
-    this.es     = es
+    this.es     = es.normalize('NFC')
   }
 
   toEs(): string {

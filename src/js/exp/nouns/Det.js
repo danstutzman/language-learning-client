@@ -8,7 +8,7 @@ export default class Det extends Exp {
 
   constructor(expId:number, es:string, en:string, gender:Gender) {
     super('Det', expId)
-    this.es     = es
+    this.es     = es.normalize('NFC')
     this.en     = en
     this.gender = gender
   }
